@@ -2,8 +2,6 @@
 
 namespace Imanghafoori\TokenAnalyzer;
 
-use Imanghafoori\LaravelMicroscope\Analyzers\Str;
-
 class Expander
 {
     /**

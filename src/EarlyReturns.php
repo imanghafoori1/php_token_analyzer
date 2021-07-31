@@ -2,8 +2,6 @@
 
 namespace Imanghafoori\TokenAnalyzer;
 
-use Imanghafoori\TokenAnalyzer\Refactor;
-
 class EarlyReturns
 {
     const scopeKeywords = [
