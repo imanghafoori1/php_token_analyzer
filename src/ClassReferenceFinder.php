@@ -254,6 +254,7 @@ class ClassReferenceFinder
             'null',
             'bool',
             'array',
+            'mixed',
             'callable',
             '::',
             'iterable',
