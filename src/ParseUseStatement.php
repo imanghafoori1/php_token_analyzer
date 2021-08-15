@@ -4,6 +4,21 @@ namespace Imanghafoori\TokenAnalyzer;
 
 class ParseUseStatement
 {
+    public static function getExpandedRef($tokens, $className)
+    {
+        $refs = ParseUseStatement::parseUseStatements($tokens, $className);
+        $rest = '';
+        if ($className[0] !== '\\') {
+            $parts = explode('\\', $className);
+            $className = $parts[0] ?: $parts[1];
+            array_shift($parts);
+            $rest = implode('\\', $parts);
+            $rest && $rest = '\\'.$rest;
+        }
+
+        return ($refs[1][$className][0] ?? $className).$rest;
+    }
+
     public static function getUseStatementsByPath($namespacedClassName, $absPath)
     {
         return self::parseUseStatements(token_get_all(file_get_contents($absPath)), $namespacedClassName)[1];
