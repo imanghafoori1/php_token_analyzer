@@ -1,6 +1,6 @@
 <?php
 
-namespace Imanghafoori\LaravelMicroscope\Tests;
+namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 
