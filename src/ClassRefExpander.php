@@ -2,7 +2,7 @@
 
 namespace Imanghafoori\TokenAnalyzer;
 
-class Expander
+class ClassRefExpander
 {
     /**
      * @param  string  $type

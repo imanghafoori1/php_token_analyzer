@@ -111,7 +111,7 @@ class Ifs
 
     private static function forwardTo($tokens, $index)
     {
-        while (\in_array($tokens[++$index][0], [T_WHITESPACE, T_COMMENT, ';'])) {
+        while (\in_array($tokens[++$index][0], [T_WHITESPACE, T_COMMENT, ';'], true)) {
         }
 
         return $index;

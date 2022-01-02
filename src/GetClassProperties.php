@@ -109,7 +109,5 @@ class GetClassProperties
 
             $results .= $tokens[$i][1];
         }
-
-        return [$i, $results];
     }
 }
