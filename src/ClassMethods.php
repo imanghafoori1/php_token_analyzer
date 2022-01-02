@@ -20,15 +20,16 @@ class ClassMethods
                 $class['name'] = $tokens[$i + 2];
                 $class['type'] = T_CLASS;
                 $class['is_abstract'] = ($tokens[$i - 2][0] === T_ABSTRACT);
-            } elseif ($token[0] == T_INTERFACE) {
+                $class['is_final'] = ($tokens[$i - 2][0] === T_FINAL);
+            } elseif ($token[0] === T_INTERFACE) {
                 $class['name'] = $tokens[$i + 2];
                 $class['type'] = T_INTERFACE;
-            } elseif ($token[0] == T_TRAIT) {
+            } elseif ($token[0] === T_TRAIT) {
                 $class['name'] = $tokens[$i + 2];
                 $class['type'] = T_TRAIT;
             }
 
-            if ($class['name'] === null || $tokens[$i][0] != T_FUNCTION) {
+            if ($class['name'] === null || $tokens[$i][0] !== T_FUNCTION) {
                 $i++;
                 continue;
             }
@@ -38,7 +39,7 @@ class ClassMethods
                 continue;
             }
 
-            [$visibility, $isStatic, $isAbstract] = self::findVisibility($tokens, $i - 2);
+            [$visibility, $isStatic, $isAbstract, $isFinal] = self::findVisibility($tokens, $i - 2);
             [, $signature, $endSignature] = Ifs::readCondition($tokens, $i + 2);
             [$char, $charIndex] = TokenManager::forwardTo($tokens, $endSignature, [':', ';', '{']);
 
@@ -62,6 +63,7 @@ class ClassMethods
                 'returnType' => $returnType,
                 'nullable_return_type' => $hasNullableReturnType,
                 'is_static' => $isStatic,
+                'is_final' => $isFinal,
                 'is_abstract' => $isAbstract,
             ];
         }
@@ -75,6 +77,7 @@ class ClassMethods
     {
         $isStatic = $tokens[$i][0] === T_STATIC && $i -= 2;
         $isAbstract = $tokens[$i][0] === T_ABSTRACT && $i -= 2;
+        $isFinal = $tokens[$i][0] === T_FINAL && $i -= 2;
 
         $hasModifier = \in_array($tokens[$i][0], [T_PUBLIC, T_PROTECTED, T_PRIVATE]);
         $visibility = $hasModifier ? $tokens[$i] : [T_PUBLIC, 'public'];
@@ -83,8 +86,9 @@ class ClassMethods
         //     public abstract function x() {
         //     abstract public function x() {
         ! $isAbstract && $isAbstract = $tokens[$i - 2][0] === T_ABSTRACT;
+        ! $isFinal && $isFinal = $tokens[$i - 2][0] === T_FINAL;
 
-        return [$visibility, $isStatic, $isAbstract];
+        return [$visibility, $isStatic, $isAbstract, $isFinal];
     }
 
     private static function processReturnType($endingChar, $tokens, $charIndex)

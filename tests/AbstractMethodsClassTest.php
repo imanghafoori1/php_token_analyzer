@@ -7,9 +7,22 @@ use Imanghafoori\TokenAnalyzer\ClassMethods;
 class AbstractMethodsClassTest extends BaseTestClass
 {
     /** @test */
+    public function check_final_class_is_detected_test()
+    {
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/final_class.stub'));
+        $class = ClassMethods::read($tokens);
+
+        $this->assertTrue($class['is_final']);
+        $methods = $class['methods'];
+        $this->assertEquals(true, $methods[0]['is_final']);
+        $this->assertEquals(true, $methods[1]['is_final']);
+    }
+
+    /** @test */
     public function check_is_abstract_method_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/abstract_sample_class.php'));
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $class = ClassMethods::read($tokens);
         $methods = $class['methods'];
         // Checks all the methods are abstract
         $this->assertEquals(true, $methods[0]['is_abstract']);
@@ -44,7 +57,8 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test */
     public function check_return_types_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/abstract_sample_class.php'));
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $class = ClassMethods::read($tokens);
         $methods = $class['methods'];
         // check is nullable return types
         $this->assertEquals(null, $methods[0]['nullable_return_type']);
@@ -65,7 +79,8 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test */
     public function check_visibility_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/abstract_sample_class.php'));
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $class = ClassMethods::read($tokens);
         $methods = $class['methods'];
 
         $this->assertEquals('public', $methods[0]['visibility'][1]);
@@ -88,7 +103,8 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test */
     public function check_is_static_method_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/abstract_sample_class.php'));
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $class = ClassMethods::read($tokens);
         $methods = $class['methods'];
 
         $this->assertEquals(true, $methods[3]['is_static']);
@@ -100,7 +116,8 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test  */
     public function abstract_class_general_body_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/abstract_sample_class.php'));
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $class = ClassMethods::read($tokens);
 
         $this->assertEquals([T_STRING, 'abstract_sample', 7], $class['name']);
         $this->assertCount(27, $class['methods']);
@@ -111,7 +128,8 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test */
     public function check_parameter_methods()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/abstract_sample_class.php'));
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $class = ClassMethods::read($tokens);
         $methods = $class['methods'];
 
         // check function has parameter
