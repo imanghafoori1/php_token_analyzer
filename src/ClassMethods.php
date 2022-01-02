@@ -6,7 +6,7 @@ class ClassMethods
 {
     public static function read($tokens)
     {
-        $i = 0;
+        $level = $i = 0;
         $class = [
             'name' => null,
             'methods' => [],
@@ -16,6 +16,19 @@ class ClassMethods
 
         while (isset($tokens[$i])) {
             $token = $tokens[$i];
+
+            // to support multiple classes per file.
+            if ($token === '{' || $token === T_CURLY_OPEN) {
+                $level++;
+            } elseif ($token === '}') {
+                $level--;
+
+                // we have finished collecting the first valid class.
+                if ($level === 0 && $class['name'] !== null) {
+                    break;
+                }
+            }
+
             if ($token[0] === T_CLASS && $tokens[$i - 1][0] !== T_DOUBLE_COLON && $tokens[$i - 2][0] !== T_NEW) {
                 $class['name'] = $tokens[$i + 2];
                 $class['type'] = T_CLASS;

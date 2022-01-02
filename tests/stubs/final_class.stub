@@ -11,22 +11,26 @@ new class {
 
 final class A1
 {
-    final function show1($x1, $y1)
+    final function show2($x1, $y1)
     {
         $sum1=$x1+$y1;
         echo "Sum of the given no.s = ".$sum1;
     }
 
-    final public function show1($x1, $y1)
+    final public function show3($x1, $y1)
     {
-        $sum1=$x1+$y1;
-
-        echo "Sum of the given no.s = ".$sum1;
+        new class {
+            final function show4($x1, $y1)
+            {
+                $sum1=$x1+$y1;
+                echo "Sum of the given no.s = ".$sum1;
+            }
+        }
     }
 }
 
 new class {
-    final function show1($x1, $y1)
+    final function show5($x1, $y1)
     {
         $sum1=$x1+$y1;
         echo "Sum of the given no.s = ".$sum1;

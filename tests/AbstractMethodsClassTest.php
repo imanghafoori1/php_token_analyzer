@@ -14,6 +14,7 @@ class AbstractMethodsClassTest extends BaseTestClass
 
         $this->assertTrue($class['is_final']);
         $methods = $class['methods'];
+        $this->assertCount(2, $methods);
         $this->assertEquals(true, $methods[0]['is_final']);
         $this->assertEquals(true, $methods[1]['is_final']);
     }
