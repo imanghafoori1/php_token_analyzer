@@ -25,7 +25,7 @@ class TokenManager
     {
         $i++;
         $token = $tokens[$i] ?? '_';
-        while ($token[0] == T_WHITESPACE || $token[0] == T_COMMENT) {
+        while ($token[0] === T_WHITESPACE || $token[0] === T_COMMENT || $token[0] === T_DOC_COMMENT) {
             $i++;
             $token = $tokens[$i] ?? [null, null];
         }
@@ -37,7 +37,7 @@ class TokenManager
     {
         $i--;
         $token = $tokens[$i];
-        while ($token[0] == T_WHITESPACE || $token[0] == T_COMMENT) {
+        while ($token[0] === T_WHITESPACE || $token[0] === T_COMMENT || $token[0] === T_DOC_COMMENT) {
             $i--;
             $token = $tokens[$i];
         }
