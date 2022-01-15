@@ -1,1 +1,3 @@
-# php_token_analyzer
+# Php Code Analyzer
+
+Reads and analyzes php code with out executing it.
