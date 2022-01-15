@@ -50,4 +50,16 @@ class GetClassPropertiesTest extends BaseTestClass
         $this->assertEquals(T_CLASS, $type);
         $this->assertEquals('', $parent);
     }
+
+    /** @test */
+    public function non_php_file()
+    {
+        [$namespace, $name, $type, $parent, $interfaces] = GetClassProperties::fromFilePath(__DIR__.'/stubs/non_php_opening_tag.stub');
+
+        $this->assertEquals(null, $namespace);
+        $this->assertEquals(null, $name);
+        $this->assertEquals(null, $type);
+        $this->assertEquals(null, $parent);
+        $this->assertEquals(null, $interfaces);
+    }
 }

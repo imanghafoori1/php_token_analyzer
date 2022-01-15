@@ -11,8 +11,8 @@ class GetClassProperties
         // In order to ensure doc blocks are closed if there is any opening we add "/**/"
         $tokens = token_get_all($buffer.'/**/');
 
-        if (strpos($buffer, '{') === false) {
-            return [null, null, null, null];
+        if (strpos($buffer, '{') === false || ($tokens[0][0] ?? null) !== T_OPEN_TAG) {
+            return [null, null, null, null, null];
         }
 
         return self::readClassDefinition($tokens);
