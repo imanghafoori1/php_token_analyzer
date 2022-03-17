@@ -107,7 +107,8 @@ class ClassReferenceFinder
                 //isset($classes[$c]) && $c++;
                 self::forward();
                 continue;
-            } elseif ($t === T_WHITESPACE || $t === '&' || $t === T_COMMENT) {
+            } elseif ($t === T_WHITESPACE || $t === '&' || $t === T_COMMENT || $t === 403) {
+		// 403 is code name T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG in php8.1
                 // We do not want to keep track of
                 // white spaces or collect them
                 continue;
