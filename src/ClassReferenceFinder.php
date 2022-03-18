@@ -17,8 +17,9 @@ class ClassReferenceFinder
      */
     public static function process(&$tokens)
     {
-        ! defined('T_NAME_QUALIFIED') && define('T_NAME_QUALIFIED', 3030);
-        ! defined('T_NAME_FULLY_QUALIFIED') && define('T_NAME_FULLY_QUALIFIED', 3031);
+        ! defined('T_NAME_QUALIFIED') && define('T_NAME_QUALIFIED', -352);
+        ! defined('T_NAME_FULLY_QUALIFIED') && define('T_NAME_FULLY_QUALIFIED', -373);
+        ! defined('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG', -385);
 
         $namespace = '';
         $classes = [];
@@ -107,10 +108,8 @@ class ClassReferenceFinder
                 //isset($classes[$c]) && $c++;
                 self::forward();
                 continue;
-            } elseif ($t === T_WHITESPACE || $t === '&' || $t === T_COMMENT || $t === 403) {
-		// 403 is code name T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG in php8.1
-                // We do not want to keep track of
-                // white spaces or collect them
+            } elseif ($t === T_WHITESPACE || $t === '&' || $t === T_COMMENT || $t === T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG) {
+                // We do not want to keep track of white spaces or collect them
                 continue;
             } elseif (in_array($t, [';', '}', T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_OR, T_LOGICAL_AND], true)) {
                 $trait = $force_close = false;
@@ -243,17 +242,17 @@ class ClassReferenceFinder
         return \in_array($token[1], [
             'object',
             'string',
-            'noreturn',
-            'int',
+            'never',
             'private',
             'public',
             'protected',
+	    'int',
             'float',
             'void',
             'false',
             'true',
-            'null',
             'bool',
+	    'null',
             'array',
             'mixed',
             'callable',
