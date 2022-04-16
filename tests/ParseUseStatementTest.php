@@ -32,10 +32,11 @@ class ParseUseStatementTest extends BaseTestClass
         $expected = [
             'DirectoryNotFoundException' => ["Symfony\Component\Finder\Exception\DirectoryNotFoundException", 6],
             'Action' => ["Imanghafoori\LaravelMicroscope\Checks\ActionsComments", 5],
+            "Hi" => ["Symfony\Component\Finder\Symfony\Component\Finder\Hello", 6],
             'Finder' => ["Symfony\Component\Finder\Symfony\Component\Finder\Finder", 6],
-            'Closure' => ['Closure', 11],
-            'PasswordBroker' => ["Illuminate\Contracts\Auth\PasswordBroker", 10],
-            'HalfImported' =>  ["Illuminate\Contracts\HalfImported", 12],
+            'Closure' => ['Closure', 12],
+            'PasswordBroker' => ["Illuminate\Contracts\Auth\PasswordBroker", 11],
+            'HalfImported' =>  ["Illuminate\Contracts\HalfImported", 13],
 
         ];
 

@@ -83,35 +83,37 @@ class ClassMethodsTest extends BaseTestClass
 
             $expected = [
                 'name' => [
-                    0 => 311,
+                    0 => T_STRING,
                     1 => 'php8syntax',
                     2 => 5,
                 ],
                 'methods' => [
                     0 => [
-                        'name' => [311, '__construct', 7],
-                        'visibility' => [360, 'public', 7],
+                        'name' => [T_STRING, '__construct', 7],
+                        'visibility' => [T_PUBLIC, 'public', 7],
                         'signature' => [
-                            [358, 'private', 7],
-                            [393, ' ', 7],
-                            [311, 'Hello', 7],
-                            [393, ' ', 7],
-                            [315, '$foo', 7],
+                            [T_PRIVATE, 'private', 7],
+                            [T_WHITESPACE, ' ', 7],
+                            [T_STRING, 'Hello', 7],
+                            [T_WHITESPACE, ' ', 7],
+                            [T_VARIABLE, '$foo', 7],
                         ],
                         'body' => '',
                         'startBodyIndex' => [34, 36],
                         'returnType' => [
-                            [311, 'G1', 7],
-                            [311, 'G2', 7],
-                            [311, 'G3', 7],
+                            [T_STRING, 'G1', 7],
+                            [T_STRING, 'G2', 7],
+                            [T_STRING, 'G3', 7],
                         ],
                         'nullable_return_type' => false,
                         'is_static' => false,
                         'is_abstract' => false,
+                        'is_final' => false,
                     ],
                 ],
-                'type' => 366,
+                'type' => T_CLASS,
                 'is_abstract' => false,
+                'is_final' => false,
             ];
             $this->assertEquals($expected, $actual);
         } else {

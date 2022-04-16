@@ -5,7 +5,8 @@ namespace Imanghafoori\LaravelMicroscope\FileReaders;
 use Imanghafoori\LaravelMicroscope\Checks\ActionsComments as Action;
 use Symfony\Component\Finder\{
     Exception\DirectoryNotFoundException,
-    Symfony\Component\Finder\Finder
+    Symfony\Component\Finder\Finder,
+    Symfony\Component\Finder\Hello as Hi,
 };
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Closure;

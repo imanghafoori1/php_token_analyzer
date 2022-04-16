@@ -7,6 +7,22 @@ use Imanghafoori\TokenAnalyzer\GetClassProperties;
 class GetClassPropertiesTest extends BaseTestClass
 {
     /** @test */
+    public function enums()
+    {
+        if (version_compare(phpversion(), '8.1.0') === 1) {
+            [$namespace, $name, $type, $parent, $interfaces] = GetClassProperties::fromFilePath(__DIR__.'/stubs/sample_enum.stub');
+
+            $this->assertEquals("Hello", $namespace);
+            $this->assertEquals('Hi', $name);
+            $this->assertEquals(T_ENUM, $type);
+            $this->assertEquals('', $parent);
+            $this->assertEquals('', $interfaces);
+        } else {
+            $this->markTestSkipped();
+        }
+    }
+
+    /** @test */
     public function can_detect_method_visibility()
     {
         [$namespace, $name, $type, $parent, $interfaces] = GetClassProperties::fromFilePath(__DIR__.'/stubs/HomeController.stub');

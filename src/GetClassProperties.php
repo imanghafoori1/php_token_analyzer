@@ -20,6 +20,7 @@ class GetClassProperties
 
     public static function readClassDefinition($tokens)
     {
+        ! defined('T_ENUM') && define('T_ENUM', -1654);
         $type = $class = null;
         $allTokensCount = \count($tokens);
         $parent = null;
@@ -37,7 +38,7 @@ class GetClassProperties
             }
 
             // when we reach the first "class", or "interface" or "trait" keyword
-            if (! $class && \in_array($tokens[$i][0], [T_CLASS, T_INTERFACE, T_TRAIT])) {
+            if (! $class && \in_array($tokens[$i][0], [T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM])) {
                 // anonymous class: new class() {...}
                 if ($tokens[$i - 2][0] !== T_NEW && ($tokens[$i + 2][0] ?? null) === T_STRING) {
                     $class = $tokens[$i + 2][1];
