@@ -38,7 +38,13 @@ class GetClassProperties
 
             // when we reach the first "class", or "interface" or "trait" keyword
             if (! $class && \in_array($tokens[$i][0], [T_CLASS, T_INTERFACE, T_TRAIT])) {
-                $class = $tokens[$i + 2][1];
+                // anonymous class: new class() {...}
+                if ($tokens[$i - 2][0] !== T_NEW && ($tokens[$i + 2][0] ?? null) === T_STRING) {
+                    $class = $tokens[$i + 2][1];
+                } else {
+                    $class = null;
+                }
+
                 $type = $tokens[$i][0];
                 $i = $i + 2;
                 continue;
@@ -51,10 +57,6 @@ class GetClassProperties
             if (! $interfaces) {
                 [$i, $interfaces] = self::collectAfterKeyword($tokens, $i, T_IMPLEMENTS, [], ',');
             }
-        }
-
-        if ($class == 'extends') {
-            $class = null;
         }
 
         return [
