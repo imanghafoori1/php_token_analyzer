@@ -201,7 +201,8 @@ class ClassReferenceFinder
                 // We start to collect tokens after the new keyword.
                 // unless we reach a variable name.
                 // currently tokenizer recognizes CONST NEW = 1; as new keyword.
-                (self::$lastToken[0] != T_CONST) && $collect = true;
+                // case New = 'new';
+                (self::$lastToken[0] != T_CONST && self::$lastToken[0] != T_CASE) && $collect = true;
                 self::forward();
 
                 // we do not want to collect the new keyword itself
@@ -246,13 +247,13 @@ class ClassReferenceFinder
             'private',
             'public',
             'protected',
-	    'int',
+    	    'int',
             'float',
             'void',
             'false',
             'true',
             'bool',
-	    'null',
+            'null',
             'array',
             'mixed',
             'callable',
