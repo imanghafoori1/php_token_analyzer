@@ -202,7 +202,7 @@ class ClassReferenceFinder
                 // unless we reach a variable name.
                 // currently tokenizer recognizes CONST NEW = 1; as new keyword.
                 // case New = 'new';
-                (self::$lastToken[0] != T_CONST && self::$lastToken[0] != T_CASE) && $collect = true;
+                ! in_array(self::$lastToken[0], [T_CONST, T_CASE, T_DOUBLE_COLON]) && $collect = true;
                 self::forward();
 
                 // we do not want to collect the new keyword itself
