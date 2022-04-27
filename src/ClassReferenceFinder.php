@@ -20,6 +20,7 @@ class ClassReferenceFinder
         ! defined('T_NAME_QUALIFIED') && define('T_NAME_QUALIFIED', -352);
         ! defined('T_NAME_FULLY_QUALIFIED') && define('T_NAME_FULLY_QUALIFIED', -373);
         ! defined('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG', -385);
+        ! defined('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG', -386);
 
         $namespace = '';
         $classes = [];
@@ -207,7 +208,7 @@ class ClassReferenceFinder
 
                 // we do not want to collect the new keyword itself
                 continue;
-            } elseif ($t === '|') {
+            } elseif ($t === '|' || $t === T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG) {
                 isset($classes[$c]) && $c++;
                 self::forward();
 

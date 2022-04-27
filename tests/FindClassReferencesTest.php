@@ -128,5 +128,41 @@ class FindClassReferencesTest extends BaseTestClass
             'class' => '\A\ReturnType',
             'line' => 70,
         ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\F',
+            'line' => 72,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\a\a',
+            'line' => 73,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\b\b',
+            'line' => 73,
+        ], $classes[$h++]);
+
+       $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\iteable',
+            'line' => 76,
+        ], $classes[$h++]);
+
+       $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\countable',
+            'line' => 76,
+        ], $classes[$h++]);
+
+
+       $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\Y',
+            'line' => 76,
+        ], $classes[$h++]);
+
+       $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\R',
+            'line' => 76,
+        ], $classes[$h]);
     }
 }
