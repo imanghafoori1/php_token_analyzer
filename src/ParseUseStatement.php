@@ -136,4 +136,20 @@ class ParseUseStatement
     {
         return self::fetch($tokens, [T_STRING, T_NS_SEPARATOR, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED]);
     }
+
+    public static function getUnusedImports($classes, $imports)
+    {
+        $inline_refs = [];
+        foreach ($classes as $refs) {
+            foreach ($refs as $ref) {
+                $inline_refs[$ref[1]] = null;
+            }
+        }
+        $imported_ref = [];
+        foreach ($imports as $_imps) {
+            $imported_ref = array_merge($imported_ref, $_imps);
+        }
+
+        return array_diff_key($imported_ref, $inline_refs);
+    }
 }
