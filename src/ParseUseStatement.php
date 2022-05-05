@@ -142,7 +142,7 @@ class ParseUseStatement
         $inline_refs = [];
         foreach ($classes as $refs) {
             foreach ($refs as $ref) {
-                $inline_refs[$ref[1]] = null;
+                $inline_refs[explode('\\', $ref[1])[0]] = null;
             }
         }
         $imported_ref = [];
