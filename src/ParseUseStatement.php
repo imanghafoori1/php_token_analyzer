@@ -43,7 +43,8 @@ class ParseUseStatement
      */
     public static function parseUseStatements($tokens, $forClass = null)
     {
-        ! defined('T_NAME_QUALIFIED') && define('T_NAME_QUALIFIED', 3030);
+        ! defined('T_NAME_QUALIFIED') && define('T_NAME_QUALIFIED', -352);
+        ! defined('T_NAME_FULLY_QUALIFIED') && define('T_NAME_FULLY_QUALIFIED', -373);
 
         $namespace = $class = $classLevel = $level = null;
         $output = $uses = [];
