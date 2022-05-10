@@ -138,7 +138,7 @@ class ParseUseStatement
         return self::fetch($tokens, [T_STRING, T_NS_SEPARATOR, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED]);
     }
 
-    public static function getUnusedImports($classes, $imports)
+    public static function getUnusedImports($classes, $imports, $docblockRefs = [])
     {
         $inline_refs = [];
         foreach ($classes as $refs) {
@@ -146,11 +146,21 @@ class ParseUseStatement
                 $inline_refs[explode('\\', $ref[1])[0]] = null;
             }
         }
+
+        $docRefs = [];
+        foreach ($docblockRefs as $ref) {
+            $class = $ref['class'];
+            if ($class[0] === '\\') {
+                continue;
+            }
+            $docRefs[explode('\\', $class)[0]] = null;
+        }
+
         $imported_ref = [];
         foreach ($imports as $_imps) {
             $imported_ref = array_merge($imported_ref, $_imps);
         }
 
-        return array_diff_key($imported_ref, $inline_refs);
+        return array_diff_key($imported_ref, $inline_refs, $docRefs);
     }
 }
