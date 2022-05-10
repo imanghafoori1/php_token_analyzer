@@ -2,6 +2,11 @@
 
 namespace Imanghafoori\TokenAnalyzer;
 
+use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\DocBlockFactory;
+use phpDocumentor\Reflection\Location;
+use phpDocumentor\Reflection\Types\Context;
+
 class ClassReferenceFinder
 {
     private static $lastToken = [null, null, null];
@@ -261,5 +266,66 @@ class ClassReferenceFinder
             '::',
             'iterable',
         ], true);
+    }
+
+    public static function readRefsInDocblocks($tokens)
+    {
+        $docblock = DocBlockFactory::createInstance();
+
+        $refs = [];
+        foreach ($tokens as $token) {
+            if ($token[0] === T_DOC_COMMENT) {
+                $refs = array_merge($refs, self::getRefsInDocblock(
+                    $docblock->create(
+                        $token[1],
+                        new Context('q1w23e4rt___ffff000'),
+                        new Location($token[2], 4)
+                    )
+                ));
+            }
+        }
+
+        return $refs;
+    }
+
+    private static function getRefsInDocblock(DocBlock $docblock): array
+    {
+        $refs = [];
+        $line = $docblock->getLocation()->getLineNumber();
+        foreach ($docblock->getTagsByName('method') as $method) {
+            $ref = (string) ($method->getReturnType());
+            ! self::isBuiltinType([0, $ref]) && $refs[] = $ref;
+            foreach ($method->getArguments() as $argument) {
+                $ref = str_replace('?', '', (string) $argument['type']);
+                ! self::isBuiltinType([0, $ref]) && $refs[] =  [
+                    'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
+                    'line' => $line,
+                ];
+            }
+        }
+
+        $readRef = function ($tagName) use ($docblock, $line) {
+            $refs = [];
+            foreach ($docblock->getTagsByName($tagName) as $ref) {
+                if (method_exists($ref, 'getType') && $ref->getType() && method_exists($ref->getType(), 'getFqsen')) {
+                    $refs[] = [
+                        'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref->getType()->getFqsen()),
+                        'line' => $line,
+                    ];
+                }
+            }
+
+            return $refs;
+        };
+
+        $refs = array_merge(
+            $refs,
+            $readRef('param'),
+            $readRef('return'),
+            $readRef('throws'),
+            $readRef('see')
+        );
+
+        return $refs;
     }
 }
