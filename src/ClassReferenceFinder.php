@@ -320,6 +320,7 @@ class ClassReferenceFinder
 
         $refs = array_merge(
             $refs,
+            self::getMixins($docblock, $line),
             $readRef('param'),
             $readRef('return'),
             $readRef('throws'),
@@ -327,5 +328,21 @@ class ClassReferenceFinder
         );
 
         return $refs;
+    }
+
+    private static function getMixins(DocBlock $docblock, int $line)
+    {
+        $mixins = [];
+        foreach ($docblock->getTagsByName('mixin') as $ref) {
+            $desc = $ref->getDescription();
+            if ($desc && $body = $desc->getBodyTemplate()) {
+                $mixins[] = [
+                    'line' => $line,
+                    'class' => $body,
+                ];
+            }
+        }
+
+        return $mixins;
     }
 }
