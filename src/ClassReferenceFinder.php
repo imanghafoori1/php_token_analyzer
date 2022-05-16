@@ -322,6 +322,7 @@ class ClassReferenceFinder
             $refs,
             self::getMixins($docblock, $line),
             $readRef('param'),
+            $readRef('var'),
             $readRef('return'),
             $readRef('throws'),
             $readRef('see')

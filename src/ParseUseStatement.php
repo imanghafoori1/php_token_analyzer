@@ -150,7 +150,7 @@ class ParseUseStatement
         $docRefs = [];
         foreach ($docblockRefs as $ref) {
             $class = $ref['class'];
-            if ($class[0] === '\\') {
+            if ($class === '' || $class[0] === '\\') {
                 continue;
             }
             $docRefs[explode('\\', $class)[0]] = null;
