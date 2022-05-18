@@ -75,5 +75,8 @@ class Paths extends \A\ParentClass implements InterF1, InterF2, \Inline\InterF3
 
     public function foo4 (iteable|countable $t, Y&R $e)
     {
+        if (request()->user() instanceof User) {
+            return true;
+        }
     }
 }
