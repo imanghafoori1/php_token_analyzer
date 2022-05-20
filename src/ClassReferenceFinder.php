@@ -174,6 +174,9 @@ class ClassReferenceFinder
                 // for a syntax like this:
                 // public function __construct(?Payment $payment) { ... }
                 // we skip collecting
+                if (!$isSignature) {
+                    $collect = false;
+                }
                 self::forward();
                 continue;
             } elseif ($t === T_DOUBLE_COLON) {
