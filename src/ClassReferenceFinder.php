@@ -297,7 +297,10 @@ class ClassReferenceFinder
         $line = $docblock->getLocation()->getLineNumber();
         foreach ($docblock->getTagsByName('method') as $method) {
             $ref = (string) ($method->getReturnType());
-            ! self::isBuiltinType([0, $ref]) && $refs[] = $ref;
+            ! self::isBuiltinType([0, $ref]) && $refs[] = [
+                'class' => $ref,
+                'line' => $line,
+            ];
             foreach ($method->getArguments() as $argument) {
                 $ref = str_replace('?', '', (string) $argument['type']);
                 ! self::isBuiltinType([0, $ref]) && $refs[] =  [
