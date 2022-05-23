@@ -91,6 +91,8 @@ class ClassReferenceFinder
                 continue;
             } elseif (\in_array($t, [T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
                 $isInsideMethod = false;
+            } elseif (defined('T_FN') && $t === T_FN) {
+                $isDefiningFunction = true;
             } elseif ($t === T_FUNCTION) {
                 $isDefiningFunction = true;
                 if ($isInSideClass and ! $isInsideMethod) {
