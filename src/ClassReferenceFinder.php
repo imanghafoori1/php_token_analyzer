@@ -33,6 +33,7 @@ class ClassReferenceFinder
         $force_close = $implements = $collect = false;
         $trait = $isDefiningFunction = $isCatchException = $isSignature = $isDefiningMethod = $isInsideMethod = $isInSideClass = false;
 
+        $isInsideArray = 0;
         while (self::$token = current($tokens)) {
             next($tokens);
             $t = self::$token[0];
@@ -67,6 +68,13 @@ class ClassReferenceFinder
                 }
                 self::forward();
                 continue;
+            } elseif ($t === T_DOUBLE_ARROW) {
+                if ($collect) {
+                    $c++;
+                    $collect = false;
+                    self::forward();
+                    continue;
+                }
             } elseif ($t === T_CLASS || $t === T_TRAIT) {
                 // new class {... }
                 // ::class
@@ -132,14 +140,17 @@ class ClassReferenceFinder
             } elseif ($t === ',') {
                 // to avoid mistaking commas in default array values with commas between args
                 // example:   function hello($arg = [1, 2]) { ... }
-                $collect = ($isSignature && self::$lastToken[0] === T_VARIABLE) || $implements || $trait;
+                $collect = $isInsideArray === 0 || $implements || $trait;
                 $isInSideClass && ($force_close = false);
                 // for method calls: foo(new Hello, $var);
                 // we do not want to collect after comma.
                 isset($classes[$c]) && $c++;
                 self::forward();
                 continue;
+            } elseif ($t === '[') {
+                $isInsideArray++;
             } elseif ($t === ']') {
+                $isInsideArray--;
                 $force_close = $collect = false;
                 isset($classes[$c]) && $c++;
                 self::forward();
@@ -211,7 +222,7 @@ class ClassReferenceFinder
             } elseif ($t === T_NEW || $t === T_INSTANCEOF) {
                 // We start to collect tokens after the new keyword.
                 // unless we reach a variable name.
-                // currently tokenizer recognizes CONST NEW = 1; as new keyword.
+                // currently, tokenizer recognizes CONST NEW = 1; as new keyword.
                 // case New = 'new';
                 ! in_array(self::$lastToken[0], [T_CONST, T_CASE, T_DOUBLE_COLON]) && $collect = true;
                 self::forward();
@@ -258,7 +269,7 @@ class ClassReferenceFinder
             'private',
             'public',
             'protected',
-    	    'int',
+            'int',
             'float',
             'void',
             'false',

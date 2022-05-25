@@ -3,9 +3,27 @@
 namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassMethods;
+use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 
 class AbstractMethodsClassTest extends BaseTestClass
 {
+    /** @test */
+    public function check_final_class_is_detected2_test()
+    {
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/arguments.stub'));
+
+        [$output,] = ClassReferenceFinder::process($tokens);
+           $this->assertEquals('T1', $output[0][0][1]);
+           $this->assertEquals('T2', $output[1][0][1]);
+           $this->assertEquals('T3', $output[2][0][1]);
+           $this->assertEquals('T33', $output[3][0][1]);
+           $this->assertEquals('T4', $output[4][0][1]);
+           $this->assertEquals('T5', $output[5][0][1]);
+           $this->assertEquals('T6', $output[6][0][1]);
+           $this->assertEquals('T7', $output[7][0][1]);
+           $this->assertEquals('T8', $output[8][0][1]);
+    }
+
     /** @test */
     public function check_final_class_is_detected_test()
     {
