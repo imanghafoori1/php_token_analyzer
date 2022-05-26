@@ -69,6 +69,10 @@ class ClassReferenceFinder
                 self::forward();
                 continue;
             } elseif ($t === T_DOUBLE_ARROW) {
+                if (! $isInsideArray) {
+                    // it means that we have reached: fn($r = ['a' => 'b']) => '-'
+                    $isSignature = $isDefiningFunction = false;
+                }
                 if ($collect) {
                     $c++;
                     $collect = false;
@@ -316,7 +320,7 @@ class ClassReferenceFinder
             ];
             foreach ($method->getArguments() as $argument) {
                 $ref = str_replace('?', '', (string) $argument['type']);
-                ! self::isBuiltinType([0, $ref]) && $refs[] =  [
+                ! self::isBuiltinType([0, $ref]) && $refs[] = [
                     'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
                     'line' => $line,
                 ];

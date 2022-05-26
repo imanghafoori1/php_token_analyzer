@@ -4,7 +4,9 @@ class S
 {
     function t(T1 $m1 = '', T2 $m2 = ['H', 0, null, ['d',], 's' => 's'], T3 $m3) : T33
     {
+	    fn ($path = ['a' => 'b']) => '1-' ? '2=' : '3_'
+        self::h($p, l();
         fn (T4 $m1): T5 => ''.T6::class; T7::class;
-        ['a' => T8::class]
+        ['a' => T8::class];
     }
 }
