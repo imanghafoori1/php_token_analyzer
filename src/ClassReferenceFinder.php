@@ -33,7 +33,7 @@ class ClassReferenceFinder
         $force_close = $implements = $collect = false;
         $trait = $isDefiningFunction = $isCatchException = $isSignature = $isDefiningMethod = $isInsideMethod = $isInSideClass = false;
 
-        $isInsideArray = 0;
+        $fnLevel = $isInsideArray = 0;
         while (self::$token = current($tokens)) {
             next($tokens);
             $t = self::$token[0];
@@ -69,7 +69,7 @@ class ClassReferenceFinder
                 self::forward();
                 continue;
             } elseif ($t === T_DOUBLE_ARROW) {
-                if (! $isInsideArray) {
+                if ($fnLevel === 0) {
                     // it means that we have reached: fn($r = ['a' => 'b']) => '-'
                     $isSignature = $isDefiningFunction = false;
                 }
@@ -104,6 +104,7 @@ class ClassReferenceFinder
             } elseif (\in_array($t, [T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
                 $isInsideMethod = false;
             } elseif (defined('T_FN') && $t === T_FN) {
+                $fnLevel = 0;
                 $isDefiningFunction = true;
             } elseif ($t === T_FUNCTION) {
                 $isDefiningFunction = true;
@@ -152,8 +153,10 @@ class ClassReferenceFinder
                 self::forward();
                 continue;
             } elseif ($t === '[') {
+                $fnLevel++;
                 $isInsideArray++;
             } elseif ($t === ']') {
+                $fnLevel--;
                 $isInsideArray--;
                 $force_close = $collect = false;
                 isset($classes[$c]) && $c++;
@@ -191,7 +194,7 @@ class ClassReferenceFinder
                 // for a syntax like this:
                 // public function __construct(?Payment $payment) { ... }
                 // we skip collecting
-                if (!$isSignature) {
+                if (! $isSignature) {
                     $collect = false;
                 }
                 self::forward();
