@@ -140,7 +140,7 @@ class ClassReferenceFinder
             } elseif ($t === ',') {
                 // to avoid mistaking commas in default array values with commas between args
                 // example:   function hello($arg = [1, 2]) { ... }
-                $collect = $isInsideArray === 0 || $implements || $trait;
+                $collect = ($isSignature && $isInsideArray === 0) || $implements || $trait;
                 $isInSideClass && ($force_close = false);
                 // for method calls: foo(new Hello, $var);
                 // we do not want to collect after comma.
