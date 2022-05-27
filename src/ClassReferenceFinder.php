@@ -31,7 +31,7 @@ class ClassReferenceFinder
         $classes = [];
         $c = 0;
         $force_close = $implements = $collect = false;
-        $trait = $isDefiningFunction = $isCatchException = $isSignature = $isDefiningMethod = $isInsideMethod = $isInSideClass = false;
+        $isImporting = $trait = $isDefiningFunction = $isCatchException = $isSignature = $isDefiningMethod = $isInsideMethod = $isInSideClass = false;
 
         $fnLevel = $isInsideArray = 0;
         while (self::$token = current($tokens)) {
@@ -39,6 +39,7 @@ class ClassReferenceFinder
             $t = self::$token[0];
 
             if ($t === T_USE) {
+                ! $isInSideClass && $isImporting = true;
                 next($tokens);
                 // use function Name\Space\function_name;
                 if (current($tokens)[0] === T_FUNCTION) {
@@ -136,7 +137,7 @@ class ClassReferenceFinder
                 $trait = $force_close = false;
 
                 // Interface methods end up with ";"
-                $t === ';' && $isSignature = false;
+                $t === ';' && ($isImporting = $isSignature = false);
                 $collect && isset($classes[$c]) && $c++;
                 $collect = false;
 
@@ -222,8 +223,11 @@ class ClassReferenceFinder
                     $classes[$c][] = self::$lastToken;
                 }
             } elseif ($t === T_NAME_QUALIFIED || $t === T_NAME_FULLY_QUALIFIED) {
-                if ($isInSideClass) {
-                    $collect = true;
+                if (! $isImporting) {
+                    $classes[$c++][] = self::$token;
+                    $collect = false;
+                    self::forward();
+                    continue;
                 }
                 //self::forward();
             } elseif ($t === T_NEW || $t === T_INSTANCEOF) {

@@ -7,6 +7,20 @@ use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 class ClassReferencesProcessTest extends BaseTestClass
 {
     /** @test */
+    public function can_instanceof()
+    {
+        $string = file_get_contents(__DIR__.'/stubs/instanceof.stub');
+        $tokens = token_get_all($string);
+
+        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+
+        $this->assertEquals('Hello', $output[0][0][1]);
+        $this->assertEquals('Hello2', $output[1][0][1]);
+        $this->assertEquals('\Hello3', $output[2][0][1]);
+        $this->assertEquals(3, count($output));
+    }
+
+    /** @test */
     public function can_detect_class_references()
     {
         $string = file_get_contents(__DIR__.'/stubs/class_references.stub');

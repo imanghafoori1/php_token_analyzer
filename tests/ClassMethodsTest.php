@@ -9,7 +9,7 @@ class ClassMethodsTest extends BaseTestClass
     /** @test */
     public function can_detect_method_visibility()
     {
-        $string = file_get_contents(__DIR__.'/stubs/sample_class.php');
+        $string = file_get_contents(__DIR__.'/stubs/sample_class.stub');
         $tokens = token_get_all($string);
 
         $class = ClassMethods::read($tokens);
@@ -43,7 +43,7 @@ class ClassMethodsTest extends BaseTestClass
     /** @test */
     public function can_detect_method_visibility_on_interfaces()
     {
-        $string = file_get_contents(__DIR__.'/stubs/PasswordBroker.php');
+        $string = file_get_contents(__DIR__.'/stubs/PasswordBroker.stub');
         $tokens = token_get_all($string);
 
         $class = ClassMethods::read($tokens);
@@ -76,7 +76,7 @@ class ClassMethodsTest extends BaseTestClass
     public function can_detect_php8_syntax()
     {
         if (version_compare(phpversion(), '8.0.0') === 1) {
-            $string = file_get_contents(__DIR__.'/stubs/php8syntax.php');
+            $string = file_get_contents(__DIR__.'/stubs/php8syntax.stub');
             $tokens = token_get_all($string);
 
             $actual = ClassMethods::read($tokens);
