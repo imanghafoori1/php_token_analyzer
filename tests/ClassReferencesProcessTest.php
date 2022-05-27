@@ -21,6 +21,21 @@ class ClassReferencesProcessTest extends BaseTestClass
     }
 
     /** @test */
+    public function refs_in_flat_files()
+    {
+        $string = file_get_contents(__DIR__.'/stubs/non_in_class_refs.stub');
+        $tokens = token_get_all($string);
+
+        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        $this->assertEquals("Model\User", $output[0][0][1]);
+        $this->assertEquals("H", $output[1][0][1]);
+        $this->assertEquals("T", $output[2][0][1]);
+        $this->assertEquals("H", $output[3][0][1]);
+        $this->assertEquals("T", $output[4][0][1]);
+        $this->assertEquals("", $namespace);
+    }
+
+    /** @test */
     public function can_detect_class_references()
     {
         $string = file_get_contents(__DIR__.'/stubs/class_references.stub');

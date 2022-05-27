@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\IncompleteTest;
 use \Countable;
-
+use function h\f;
 /**
  * Interface interface_sample
  */
