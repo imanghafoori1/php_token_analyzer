@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
 namespace /*HEHE*/ Imanghafoori\LaravelMicroscope\FileReaders;
-
 use Illuminate\Contracts\HalfImported;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException; // comment
 use Symfony\Component\Finder\Symfony\Component\Finder\Finder;
 use function foo\bar_func;
+use Laravel\Telescope\Watchers;
 class Paths extends \A\ParentClass implements InterF1, InterF2, \Inline\InterF3
 {
     use Trait1, Trait2;
@@ -78,5 +78,6 @@ class Paths extends \A\ParentClass implements InterF1, InterF2, \Inline\InterF3
         if (request()->user() instanceof User) {
             return true;
         }
+        $t = Watchers\BatchWatcher::class;
     }
 }
