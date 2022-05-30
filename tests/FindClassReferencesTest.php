@@ -11,7 +11,7 @@ class FindClassReferencesTest extends BaseTestClass
     {
         $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/class_references.stub'));
 
-        [$classes, $namespace] = ParseUseStatement::findClassReferences($tokens, 'class_references.stub');
+        [$classes, $namespace] = ParseUseStatement::findClassReferences($tokens);
         $this->assertEquals("Imanghafoori\LaravelMicroscope\FileReaders", $namespace);
         $h = 0;
         $this->assertEquals([
@@ -168,6 +168,36 @@ class FindClassReferencesTest extends BaseTestClass
         $this->assertEquals([
             'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\User',
             'line' => 78,
-        ], $classes[$h]);
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\ParentOfAnonymous',
+            'line' => 87,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\interfaceOfAnonymous',
+            'line' => 88,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\ParentOfAnonymous',
+            'line' => 89,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\interfaceOfAnonymous',
+            'line' => 89,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => '\T',
+            'line' => 90,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => '\interfaceOfAnonymous',
+            'line' => 92,
+        ], $classes[$h++]);
     }
 }

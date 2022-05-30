@@ -79,4 +79,16 @@ class Paths extends \A\ParentClass implements InterF1, InterF2, \Inline\InterF3
             return true;
         }
     }
+
+    public function F()
+    {
+        new class {}; new class() {};
+        new class($f) {};
+        new class($f) extends ParentOfAnonymous {};
+        new class($f) implements interfaceOfAnonymous {};
+        new class() extends ParentOfAnonymous implements interfaceOfAnonymous {
+            public function __construct(\T $t) {}
+        };
+        new class($f) implements \interfaceOfAnonymous {};
+    }
 }
