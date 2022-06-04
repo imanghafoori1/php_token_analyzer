@@ -274,6 +274,7 @@ class ClassReferenceFinder
     public static function isBuiltinType($token)
     {
         return \in_array($token[1], [
+            'static',
             'object',
             'string',
             'never',
@@ -333,17 +334,21 @@ class ClassReferenceFinder
             foreach ($docblock->getTagsByName($tagName) as $ref) {
                 if (method_exists($ref, 'getType') && $ref->getType() && method_exists($ref->getType(), 'getFqsen')) {
                     $refs = self::addRef((explode('|', $ref->getType()->getFqsen())), $line, $refs);
-                } elseif (method_exists($ref->getType(), 'getValueType')) {
-                    // this finds the "Money" ref in: " @var array<int, class-string<Money>> "
-                    $value = $ref->getType()->getValueType();
-                    if (method_exists($value, 'getFqsen')) {
-                        $v = $value->getFqsen();
-                    } else {
-                        // * @var array<int, Money|Throwable>
-                        $v = $value->__toString();
-                    }
-                    $refs = self::addRef(explode('|', $v), $line, $refs);
+                    continue;
                 }
+                // this finds the "Money" ref in: " @var array<int, class-string<Money>> "
+                if (! method_exists($ref->getType(), 'getValueType')) {
+                    $refs = self::addRef(explode('|', (string) $ref->getType()), $line, $refs);
+                    continue;
+                }
+                $value = $ref->getType()->getValueType();
+                if (method_exists($value, 'getFqsen')) {
+                    $v = $value->getFqsen();
+                } else {
+                    // * @var array<int, Money|Throwable>
+                    $v = $value->__toString();
+                }
+                $refs = self::addRef(explode('|', $v), $line, $refs);
             }
 
             return $refs;
@@ -381,7 +386,7 @@ class ClassReferenceFinder
     private static function addRef($_refs, int $line, array $refs): array
     {
         foreach ($_refs as $ref) {
-            ! self::isBuiltinType([0, $ref]) && $refs[] = [
+            ! self::isBuiltinType([0, $ref]) && ! Str::startsWith($ref, ['array<int', 'array<string']) && $ref !== 'class-string' && $refs[] = [
                 'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
                 'line' => $line,
             ];
