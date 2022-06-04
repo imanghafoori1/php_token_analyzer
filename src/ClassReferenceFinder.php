@@ -332,7 +332,17 @@ class ClassReferenceFinder
             $refs = [];
             foreach ($docblock->getTagsByName($tagName) as $ref) {
                 if (method_exists($ref, 'getType') && $ref->getType() && method_exists($ref->getType(), 'getFqsen')) {
-                    $refs = self::addRef(explode('|', $ref->getType()->getFqsen()), $line, $refs);
+                    $refs = self::addRef((explode('|', $ref->getType()->getFqsen())), $line, $refs);
+                } elseif (method_exists($ref->getType(), 'getValueType')) {
+                    // this finds the "Money" ref in: " @var array<int, class-string<Money>> "
+                    $value = $ref->getType()->getValueType();
+                    if (method_exists($value, 'getFqsen')) {
+                        $v = $value->getFqsen();
+                    } else {
+                        // * @var array<int, Money|Throwable>
+                        $v = $value->__toString();
+                    }
+                    $refs = self::addRef(explode('|', $v), $line, $refs);
                 }
             }
 
