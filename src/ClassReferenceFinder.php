@@ -336,19 +336,32 @@ class ClassReferenceFinder
                     $refs = self::addRef((explode('|', $ref->getType()->getFqsen())), $line, $refs);
                     continue;
                 }
-                // this finds the "Money" ref in: " @var array<int, class-string<Money>> "
-                if (! method_exists($ref->getType(), 'getValueType')) {
-                    $refs = self::addRef(explode('|', (string) $ref->getType()), $line, $refs);
-                    continue;
-                }
-                $value = $ref->getType()->getValueType();
-                if (method_exists($value, 'getFqsen')) {
-                    $v = $value->getFqsen();
+                if (method_exists($ref, 'getType')) {
+                    // this finds the "Money" ref in: " @var array<int, class-string<Money>> "
+                    $type = $ref->getType();
+                    if (! $type) {
+                        continue;
+                    }
+                    if (! method_exists($type, 'getValueType')) {
+                        $refs = self::addRef(explode('|', (string) $ref->getType()), $line, $refs);
+                    } else {
+                        $value = $ref->getType()->getValueType();
+                        if (! $value) {
+                            continue;
+                        }
+                        if (method_exists($value, 'getFqsen')) {
+                            $v = $value->getFqsen();
+                        } else {
+                            // * @var array<int, Money|Throwable>
+                            $v = $value->__toString();
+                        }
+                        $refs = self::addRef(explode('|', $v), $line, $refs);
+                    }
                 } else {
-                    // * @var array<int, Money|Throwable>
-                    $v = $value->__toString();
+                    $ref = (string) $ref;
+
+                    $ref && $refs = self::addRef(explode('|', $ref), $line, $refs);
                 }
-                $refs = self::addRef(explode('|', $v), $line, $refs);
             }
 
             return $refs;
