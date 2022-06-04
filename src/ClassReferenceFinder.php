@@ -320,17 +320,11 @@ class ClassReferenceFinder
         $refs = [];
         $line = $docblock->getLocation()->getLineNumber();
         foreach ($docblock->getTagsByName('method') as $method) {
-            $ref = (string) ($method->getReturnType());
-            ! self::isBuiltinType([0, $ref]) && $refs[] = [
-                'class' => $ref,
-                'line' => $line,
-            ];
+            $refs = self::addRef(explode('|', (string) $method->getReturnType()), $line, $refs);
+
             foreach ($method->getArguments() as $argument) {
-                $ref = str_replace('?', '', (string) $argument['type']);
-                ! self::isBuiltinType([0, $ref]) && $refs[] = [
-                    'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
-                    'line' => $line,
-                ];
+                $_refs = explode('|', str_replace('?', '', (string) $argument['type']));
+                $refs = self::addRef($_refs, $line, $refs);
             }
         }
 
@@ -338,10 +332,7 @@ class ClassReferenceFinder
             $refs = [];
             foreach ($docblock->getTagsByName($tagName) as $ref) {
                 if (method_exists($ref, 'getType') && $ref->getType() && method_exists($ref->getType(), 'getFqsen')) {
-                    $refs[] = [
-                        'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref->getType()->getFqsen()),
-                        'line' => $line,
-                    ];
+                    $refs = self::addRef(explode('|', $ref->getType()->getFqsen()), $line, $refs);
                 }
             }
 
@@ -375,5 +366,17 @@ class ClassReferenceFinder
         }
 
         return $mixins;
+    }
+
+    private static function addRef($_refs, int $line, array $refs): array
+    {
+        foreach ($_refs as $ref) {
+            ! self::isBuiltinType([0, $ref]) && $refs[] = [
+                'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
+                'line' => $line,
+            ];
+        }
+
+        return $refs;
     }
 }
