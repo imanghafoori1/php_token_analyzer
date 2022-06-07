@@ -293,6 +293,7 @@ class ClassReferenceFinder
             'callable',
             '::',
             'iterable',
+            'readonly',
         ], true);
     }
 
