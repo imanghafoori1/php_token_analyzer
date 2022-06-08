@@ -104,7 +104,20 @@ class ClassReferenceFinder
                 next($tokens);
                 continue;
             } elseif (\in_array($t, [T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
+                $_ = next($tokens);
+
+                if ($_[0] === T_STATIC && $_[1] === 'static') {
+                    while (($_ = next($tokens))[0] === T_WHITESPACE) {}
+                }
+
+                if ($_[0] === T_CONST || $_[0] === T_FUNCTION) {
+                    continue;
+                }
+
+                $collect = true;
+                self::forward();
                 $isInsideMethod = false;
+                continue;
             } elseif (defined('T_FN') && $t === T_FN) {
                 $fnLevel = 0;
                 $isDefiningFunction = true;
@@ -114,9 +127,7 @@ class ClassReferenceFinder
                     $isDefiningMethod = true;
                 }
             } elseif ($t === T_VARIABLE || $t === T_ELLIPSIS) {
-                //if ($isDefiningFunction) {
-                //$c++;
-                //}
+                $collect && isset($classes[$c]) && $c++;
                 $collect = false;
                 self::forward();
                 // we do not want to collect variables

@@ -2,6 +2,10 @@
 
 class php8syntax
 {
+	public function A() {
+		readonly::class;
+	}
+
 	public readonly Hello1 $d = Hello2::class;
 
     public function __construct(private readonly Hello3 $foo) {

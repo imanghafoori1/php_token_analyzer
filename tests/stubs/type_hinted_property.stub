@@ -1,0 +1,16 @@
+<?php
+
+class A {
+	public const a;
+	public function r (){
+
+	}
+	public static tH0 $a;
+	public tH1 $a;
+	public $a = 'ADC';
+	public t\H2 $a;
+	public \tH3 $b;
+	public readonly tH4 $c;
+	public int $a;
+	public string $a;
+}
