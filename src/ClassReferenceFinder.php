@@ -26,6 +26,7 @@ class ClassReferenceFinder
         ! defined('T_NAME_FULLY_QUALIFIED') && define('T_NAME_FULLY_QUALIFIED', -373);
         ! defined('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG', -385);
         ! defined('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG', -386);
+        ! defined('T_READONLY') && define('T_READONLY', -387);
 
         $namespace = '';
         $classes = [];
@@ -274,27 +275,28 @@ class ClassReferenceFinder
     public static function isBuiltinType($token)
     {
         return \in_array($token[1], [
-            'static',
-            'object',
-            'string',
+            'array',
+            'bool',
+            'callable',
+            'false',
+            'float',
+            'int',
+            'iterable',
+            'mixed',
             'never',
+            'null',
+            'object',
             'private',
             'public',
             'protected',
-            'int',
-            'float',
-            'void',
-            'false',
+            'parent',
+            'static',
+            'self',
+            'string',
             'true',
-            'bool',
-            'null',
-            'array',
-            'mixed',
-            'callable',
+            'void',
             '::',
-            'iterable',
-            'readonly',
-        ], true);
+        ], true) || \in_array($token[0], [T_READONLY]);
     }
 
     public static function readRefsInDocblocks($tokens)
@@ -337,32 +339,27 @@ class ClassReferenceFinder
                     $refs = self::addRef((explode('|', $ref->getType()->getFqsen())), $line, $refs);
                     continue;
                 }
-                if (method_exists($ref, 'getType')) {
-                    // this finds the "Money" ref in: " @var array<int, class-string<Money>> "
-                    $type = $ref->getType();
-                    if (! $type) {
-                        continue;
-                    }
-                    if (! method_exists($type, 'getValueType')) {
-                        $refs = self::addRef(explode('|', (string) $ref->getType()), $line, $refs);
-                    } else {
-                        $value = $ref->getType()->getValueType();
-                        if (! $value) {
-                            continue;
-                        }
-                        if (method_exists($value, 'getFqsen')) {
-                            $v = $value->getFqsen();
-                        } else {
-                            // * @var array<int, Money|Throwable>
-                            $v = $value->__toString();
-                        }
-                        $refs = self::addRef(explode('|', $v), $line, $refs);
-                    }
-                } else {
+                if (! method_exists($ref, 'getType')) {
                     $ref = (string) $ref;
-
                     $ref && $refs = self::addRef(explode('|', $ref), $line, $refs);
+                    continue;
                 }
+                // this finds the "Money" ref in: " @var array<int, class-string<Money>> "
+                $type = $ref->getType();
+                if (! $type) {
+                    continue;
+                }
+                if (! method_exists($type, 'getValueType')) {
+                    $refs = self::addRef(explode('|', (string) $ref->getType()), $line, $refs);
+                    continue;
+                }
+                $value = $ref->getType()->getValueType();
+                if (! $value) {
+                    continue;
+                }
+                $v = method_exists($value, 'getFqsen') ? $value->getFqsen() : $value->__toString();
+
+                $refs = self::addRef(explode('|', $v), $line, $refs);
             }
 
             return $refs;

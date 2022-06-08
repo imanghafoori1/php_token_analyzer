@@ -56,7 +56,7 @@ class Paths extends \A\ParentClass implements InterF1, InterF2, \Inline\InterF3
     public function returny_string(?string $string, iterable $t): self // a comment
     {
         $tt = '';
-        new Newed();
+        new Newed(); new Newed();
         new A\Newed;
         new $tt;
     }

@@ -59,12 +59,11 @@ class ClassReferencesProcessTest extends BaseTestClass
         $this->assertEquals([[T_STRING, 'TypeHint1', 51]], $output[17]);
         $this->assertEquals([[T_STRING, 'ReturnyType2', 51]], $output[18]);
         $this->assertEquals([[T_STRING, 'Newed', 59]], $output[20]);
-        $this->assertEquals([[T_STRING, 'self', 56]], $output[19]);
 
         $this->assertEquals("Imanghafoori\LaravelMicroscope\FileReaders", $namespace);
+        $this->assertEquals([[T_STRING, 'InConstructor', 67]], $output[22]);
 
-        $this->assertEquals([[T_STRING, 'InConstructor', 67]], $output[23]);
-        $this->assertEquals([[T_STRING, 'F', 72]], $output[25]);
+        $this->assertEquals([[T_STRING, 'F', 72]], $output[24]);
 
         if (version_compare(phpversion(), '8.0.0') !== 1) {
             $this->assertEquals([[T_NS_SEPARATOR, '\\', 9], [T_STRING, 'Inline', 9], [T_NS_SEPARATOR, '\\', 9], [T_STRING, 'InterF3', 9]], $output[3]);

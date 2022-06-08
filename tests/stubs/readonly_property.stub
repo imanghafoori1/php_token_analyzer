@@ -1,0 +1,22 @@
+<?php
+
+class php8syntax
+{
+	public readonly Hello1 $d = Hello2::class;
+
+    public function __construct(private readonly Hello3 $foo) {
+        static::class;
+        self::class;
+        parent::class;
+        $var::class;
+
+        new static();
+        new static;
+
+        new self();
+        new self;
+
+        new parent;
+        new parent();
+    }
+}
