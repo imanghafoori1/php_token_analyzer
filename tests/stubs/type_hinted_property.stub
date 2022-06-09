@@ -2,7 +2,7 @@
 
 class A {
 	public const a;
-	public function r (){
+	public function r () {
 
 	}
 	public static tH0 $a;
@@ -11,6 +11,8 @@ class A {
 	public t\H2 $a;
 	public \tH3 $b;
 	public readonly tH4 $c;
+	public tH5|tH6 $c;
+	public tH7&tH8 $c;
 	public int $a;
 	public string $a;
 }
