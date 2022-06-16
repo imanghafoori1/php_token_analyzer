@@ -65,8 +65,7 @@ class ClassReferenceFinder
                     $force_close = true;
                     $collect = false;
                 } else {
-                    $trait = true;
-                    $collect = true;
+                    $collect = $trait = true;
                 }
                 self::forward();
                 continue;
@@ -103,7 +102,7 @@ class ClassReferenceFinder
                 }
                 next($tokens);
                 continue;
-            } elseif (\in_array($t, [T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
+            } elseif (\in_array($t, [T_PUBLIC, T_PROTECTED, T_PRIVATE], true) && self::$lastToken[0] !== T_AS) {
                 $_ = next($tokens);
 
                 if ($_[0] === T_STATIC && $_[1] === 'static') {

@@ -7,6 +7,18 @@ use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 class ClassReferencesProcessTest extends BaseTestClass
 {
     /** @test */
+    public function traits()
+    {
+        $string = file_get_contents(__DIR__.'/stubs/used_trait.stub');
+        $tokens = token_get_all($string);
+
+        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+
+        $this->assertEquals('MyTrait', $output[0][0][1]);
+        $this->assertEquals(1, count($output));
+    }
+
+    /** @test */
     public function can_instanceof()
     {
         $string = file_get_contents(__DIR__.'/stubs/instanceof.stub');
