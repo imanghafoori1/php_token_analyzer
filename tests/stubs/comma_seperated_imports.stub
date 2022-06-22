@@ -1,0 +1,9 @@
+<?php
+
+use A, B\B\B, C;
+use D;
+
+class G
+{
+	//
+}

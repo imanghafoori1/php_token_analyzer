@@ -44,6 +44,23 @@ class ParseUseStatementTest extends BaseTestClass
     }
 
     /** @test */
+    public function can_detect_comma_seperated_imports()
+    {
+        $tokens = $this->getTokens('/stubs/comma_seperated_imports.stub');
+
+        [$result, $uses] = ParseUseStatement::parseUseStatements($tokens);
+
+        $expected = [
+            'A' => ['A', 3],
+            'B' => ['B\B\B', 3],
+            'C' => ['C', 3],
+            'D' => ['D', 4],
+        ];
+
+        $this->assertEquals($expected, $uses);
+    }
+
+    /** @test */
     public function can_skip_imported_global_functions()
     {
         $tokens = $this->getTokens('/stubs/auth.stub');
