@@ -47,4 +47,10 @@ class Str
 
         return $subject;
     }
+
+    public static function endsWith($haystack, $needle)
+    {
+        return substr($haystack, -strlen($needle)) === $needle;
+    }
+
 }
