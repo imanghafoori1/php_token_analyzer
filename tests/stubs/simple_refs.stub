@@ -1,0 +1,14 @@
+<?php
+
+namespace A1\A2;
+
+use R1\R2;
+use half\Imported;
+
+class D {
+	public function foo () {
+        R2::class;
+        Imported\Rest::class;
+        NoUse::class;
+	}
+}

@@ -7,6 +7,15 @@ class ParseUseStatement
     public static function getExpandedRef($tokens, $className)
     {
         $refs = ParseUseStatement::parseUseStatements($tokens, $className);
+
+        $namespace = '';
+        foreach($refs[0] as $classPath => $y) {
+            $segs = explode('\\', $classPath);
+            array_pop($segs);
+            $namespace = implode('\\', $segs);
+            break;
+        }
+
         $rest = '';
         if ($className[0] !== '\\') {
             $parts = explode('\\', $className);
@@ -16,7 +25,7 @@ class ParseUseStatement
             $rest && $rest = '\\'.$rest;
         }
 
-        return ($refs[1][$className][0] ?? $className).$rest;
+        return ($refs[1][$className][0] ?? ($namespace.'\\'.$className)).$rest;
     }
 
     public static function getUseStatementsByPath($namespacedClassName, $absPath)
