@@ -15,4 +15,5 @@ class A {
 	public tH7&tH8 $c;
 	public int $a;
 	public string $a;
+	public ?tH9 $h;
 }

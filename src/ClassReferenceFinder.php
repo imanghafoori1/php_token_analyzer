@@ -31,7 +31,7 @@ class ClassReferenceFinder
         $namespace = '';
         $classes = [];
         $c = 0;
-        $force_close = $implements = $collect = false;
+        $declaringProperty = $force_close = $implements = $collect = false;
         $isImporting = $trait = $isDefiningFunction = $isCatchException = $isSignature = $isDefiningMethod = $isInsideMethod = $isInSideClass = false;
 
         $fnLevel = $isInsideArray = 0;
@@ -115,6 +115,7 @@ class ClassReferenceFinder
 
                 $collect = true;
                 self::forward();
+                $declaringProperty = true;
                 $isInsideMethod = false;
                 continue;
             } elseif (defined('T_FN') && $t === T_FN) {
@@ -148,7 +149,7 @@ class ClassReferenceFinder
                 $trait = $force_close = false;
 
                 // Interface methods end up with ";"
-                $t === ';' && ($isImporting = $isSignature = false);
+                $t === ';' && ($declaringProperty = $isImporting = $isSignature = false);
                 $collect && isset($classes[$c]) && $c++;
                 $collect = false;
 
@@ -206,7 +207,7 @@ class ClassReferenceFinder
                 // for a syntax like this:
                 // public function __construct(?Payment $payment) { ... }
                 // we skip collecting
-                if (! $isSignature) {
+                if (! $isSignature && ! $declaringProperty) {
                     $collect = false;
                 }
                 self::forward();

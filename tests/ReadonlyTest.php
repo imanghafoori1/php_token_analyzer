@@ -35,6 +35,7 @@ class ReadonlyTest extends BaseTestClass
         $this->assertEquals('tH6', $output[6][0][1]);
         $this->assertEquals('tH7', $output[7][0][1]);
         $this->assertEquals('tH8', $output[8][0][1]);
+        $this->assertEquals('tH9', $output[9][0][1]);
     }
 }
 
