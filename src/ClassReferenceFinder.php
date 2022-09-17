@@ -408,6 +408,7 @@ class ClassReferenceFinder
     private static function addRef($_refs, int $line, array $refs): array
     {
         foreach ($_refs as $ref) {
+            $ref = str_replace('[]', '', $ref);
             ! self::isBuiltinType([0, $ref]) && ! Str::startsWith($ref, ['array<int', 'array<string']) && $ref !== 'class-string' && $refs[] = [
                 'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
                 'line' => $line,
