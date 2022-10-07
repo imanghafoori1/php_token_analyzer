@@ -8,6 +8,15 @@ use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 class AbstractMethodsClassTest extends BaseTestClass
 {
     /** @test */
+    public function constants()
+    {
+        $string = file_get_contents(__DIR__.'/stubs/const.stub');
+        $tokens = token_get_all($string);
+        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        $this->assertCount(0, $output);
+    }
+
+    /** @test */
     public function check_final_class_is_detected2_test()
     {
         $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/arguments.stub'));

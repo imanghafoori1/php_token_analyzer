@@ -102,7 +102,7 @@ class ClassReferenceFinder
                 }
                 next($tokens);
                 continue;
-            } elseif (\in_array($t, [T_PUBLIC, T_PROTECTED, T_PRIVATE], true) && self::$lastToken[0] !== T_AS) {
+            } elseif (\in_array($t, [T_PUBLIC, T_PROTECTED, T_PRIVATE], true) && ! in_array(self::$lastToken[0], [T_AS, T_CONST, T_CASE])) {
                 $_ = next($tokens);
 
                 if ($_[0] === T_STATIC && $_[1] === 'static') {
@@ -257,6 +257,13 @@ class ClassReferenceFinder
                 self::forward();
 
                 continue;
+            } elseif ($t === T_CONST || $t === T_CASE) {
+                $i = key($tokens);
+                while (in_array($tokens[$i + 1][0], [T_COMMENT, T_DOC_COMMENT])) {
+                    $i++;
+                }
+                is_int($tokens[$i + 1][0]) && $tokens[$i + 1][0] = T_STRING;
+                unset($i);
             } elseif ($t === ':') {
                 if ($isSignature) {
                     $collect = true;

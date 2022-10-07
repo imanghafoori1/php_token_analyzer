@@ -1,0 +1,10 @@
+<?php
+
+enum AttachmentType: string
+{
+    case HEELO;
+    case PUBLIC;
+    case PROTECTED;
+    case PRIVATE;
+    const TEMP;
+}
