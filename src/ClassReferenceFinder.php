@@ -259,7 +259,7 @@ class ClassReferenceFinder
                 continue;
             } elseif ($t === T_CONST || $t === T_CASE) {
                 $i = key($tokens);
-                while (in_array($tokens[$i + 1][0], [T_COMMENT, T_DOC_COMMENT])) {
+                while (in_array($tokens[$i + 1][0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT])) {
                     $i++;
                 }
                 is_int($tokens[$i + 1][0]) && $tokens[$i + 1][0] = T_STRING;
