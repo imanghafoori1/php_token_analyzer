@@ -69,7 +69,7 @@ class IfElse
                 }
             }
 
-            // ignore the else body.
+            // ignore the else body
             if ($i >= $elseBodyStartIndex && $i <= $elseBodyEndIndex) {
                 continue;
             }
