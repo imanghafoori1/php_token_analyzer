@@ -22,11 +22,7 @@ class ClassReferenceFinder
      */
     public static function process(&$tokens)
     {
-        ! defined('T_NAME_QUALIFIED') && define('T_NAME_QUALIFIED', -352);
-        ! defined('T_NAME_FULLY_QUALIFIED') && define('T_NAME_FULLY_QUALIFIED', -373);
-        ! defined('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG', -385);
-        ! defined('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG', -386);
-        ! defined('T_READONLY') && define('T_READONLY', -387);
+        self::defineConstants();
 
         $namespace = '';
         $classes = [];
@@ -319,6 +315,7 @@ class ClassReferenceFinder
 
     public static function readRefsInDocblocks($tokens)
     {
+        self::defineConstants();
         $docblock = DocBlockFactory::createInstance();
 
         $refs = [];
@@ -423,5 +420,14 @@ class ClassReferenceFinder
         }
 
         return $refs;
+    }
+
+    private static function defineConstants()
+    {
+        ! defined('T_NAME_QUALIFIED') && define('T_NAME_QUALIFIED', -352);
+        ! defined('T_NAME_FULLY_QUALIFIED') && define('T_NAME_FULLY_QUALIFIED', -373);
+        ! defined('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG', -385);
+        ! defined('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG', -386);
+        ! defined('T_READONLY') && define('T_READONLY', -387);
     }
 }

@@ -48,6 +48,19 @@ class ClassReferencesProcessTest extends BaseTestClass
     }
 
     /** @test */
+    public function can_detect_docblocks()
+    {
+        $string = file_get_contents(__DIR__.'/stubs/doc_block_ref.stub');
+        $tokens = token_get_all($string);
+
+        $output = ClassReferenceFinder::readRefsInDocblocks($tokens);
+        $this->assertEquals( ["class" => "Hello", "line" => 6], $output[0]);
+        $this->assertEquals( ["class" => "Hello3", "line" => 6], $output[1]);
+        $this->assertEquals( ["class" => "Hello2", "line" => 6], $output[2]);
+        $this->assertEquals( ["class" => "Returny", "line" => 6], $output[3]);
+    }
+
+    /** @test */
     public function can_detect_class_references()
     {
         $string = file_get_contents(__DIR__.'/stubs/class_references.stub');
