@@ -2,13 +2,24 @@
 
 namespace A1\A2;
 
+/**
+ * @see A
+ */
 class D {
+	/**
+	 * @var Logger|mixed[]
+	 */
+	private $logger;
+
    /**
-	* @param Hello|string $var
+	* @param Hello|string $var test Description.
 	* @param Hello3|string $var1
 	* @param Hello2|string $var2
+	* @param ArrayIterator<int, string|null> $tokens
 	*
-	* @return Returny|null
+	* @return Returny|null|$this|DOMElement[]
+	*
+	* @throws \Exception|bool|callable
 	*/
 	public function bar () {}
 }
