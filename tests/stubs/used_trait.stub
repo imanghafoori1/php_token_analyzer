@@ -3,4 +3,9 @@
 class A
 {
     use MyTrait { foo as protected bar; }
+
+	use A, B {
+		B::smallTalk insteadof A;
+		A::bigTalk as talk;
+	}
 }

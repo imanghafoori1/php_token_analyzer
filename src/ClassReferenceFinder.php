@@ -238,7 +238,7 @@ class ClassReferenceFinder
                     continue;
                 }
                 //self::forward();
-            } elseif ($t === T_NEW || $t === T_INSTANCEOF) {
+            } elseif ($t === T_NEW || $t === T_INSTANCEOF || $t === T_INSTEADOF) {
                 // We start to collect tokens after the new keyword.
                 // unless we reach a variable name.
                 // currently, tokenizer recognizes CONST NEW = 1; as new keyword.
