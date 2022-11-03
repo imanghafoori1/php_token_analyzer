@@ -15,7 +15,17 @@ class ClassReferencesProcessTest extends BaseTestClass
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('MyTrait', $output[0][0][1]);
-        $this->assertEquals(1, count($output));
+        $this->assertEquals('Foo\Test', $output[1][0][1]);
+        $this->assertEquals('A', $output[2][0][1]);
+        $this->assertEquals('C', $output[3][0][1]);
+        $this->assertEquals('B', $output[4][0][1]);
+        $this->assertEquals('B', $output[5][0][1]);
+        $this->assertEquals('A', $output[6][0][1]);
+        $this->assertEquals('A', $output[7][0][1]);
+        $this->assertEquals('A', $output[8][0][1]);
+        $this->assertEquals('B', $output[9][0][1]);
+        $this->assertEquals('C', $output[10][0][1]);
+        $this->assertEquals(11, count($output));
     }
 
     /** @test */

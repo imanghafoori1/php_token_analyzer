@@ -128,7 +128,7 @@ class ClassReferenceFinder
                 self::forward();
                 // we do not want to collect variables
                 continue;
-            } elseif ($t === T_IMPLEMENTS) {
+            } elseif ($t === T_IMPLEMENTS || $t === T_INSTEADOF) {
                 $collect = $implements = true;
                 isset($classes[$c]) && $c++;
                 self::forward();
