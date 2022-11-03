@@ -128,7 +128,7 @@ class ClassReferenceFinder
                 self::forward();
                 // we do not want to collect variables
                 continue;
-            } elseif ($t === T_IMPLEMENTS) {
+            } elseif ($t === T_IMPLEMENTS || $t === T_INSTEADOF) {
                 $collect = $implements = true;
                 isset($classes[$c]) && $c++;
                 self::forward();
@@ -238,7 +238,7 @@ class ClassReferenceFinder
                     continue;
                 }
                 //self::forward();
-            } elseif ($t === T_NEW || $t === T_INSTANCEOF || $t === T_INSTEADOF) {
+            } elseif ($t === T_NEW || $t === T_INSTANCEOF) {
                 // We start to collect tokens after the new keyword.
                 // unless we reach a variable name.
                 // currently, tokenizer recognizes CONST NEW = 1; as new keyword.

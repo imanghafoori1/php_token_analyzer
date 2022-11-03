@@ -4,8 +4,10 @@ class A
 {
     use MyTrait { foo as protected bar; }
 
-	use A, B {
+	use Foo\Test, A, C, B {
+		// B::smallTalk insteadof A test comment.
 		B::smallTalk insteadof A;
 		A::bigTalk as talk;
+		A::mediumTalk insteadof B, C
 	}
 }
