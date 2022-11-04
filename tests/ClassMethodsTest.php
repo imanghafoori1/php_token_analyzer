@@ -3,6 +3,8 @@
 namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassMethods;
+use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
+use Imanghafoori\TokenAnalyzer\FunctionCall;
 
 class ClassMethodsTest extends BaseTestClass
 {
@@ -119,5 +121,24 @@ class ClassMethodsTest extends BaseTestClass
         } else {
             $this->assertTrue(true);
         }
+    }
+
+    /** @test */
+    public function can_detect_method_return_types_php82_syntax()
+    {
+        $string = file_get_contents(__DIR__.'/stubs/php82syntax.stub');
+        $tokens = token_get_all($string);
+
+        $methods = ClassMethods::read($tokens)['methods'];
+
+        $this->assertEquals(3, count($methods));
+
+        $this->assertTrue($methods[0]['nullable_return_type']);
+        $this->assertFalse($methods[1]['nullable_return_type']);
+        $this->assertFalse($methods[2]['nullable_return_type']);
+
+        $this->assertEquals('null', $methods[0]['returnType'][0][1]);
+        $this->assertEquals('true', $methods[1]['returnType'][0][1]);
+        $this->assertEquals('false', $methods[2]['returnType'][0][1]);
     }
 }
