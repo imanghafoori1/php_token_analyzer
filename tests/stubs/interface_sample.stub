@@ -57,4 +57,9 @@ interface interface_sample extends IncompleteTest {
 
     public function method_19($parameter1 = null);
 
+	public function method_20(): null;
+
+	public function method_21(): true;
+
+	public function method_22(): false;
 }

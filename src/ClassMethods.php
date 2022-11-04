@@ -114,9 +114,10 @@ class ClassMethods
         [$returnType, $returnTypeIndex] = TokenManager::getNextToken($tokens, $charIndex);
 
         // In case the return type is like this: function c() : ?string {...
-        $hasNullableReturnType = ($returnType == '?');
+        // Or like this: function c() : null { ...
+        $hasNullableReturnType = ($returnType == '?' || isset($returnType[1]) && $returnType[1] == 'null');
 
-        if ($hasNullableReturnType) {
+        if ($hasNullableReturnType && ! (isset($returnType[1]) && $returnType[1] == 'null')) {
             [$returnType, $returnTypeIndex] = TokenManager::getNextToken($tokens, $returnTypeIndex);
         }
 

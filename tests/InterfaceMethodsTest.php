@@ -44,6 +44,7 @@ class InterfaceMethodsTest extends BaseTestClass
         $this->assertNull($methods[0]['nullable_return_type']);
         $this->assertFalse($methods[6]['nullable_return_type']);
         $this->assertTrue($methods[11]['nullable_return_type']);
+        $this->assertTrue($methods[20]['nullable_return_type']);
 
         $this->assertNull($methods[0]['returnType']);
         $this->assertEquals('test', $methods[4]['returnType'][0][1]);
@@ -54,6 +55,9 @@ class InterfaceMethodsTest extends BaseTestClass
         $this->assertEquals('void', $methods[9]['returnType'][0][1]);
         $this->assertEquals('float', $methods[10]['returnType'][0][1]);
         $this->assertEquals('string', $methods[11]['returnType'][0][1]);
+        $this->assertEquals('null', $methods[20]['returnType'][0][1]);
+        $this->assertEquals('true', $methods[21]['returnType'][0][1]);
+        $this->assertEquals('false', $methods[22]['returnType'][0][1]);
     }
 
     /** @test */
@@ -106,6 +110,6 @@ class InterfaceMethodsTest extends BaseTestClass
         $this->assertEquals([T_STRING, 'interface_sample', 9], $class['name']);
         $this->assertEquals(T_INTERFACE, $class['type']);
         $this->assertArrayNotHasKey('is_abstract', $class);
-        $this->assertCount(20, $class['methods']);
+        $this->assertCount(23, $class['methods']);
     }
 }
