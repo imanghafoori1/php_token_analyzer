@@ -1,0 +1,12 @@
+<?php
+
+namespace Imanghafoori\LaravelMicroscope\Tests\stubs;
+
+interface interface_sample
+{
+	public function method_0(): null;
+
+	public function method_1(): true;
+
+	public function method_2(): false;
+}

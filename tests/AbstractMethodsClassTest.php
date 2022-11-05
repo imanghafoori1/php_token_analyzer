@@ -90,8 +90,8 @@ class AbstractMethodsClassTest extends BaseTestClass
         $methods = $class['methods'];
         // check is nullable return types
         $this->assertEquals(null, $methods[0]['nullable_return_type']);
-        $this->assertEquals(false, $methods[6]['nullable_return_type']);
-        $this->assertEquals(true, $methods[13]['nullable_return_type']);
+        $this->assertFalse($methods[6]['nullable_return_type']);
+        $this->assertTrue($methods[13]['nullable_return_type']);
 
         $this->assertEquals(null, $methods[0]['returnType']);
         $this->assertEquals('test', $methods[6]['returnType'][0][1]);

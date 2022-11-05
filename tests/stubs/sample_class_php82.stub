@@ -1,0 +1,26 @@
+<?php
+
+namespace Imanghafoori\LaravelMicroscope\Tests\stubs;
+
+class A {
+
+	public static function method_0(): null
+	{
+		$var = function (): false {
+			return '_';
+		};
+	}
+
+	function method_1(): true
+	{
+		fn (): true => '_';
+		fn ($path = ['a' => 'b']): null => '1-' ? '2=' : '3_';
+	}
+
+	private function method_2(): false
+	{
+		return function (): null {
+        	return '_';
+        };
+	}
+}

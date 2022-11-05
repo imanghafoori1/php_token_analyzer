@@ -1,0 +1,12 @@
+<?php
+
+namespace Imanghafoori\LaravelMicroscope\Tests\stubs;
+
+abstract class abstract_sample
+{
+	abstract public function abstract_with_return_type_0(): null;
+
+	abstract function abstract_with_return_type_1(): true;
+
+	abstract protected function abstract_with_return_type_2(): false;
+}
