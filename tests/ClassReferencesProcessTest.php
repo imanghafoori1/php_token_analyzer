@@ -25,7 +25,7 @@ class ClassReferencesProcessTest extends BaseTestClass
         $this->assertEquals('A', $output[8][0][1]);
         $this->assertEquals('B', $output[9][0][1]);
         $this->assertEquals('C', $output[10][0][1]);
-        $this->assertEquals(11, count($output));
+        $this->assertCount(11, $output);
     }
 
     /** @test */
@@ -39,7 +39,7 @@ class ClassReferencesProcessTest extends BaseTestClass
         $this->assertEquals('Hello', $output[0][0][1]);
         $this->assertEquals('Hello2', $output[1][0][1]);
         $this->assertEquals('\Hello3', $output[2][0][1]);
-        $this->assertEquals(3, count($output));
+        $this->assertCount(3, $output);
     }
 
     /** @test */

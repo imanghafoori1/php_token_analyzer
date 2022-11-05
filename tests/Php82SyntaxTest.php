@@ -21,7 +21,7 @@ class Php82SyntaxTest extends BaseTestClass
         $class = ClassMethods::read($this->getTokens('/stubs/sample_class_php82.stub'));
         $methods = $class['methods'];
 
-        $this->assertEquals(3, count($methods));
+        $this->assertCount(3, $methods);
 
         $this->assertTrue($methods[0]['nullable_return_type']);
         $this->assertFalse($methods[1]['nullable_return_type']);
