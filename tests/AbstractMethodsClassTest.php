@@ -92,7 +92,6 @@ class AbstractMethodsClassTest extends BaseTestClass
         $this->assertEquals(null, $methods[0]['nullable_return_type']);
         $this->assertFalse($methods[6]['nullable_return_type']);
         $this->assertTrue($methods[13]['nullable_return_type']);
-        $this->assertTrue($methods[27]['nullable_return_type']);
 
         $this->assertEquals(null, $methods[0]['returnType']);
         $this->assertEquals('test', $methods[6]['returnType'][0][1]);
@@ -103,9 +102,6 @@ class AbstractMethodsClassTest extends BaseTestClass
         $this->assertEquals('void', $methods[11]['returnType'][0][1]);
         $this->assertEquals('float', $methods[12]['returnType'][0][1]);
         $this->assertEquals('string', $methods[13]['returnType'][0][1]);
-        $this->assertEquals('null', $methods[27]['returnType'][0][1]);
-        $this->assertEquals('true', $methods[28]['returnType'][0][1]);
-        $this->assertEquals('false', $methods[29]['returnType'][0][1]);
     }
 
     /** @test */
@@ -152,7 +148,7 @@ class AbstractMethodsClassTest extends BaseTestClass
         $class = ClassMethods::read($tokens);
 
         $this->assertEquals([T_STRING, 'abstract_sample', 7], $class['name']);
-        $this->assertCount(30, $class['methods']);
+        $this->assertCount(27, $class['methods']);
         $this->assertEquals(true, $class['is_abstract']);
         $this->assertEquals(T_CLASS, $class['type']);
     }
