@@ -2,7 +2,7 @@
 
 namespace Imanghafoori\LaravelMicroscope\Tests\stubs;
 
-class php8syntax
+class sample_class
 {
     public function __construct(private Hello $foo) : G1|G2|G3
     {}
