@@ -12,12 +12,11 @@ on:
 jobs:
   test:
     # The type of runner that the job will run on
-    runs-on: [ubuntu-latest, windows-latest]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
           php: ["8.2", "8.1", "8.0", "7.4", "7.3", "7.2"]
-          operating-system: [ubuntu-latest, windows-latest]
           dependency-version: [prefer-stable]
 
     name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
