@@ -7,18 +7,6 @@ use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 class ReadonlyTest extends BaseTestClass
 {
     /** @test */
-    public function readonly_properties()
-    {
-        $string = file_get_contents(__DIR__.'/stubs/readonly_property.stub');
-        $tokens = token_get_all($string);
-        [$output, $namespace] = ClassReferenceFinder::process($tokens);
-        $this->assertCount(3, $output);
-        $this->assertEquals('Hello1', $output[0][0][1]);
-        $this->assertEquals('Hello2', $output[1][0][1]);
-        $this->assertEquals('Hello3', $output[2][0][1]);
-    }
-
-    /** @test */
     public function type_hinted_property()
     {
         $string = file_get_contents(__DIR__.'/stubs/type_hinted_property.stub');

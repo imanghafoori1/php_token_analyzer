@@ -1,6 +1,6 @@
 <?php
 
-class php8syntax
+class readonly_property
 {
 	public function A() {
 		readonly::class;

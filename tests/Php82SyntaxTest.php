@@ -18,7 +18,7 @@ class Php82SyntaxTest extends BaseTestClass
     /** @test */
     public function check_class_return_types_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/sample_class_php82.stub'));
+        $class = ClassMethods::read($this->getTokens('/stubs/php82/sample_class.stub'));
         $methods = $class['methods'];
 
         $this->assertCount(3, $methods);
@@ -35,7 +35,7 @@ class Php82SyntaxTest extends BaseTestClass
     /** @test */
     public function check_abstract_class_return_types_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/abstract_sample_class_php82.stub'));
+        $class = ClassMethods::read($this->getTokens('/stubs/php82/abstract_sample_class.stub'));
         $methods = $class['methods'];
 
         $this->assertTrue($methods[0]['nullable_return_type']);
@@ -50,7 +50,7 @@ class Php82SyntaxTest extends BaseTestClass
     /** @test */
     public function check_interface_return_types_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/interface_sample_php82.stub'));
+        $class = ClassMethods::read($this->getTokens('/stubs/php82/interface_sample.stub'));
         $methods = $class['methods'];
 
         $this->assertTrue($methods[0]['nullable_return_type']);
