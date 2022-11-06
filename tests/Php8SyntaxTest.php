@@ -16,47 +16,66 @@ class Php8SyntaxTest extends BaseTestClass
     }
 
     /** @test */
-    public function can_detect_php8_syntax()
+    public function can_detect_class_general_test()
     {
-        $string = file_get_contents(__DIR__.'/stubs/php80/sample_class.stub');
-        $tokens = token_get_all($string);
+        $class = ClassMethods::read($this->getTokens('/stubs/php80/sample_class.stub'));
 
-        $actual = ClassMethods::read($tokens);
+        $this->assertEquals([T_STRING, 'sample_class', 5], $class['name']);
+        $this->assertEquals(T_CLASS, $class['type']);
+        $this->assertFalse($class['is_abstract']);
+        $this->assertFalse($class['is_final']);
+        $this->assertCount(1, $class['methods']);
+    }
 
-        $expected = [
-            'name' => [
-                0 => T_STRING,
-                1 => 'sample_class',
-                2 => 5,
-            ],
-            'methods' => [
-                0 => [
-                    'name' => [T_STRING, '__construct', 7],
-                    'visibility' => [T_PUBLIC, 'public', 7],
-                    'signature' => [
-                        [T_PRIVATE, 'private', 7],
-                        [T_WHITESPACE, ' ', 7],
-                        [T_STRING, 'Hello', 7],
-                        [T_WHITESPACE, ' ', 7],
-                        [T_VARIABLE, '$foo', 7],
-                    ],
-                    'body' => '',
-                    'startBodyIndex' => [34, 36],
-                    'returnType' => [
-                        [T_STRING, 'G1', 7],
-                        [T_STRING, 'G2', 7],
-                        [T_STRING, 'G3', 7],
-                    ],
-                    'nullable_return_type' => false,
-                    'is_static' => false,
-                    'is_abstract' => false,
-                    'is_final' => false,
-                ],
-            ],
-            'type' => T_CLASS,
-            'is_abstract' => false,
-            'is_final' => false,
-        ];
-        $this->assertEquals($expected, $actual);
+    /** @test */
+    public function can_detect_class_methods_test()
+    {
+        $class = ClassMethods::read($this->getTokens('/stubs/php80/sample_class.stub'));
+        $methods = $class['methods'];
+
+        $this->assertEquals([T_STRING, '__construct', 7], $methods[0]['name']);
+        $this->assertEquals([T_PUBLIC, 'public', 7], $methods[0]['visibility']);
+        $this->assertEquals('', $methods[0]['body']);
+        $this->assertFalse($methods[0]['is_final']);
+        $this->assertFalse($methods[0]['is_abstract']);
+        $this->assertFalse($methods[0]['is_static']);
+        $this->assertFalse($methods[0]['nullable_return_type']);
+    }
+
+    /** @test */
+    public function can_detect_return_types_test()
+    {
+        $class = ClassMethods::read($this->getTokens('/stubs/php80/sample_class.stub'));
+        $methods = $class['methods'];
+
+        $this->assertEquals('G1', $methods[0]['returnType'][0][1]);
+        $this->assertEquals('G2', $methods[0]['returnType'][1][1]);
+        $this->assertEquals('G3', $methods[0]['returnType'][2][1]);
+    }
+
+    /** @test */
+    public function can_detect_methods_signature_test()
+    {
+        $class = ClassMethods::read($this->getTokens('/stubs/php80/sample_class.stub'));
+        $methods = $class['methods'];
+
+        $this->assertEquals('private', $methods[0]['signature'][0][1]);
+        $this->assertEquals(' ', $methods[0]['signature'][1][1]);
+        $this->assertEquals('Hello', $methods[0]['signature'][2][1]);
+        $this->assertEquals(' ', $methods[0]['signature'][3][1]);
+        $this->assertEquals('$foo', $methods[0]['signature'][4][1]);
+        $this->assertEquals(',', $methods[0]['signature'][5]);
+        $this->assertEquals(' ', $methods[0]['signature'][6][1]);
+        $this->assertEquals('public', $methods[0]['signature'][7][1]);
+        $this->assertEquals(' ', $methods[0]['signature'][8][1]);
+        $this->assertEquals('int', $methods[0]['signature'][9][1]);
+        $this->assertEquals('|', $methods[0]['signature'][10]);
+        $this->assertEquals('float', $methods[0]['signature'][11][1]);
+        $this->assertEquals(' ', $methods[0]['signature'][12][1]);
+        $this->assertEquals('$x', $methods[0]['signature'][13][1]);
+        $this->assertEquals(' ', $methods[0]['signature'][14][1]);
+        $this->assertEquals('=', $methods[0]['signature'][15]);
+        $this->assertEquals(' ', $methods[0]['signature'][16][1]);
+        $this->assertEquals('0.0', $methods[0]['signature'][17][1]);
     }
 }
