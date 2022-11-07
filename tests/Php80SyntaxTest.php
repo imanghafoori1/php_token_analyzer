@@ -3,6 +3,8 @@
 namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassMethods;
+use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
+use Imanghafoori\TokenAnalyzer\ParseUseStatement;
 
 class Php80SyntaxTest extends BaseTestClass
 {
@@ -77,5 +79,117 @@ class Php80SyntaxTest extends BaseTestClass
         $this->assertEquals('=', $methods[0]['signature'][15]);
         $this->assertEquals(' ', $methods[0]['signature'][16][1]);
         $this->assertEquals('0.0', $methods[0]['signature'][17][1]);
+    }
+
+    /** @test */
+    public function can_detect_class_references()
+    {
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/php80/class_references.stub'));
+        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+
+        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\A\ParentClass', 7],], $output[0]);
+        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\Inline\InterF3', 7]], $output[1]);
+        $this->assertEquals([[T_STRING, 'Finder', 12]], $output[2]);
+        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\Exception', 13]], $output[3]);
+        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\ErrorException', 13]], $output[4]);
+        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\YetAnotherclass', 17]], $output[5]);
+        $this->assertEquals([[T_NAME_QUALIFIED, 'HalfImported\TheRest', 19]], $output[6]);
+        $this->assertEquals([[T_NAME_QUALIFIED, 'A\Newed', 24],], $output[7]);
+        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\A\ReturnType', 27]], $output[8]);
+        $this->assertEquals([[T_STRING, 'F', 29]], $output[9]);
+        $this->assertEquals([[T_NAME_QUALIFIED, 'a\a', 30]], $output[10]);
+        $this->assertEquals([[T_NAME_QUALIFIED, 'b\b', 30]], $output[11]);
+        $this->assertEquals([[T_STRING, 'ParentOfAnonymous', 31]], $output[12]);
+        $this->assertEquals([[T_STRING, 'interfaceOfAnonymous', 31]], $output[13]);
+        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\T', 32]], $output[14]);
+        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\interfaceOfAnonymous', 34]], $output[15]);
+    }
+
+    /** @test */
+    public function can_find_class_references()
+    {
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/php80/class_references.stub'));
+        [$classes, $namespace] = ParseUseStatement::findClassReferences($tokens);
+        $h = 0;
+
+        $this->assertEquals([
+            'class' => "\A\ParentClass",
+            'line' => 7,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => "\Inline\InterF3",
+            'line' => 7,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => "Symfony\Component\Finder\Symfony\Component\Finder\Finder",
+            'line' => 12,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => "\Exception",
+            'line' => 13,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => "\ErrorException",
+            'line' => 13,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => "\YetAnotherclass",
+            'line' => 17,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\HalfImported\TheRest',
+            'line' => 19,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\A\Newed',
+            'line' => 24,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => '\A\ReturnType',
+            'line' => 27,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\F',
+            'line' => 29,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\a\a',
+            'line' => 30,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\b\b',
+            'line' => 30,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\ParentOfAnonymous',
+            'line' => 31,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\interfaceOfAnonymous',
+            'line' => 31,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => '\T',
+            'line' => 32,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => '\interfaceOfAnonymous',
+            'line' => 34,
+        ], $classes[$h]);
     }
 }
