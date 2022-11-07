@@ -1,0 +1,8 @@
+<?php
+
+class A
+{
+    public H1&H2 $c;
+    private \H3\H4&\tH5 $b;
+    protected tH6&\tH7 $a;
+}

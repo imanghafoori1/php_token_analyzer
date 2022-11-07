@@ -10,8 +10,8 @@ class Php82SyntaxTest extends BaseTestClass
     {
         parent::setUp();
 
-        if (version_compare(phpversion(), '8.2.0') !== 1) {
-            $this->markTestSkipped('Your php version is less than 8.2');
+        if (! version_compare(phpversion(), '8.2.0', '>=')) {
+            $this->markTestSkipped('Skipping, your php version is less than 8.2');
         }
     }
 

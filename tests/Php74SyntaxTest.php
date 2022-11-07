@@ -4,8 +4,17 @@ namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 
-class ReadonlyTest extends BaseTestClass
+class TypeHintedPropertiesTest extends BaseTestClass
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        if (! version_compare(phpversion(), '7.4.0', '>=')) {
+            $this->markTestSkipped('Your php version is less than 7.4');
+        }
+    }
+
     /** @test */
     public function type_hinted_property()
     {
@@ -20,10 +29,8 @@ class ReadonlyTest extends BaseTestClass
         $this->assertEquals('\tH3', $output[3][0][1]);
         $this->assertEquals('tH4', $output[4][0][1]);
         $this->assertEquals('tH5', $output[5][0][1]);
-        $this->assertEquals('tH6', $output[6][0][1]);
-        $this->assertEquals('tH7', $output[7][0][1]);
-        $this->assertEquals('tH8', $output[8][0][1]);
-        $this->assertEquals('tH9', $output[9][0][1]);
+        $this->assertEquals('\tH7\tH8', $output[6][0][1]);
+        $this->assertEquals('tH9', $output[7][0][1]);
     }
 }
 

@@ -277,6 +277,19 @@ class ClassReferenceFinder
             self::forward();
         }
 
+        foreach ($classes as $i => $classTokens) {
+            $result = [
+                $classTokens[0][0],
+                '',
+                $classTokens[0][2]
+
+            ];
+            foreach ($classTokens as $token) {
+                $result[1] .= $token[1];
+            }
+            $classes[$i][0] = $result;
+        }
+
         return [$classes, $namespace];
     }
 

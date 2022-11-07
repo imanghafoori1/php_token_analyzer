@@ -4,13 +4,13 @@ namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassMethods;
 
-class Php8SyntaxTest extends BaseTestClass
+class Php80SyntaxTest extends BaseTestClass
 {
     public function setUp(): void
     {
         parent::setUp();
 
-        if (version_compare(phpversion(), '8.0.0') !== 1) {
+        if (! version_compare(phpversion(), '8.0', '>=')) {
             $this->markTestSkipped('Your php version is less than 8.0');
         }
     }
@@ -18,7 +18,7 @@ class Php8SyntaxTest extends BaseTestClass
     /** @test */
     public function can_detect_class_general_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/php80/sample_class.stub'));
+        $class = ClassMethods::read($this->getTokens('/stubs/php80/union_types.stub'));
 
         $this->assertEquals([T_STRING, 'sample_class', 5], $class['name']);
         $this->assertEquals(T_CLASS, $class['type']);
@@ -30,7 +30,7 @@ class Php8SyntaxTest extends BaseTestClass
     /** @test */
     public function can_detect_class_methods_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/php80/sample_class.stub'));
+        $class = ClassMethods::read($this->getTokens('/stubs/php80/union_types.stub'));
         $methods = $class['methods'];
 
         $this->assertEquals([T_STRING, '__construct', 7], $methods[0]['name']);
@@ -45,7 +45,7 @@ class Php8SyntaxTest extends BaseTestClass
     /** @test */
     public function can_detect_return_types_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/php80/sample_class.stub'));
+        $class = ClassMethods::read($this->getTokens('/stubs/php80/union_types.stub'));
         $methods = $class['methods'];
 
         $this->assertEquals('G1', $methods[0]['returnType'][0][1]);
@@ -56,7 +56,7 @@ class Php8SyntaxTest extends BaseTestClass
     /** @test */
     public function can_detect_methods_signature_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/php80/sample_class.stub'));
+        $class = ClassMethods::read($this->getTokens('/stubs/php80/union_types.stub'));
         $methods = $class['methods'];
 
         $this->assertEquals('private', $methods[0]['signature'][0][1]);

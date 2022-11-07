@@ -11,7 +11,7 @@ class Php81SyntaxTest extends BaseTestClass
     {
         parent::setUp();
 
-        if (version_compare(phpversion(), '8.1.0') !== 1) {
+        if (! version_compare(phpversion(), '8.1.0', '>=')) {
             $this->markTestSkipped('Your php version is less than 8.1');
         }
     }
@@ -38,5 +38,34 @@ class Php81SyntaxTest extends BaseTestClass
         $this->assertEquals(T_ENUM, $type);
         $this->assertEquals('', $parent);
         $this->assertEquals('', $interfaces);
+    }
+
+    /** @test */
+    public function intersection_types_in_typehinted_properties()
+    {
+        $string = file_get_contents(__DIR__.'/stubs/php81/intersection_type.stub');
+        $tokens = token_get_all($string);
+        [$actualResult, $namespace] = ClassReferenceFinder::process($tokens);
+        $expected = [
+            [
+                [0 => 313, 1 => "H1", 2 => 5],
+            ],
+            [
+                [0 => 313, 1 => "H2", 2 => 5,],
+            ],
+            [
+                [0 => 314, 1 => "\\H3\\H4", 2 => 6,],
+            ],
+            [
+                [0 => 314, 1 => "\\tH5", 2 => 6,],
+            ],
+            [
+                [0 => 313, 1 => "tH6", 2 => 7,],
+            ],
+            [
+                [0 => 314, 1 => "\\tH7", 2 => 7,],
+            ],
+        ];
+        $this->assertEquals($expected, $actualResult);
     }
 }
