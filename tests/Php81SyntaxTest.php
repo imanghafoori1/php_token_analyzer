@@ -4,6 +4,7 @@ namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 use Imanghafoori\TokenAnalyzer\GetClassProperties;
+use Imanghafoori\TokenAnalyzer\ParseUseStatement;
 
 class Php81SyntaxTest extends BaseTestClass
 {
@@ -48,24 +49,57 @@ class Php81SyntaxTest extends BaseTestClass
         [$actualResult, $namespace] = ClassReferenceFinder::process($tokens);
         $expected = [
             [
-                [0 => 313, 1 => "H1", 2 => 5],
+                [0 => T_STRING, 1 => "H1", 2 => 5],
             ],
             [
-                [0 => 313, 1 => "H2", 2 => 5,],
+                [0 => T_STRING, 1 => "H2", 2 => 5,],
             ],
             [
-                [0 => 314, 1 => "\\H3\\H4", 2 => 6,],
+                [0 => T_NAME_FULLY_QUALIFIED, 1 => "\\H3\\H4", 2 => 6,],
             ],
             [
-                [0 => 314, 1 => "\\tH5", 2 => 6,],
+                [0 => T_NAME_FULLY_QUALIFIED, 1 => "\\tH5", 2 => 6,],
             ],
             [
-                [0 => 313, 1 => "tH6", 2 => 7,],
+                [0 => T_STRING, 1 => "tH6", 2 => 7,],
             ],
             [
-                [0 => 314, 1 => "\\tH7", 2 => 7,],
+                [0 => T_NAME_FULLY_QUALIFIED, 1 => "\\tH7", 2 => 7,],
             ],
         ];
         $this->assertEquals($expected, $actualResult);
+    }
+
+    /** @test */
+    public function can_find_class_references()
+    {
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/php81/class_references.stub'));
+        [$classes, $namespace] = ParseUseStatement::findClassReferences($tokens);
+        $h = 0;
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\Y',
+            'line' => 7,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\R',
+            'line' => 7,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => '\A\ReturnType',
+            'line' => 7,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\F',
+            'line' => 9,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => '\C',
+            'line' => 9,
+        ], $classes[$h]);
     }
 }

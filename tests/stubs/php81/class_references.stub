@@ -1,0 +1,11 @@
+<?php
+
+namespace Imanghafoori\LaravelMicroscope\FileReaders;
+
+class Paths
+{
+	public function foo (Y&R $e) : /*comment*/ \A\ReturnType
+	{
+		$r = function (F&\C $f) use ($g) {};
+	}
+}

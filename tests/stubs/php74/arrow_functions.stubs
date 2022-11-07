@@ -1,0 +1,11 @@
+<?php
+
+class A
+{
+    function getAll()
+    {
+        fn (T4 $m1): T5 => ''.T6::class; T7::class;
+    }
+}
+
+fn (H $r) => T::class;

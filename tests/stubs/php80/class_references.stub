@@ -1,0 +1,36 @@
+<?php
+
+namespace /*HEHE*/ Imanghafoori\LaravelMicroscope\FileReaders;
+
+use Symfony\Component\Finder\Symfony\Component\Finder\Finder;
+
+class Paths extends \A\ParentClass implements \Inline\InterF3
+{
+	public function fn_0()
+	{
+		try {
+			$files = Finder::create()->in($dirs);
+		} catch (\Exception | \ErrorException $e) {
+			return [];
+		}
+
+		\YetAnotherclass::koo();$goo::koo();
+		// Http\Request::class; comment test.
+		HalfImported\TheRest::class;
+	}
+
+	function fn_1()
+	{
+		new A\Newed;
+	}
+
+	public function foo (iterable $t) : /*comment*/ \A\ReturnType
+	{
+		$r = function (F $f) use ($g) {};
+		true ? new a\a : new b\b;
+		new class() extends ParentOfAnonymous implements interfaceOfAnonymous {
+			public function __construct(\T $t) {}
+		};
+		new class($f) implements \interfaceOfAnonymous {};
+	}
+}
