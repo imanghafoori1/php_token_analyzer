@@ -7,7 +7,6 @@ class S
 	    fn ($path = ['a' => 'b']) => '1-' ? '2=' : '3_';
 	    ['e' => fn ($path = ['a' => 'b']) => '1-' ? '2=' : '3_'];
         self::h($p, l();
-        fn (T4 $m1): T5 => ''.T6::class; T7::class;
         ['a' => T8::class];
     }
 }

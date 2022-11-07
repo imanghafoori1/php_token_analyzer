@@ -3,5 +3,4 @@
 use App\Model;
 
 Model\User;
-fn (H $r) => T::class;
 function (H $r) { T::class; }

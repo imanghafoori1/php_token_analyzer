@@ -32,6 +32,20 @@ class TypeHintedPropertiesTest extends BaseTestClass
         $this->assertEquals('\tH7\tH8', $output[6][0][1]);
         $this->assertEquals('tH9', $output[7][0][1]);
     }
+
+    /** @test */
+    public function can_detect_arrow_functions_test()
+    {
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/php74/arrow_functions.stubs'));
+        [$output,] = ClassReferenceFinder::process($tokens);
+
+        $this->assertEquals('T4', $output[0][0][1]);
+        $this->assertEquals('T5', $output[1][0][1]);
+        $this->assertEquals('T6', $output[2][0][1]);
+        $this->assertEquals('T7', $output[3][0][1]);
+        $this->assertEquals("H", $output[4][0][1]);
+        $this->assertEquals("T", $output[5][0][1]);
+    }
 }
 
 
