@@ -4,6 +4,7 @@ namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 use Imanghafoori\TokenAnalyzer\GetClassProperties;
+use Imanghafoori\TokenAnalyzer\ParseUseStatement;
 
 class Php81SyntaxTest extends BaseTestClass
 {
@@ -67,5 +68,38 @@ class Php81SyntaxTest extends BaseTestClass
             ],
         ];
         $this->assertEquals($expected, $actualResult);
+    }
+
+    /** @test */
+    public function can_find_class_references()
+    {
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/php81/class_references.stub'));
+        [$classes, $namespace] = ParseUseStatement::findClassReferences($tokens);
+        $h = 0;
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\Y',
+            'line' => 7,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\R',
+            'line' => 7,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => '\A\ReturnType',
+            'line' => 7,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\F',
+            'line' => 9,
+        ], $classes[$h++]);
+
+        $this->assertEquals([
+            'class' => '\C',
+            'line' => 9,
+        ], $classes[$h]);
     }
 }
