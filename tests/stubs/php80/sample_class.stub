@@ -4,6 +4,6 @@ namespace Imanghafoori\LaravelMicroscope\Tests\stubs;
 
 class sample_class
 {
-    public function __construct(private Hello $foo) : G1|G2|G3
+    public function __construct(private Hello $foo, public int|float $x = 0.0) : G1|G2|G3
     {}
 }
