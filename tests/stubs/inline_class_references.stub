@@ -1,0 +1,81 @@
+<?php declare(strict_types=1);
+
+namespace /*HEHE*/ Imanghafoori\LaravelMicroscope\FileReaders;
+
+use Illuminate\Contracts\HalfImported;
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException; // comment
+use Symfony\Component\Finder\Symfony\Component\Finder\Finder;
+use function foo\bar_func;
+class Paths extends \A implements \InterF1, \InterF2, \B
+{
+    use \Trait1, \Trait2;
+
+    use \Trait3;
+    const NEW = 1;
+
+
+    public static function getAbsFilePaths(\TypeHint1 $dirs, ?\TypeHint2 $dir3, $arg = [1, 2])
+    {
+        if (! $dirs) {
+            return [];
+        }
+        try {
+            $files = \Finder::create()->files()->name('*.php')->in($dirs);
+
+            $paths = [];
+            foreach ($files as $f) {
+                $paths[] = $f->getRealPath();
+            }
+
+            return $paths;
+        } catch (\DirectoryNotFoundException $e) {
+            return [];
+        }
+
+        \MyAmIClass::con; // a comment
+    }
+
+    public function returny_Method(string $string): int // a comment
+    {
+        new $tt; // a comment
+    }
+
+    public function returny_nullable(\TypeHint1 $dirs): ?\ReturnyType2 // a comment
+    {
+        new class {};
+    }
+
+    public function returny_string(?string $string, iterable $t): self // a comment
+    {
+        $tt = '';
+        new \Newed(); new \Newed();
+        new $tt;
+    }
+
+    public function __constructor(?string $string): self
+    {
+        parent::hello();
+        \InConstructor::$method();
+    }
+
+    public function foo (iterable $t)
+    {
+        $r = function (\F $f) use ($g) {};
+    }
+
+    public function foo4 (\iteable|\countable $t)
+    {
+        if (request()->user() instanceof \User) {
+            return true;
+        }
+    }
+
+    public function F()
+    {
+        new class {}; new class() {};
+        new class($f) {};
+        new class($f) extends \ParentOfAnonymous {};
+        new class($f) implements \interfaceOfAnonymous {};
+        new class($f) implements \A\interfaceOfAnonymous {};
+    }
+}

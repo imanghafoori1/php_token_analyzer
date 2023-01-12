@@ -106,4 +106,44 @@ class ClassReferencesProcessTest extends BaseTestClass
 
         $this->assertEquals([[T_STRING, 'F', 63]], $output[17]);
     }
+
+    /** @test */
+    public function can_detect_inline_class_references()
+    {
+        $string = file_get_contents(__DIR__.'/stubs/inline_class_references.stub');
+        $tokens = token_get_all($string);
+
+        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+
+        $this->assertEquals([[T_STRING, '\A', 9]], $output[0]);
+        $this->assertEquals([[T_STRING, '\InterF1', 9]], $output[1]);
+        $this->assertEquals([[T_STRING, '\InterF2', 9]], $output[2]);
+        $this->assertEquals([[T_STRING, '\B', 9]], $output[3]);
+
+        $this->assertEquals([[T_STRING, '\Trait1', 11]], $output[4]);
+        $this->assertEquals([[T_STRING, '\Trait2', 11]], $output[5]);
+        $this->assertEquals([[T_STRING, '\Trait3', 13]], $output[6]);
+
+        $this->assertEquals([[T_STRING, '\TypeHint1', 17]], $output[7]);
+        $this->assertEquals([[T_STRING, '\TypeHint2', 17]], $output[8]);
+        $this->assertEquals([[T_STRING, '\Finder', 23]], $output[9]);
+        $this->assertEquals([[T_STRING, '\DirectoryNotFoundException', 31]], $output[10]);
+        $this->assertEquals([[T_STRING, '\MyAmIClass', 35]], $output[11]);
+        $this->assertEquals([[T_STRING, '\TypeHint1', 43]], $output[12]);
+        $this->assertEquals([[T_STRING, '\ReturnyType2', 43]], $output[13]);
+        $this->assertEquals([[T_STRING, '\Newed', 51]], $output[14]);
+        $this->assertEquals([[T_STRING, '\Newed', 51]], $output[15]);
+
+        $this->assertEquals("Imanghafoori\LaravelMicroscope\FileReaders", $namespace);
+        $this->assertEquals([[T_STRING, '\InConstructor', 58]], $output[16]);
+
+        $this->assertEquals([[T_STRING, '\F', 63]], $output[17]);
+        $this->assertEquals([[T_STRING, '\iteable', 66]], $output[18]);
+
+        $this->assertEquals([[T_STRING, '\countable', 66]], $output[19]);
+        $this->assertEquals([[T_STRING, '\User', 68]], $output[20]);
+        $this->assertEquals([[T_STRING, '\ParentOfAnonymous', 77]], $output[21]);
+        $this->assertEquals([[T_STRING, '\interfaceOfAnonymous', 78]], $output[22]);
+        $this->assertEquals([[T_STRING, '\A\interfaceOfAnonymous', 79]], $output[23]);
+    }
 }

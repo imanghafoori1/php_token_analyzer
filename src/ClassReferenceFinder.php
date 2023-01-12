@@ -185,7 +185,6 @@ class ClassReferenceFinder
                 self::forward();
                 continue;
             } elseif ($t === '(' || $t === ')') {
-                // wrong...
                 if ($t === '(' && ($isDefiningFunction || $isCatchException)) {
                     $isSignature = true;
                     $collect = true;
@@ -279,7 +278,7 @@ class ClassReferenceFinder
 
         foreach ($classes as $i => $classTokens) {
             $result = [
-                $classTokens[0][0],
+                T_STRING,
                 '',
                 $classTokens[0][2]
 
@@ -287,7 +286,7 @@ class ClassReferenceFinder
             foreach ($classTokens as $token) {
                 $result[1] .= $token[1];
             }
-            $classes[$i][0] = $result;
+            $classes[$i] = [$result];
         }
 
         return [$classes, $namespace];
