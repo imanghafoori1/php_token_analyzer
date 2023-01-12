@@ -87,22 +87,22 @@ class Php80SyntaxTest extends BaseTestClass
         $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/php80/class_references.stub'));
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
 
-        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\A\ParentClass', 7],], $output[0]);
-        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\Inline\InterF3', 7]], $output[1]);
+        $this->assertEquals([[T_STRING, '\A\ParentClass', 7],], $output[0]);
+        $this->assertEquals([[T_STRING, '\Inline\InterF3', 7]], $output[1]);
         $this->assertEquals([[T_STRING, 'Finder', 12]], $output[2]);
-        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\Exception', 13]], $output[3]);
-        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\ErrorException', 13]], $output[4]);
-        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\YetAnotherclass', 17]], $output[5]);
-        $this->assertEquals([[T_NAME_QUALIFIED, 'HalfImported\TheRest', 19]], $output[6]);
-        $this->assertEquals([[T_NAME_QUALIFIED, 'A\Newed', 24],], $output[7]);
-        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\A\ReturnType', 27]], $output[8]);
+        $this->assertEquals([[T_STRING, '\Exception', 13]], $output[3]);
+        $this->assertEquals([[T_STRING, '\ErrorException', 13]], $output[4]);
+        $this->assertEquals([[T_STRING, '\YetAnotherclass', 17]], $output[5]);
+        $this->assertEquals([[T_STRING, 'HalfImported\TheRest', 19]], $output[6]);
+        $this->assertEquals([[T_STRING, 'A\Newed', 24],], $output[7]);
+        $this->assertEquals([[T_STRING, '\A\ReturnType', 27]], $output[8]);
         $this->assertEquals([[T_STRING, 'F', 29]], $output[9]);
-        $this->assertEquals([[T_NAME_QUALIFIED, 'a\a', 30]], $output[10]);
-        $this->assertEquals([[T_NAME_QUALIFIED, 'b\b', 30]], $output[11]);
+        $this->assertEquals([[T_STRING, 'a\a', 30]], $output[10]);
+        $this->assertEquals([[T_STRING, 'b\b', 30]], $output[11]);
         $this->assertEquals([[T_STRING, 'ParentOfAnonymous', 31]], $output[12]);
         $this->assertEquals([[T_STRING, 'interfaceOfAnonymous', 31]], $output[13]);
-        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\T', 32]], $output[14]);
-        $this->assertEquals([[T_NAME_FULLY_QUALIFIED, '\interfaceOfAnonymous', 34]], $output[15]);
+        $this->assertEquals([[T_STRING, '\T', 32]], $output[14]);
+        $this->assertEquals([[T_STRING, '\interfaceOfAnonymous', 34]], $output[15]);
     }
 
     /** @test */

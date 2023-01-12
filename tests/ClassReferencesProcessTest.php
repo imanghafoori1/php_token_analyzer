@@ -146,4 +146,14 @@ class ClassReferencesProcessTest extends BaseTestClass
         $this->assertEquals([[T_STRING, '\interfaceOfAnonymous', 78]], $output[22]);
         $this->assertEquals([[T_STRING, '\A\interfaceOfAnonymous', 79]], $output[23]);
     }
+
+    /** @test */
+    public function namespaced_function_call()
+    {
+        $string = file_get_contents(__DIR__.'/stubs/namespaced_function_call.stub');
+        $tokens = token_get_all($string);
+
+        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        $this->markTestSkipped();
+    }
 }

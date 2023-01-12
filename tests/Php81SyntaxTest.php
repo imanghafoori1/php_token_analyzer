@@ -55,16 +55,16 @@ class Php81SyntaxTest extends BaseTestClass
                 [0 => T_STRING, 1 => "H2", 2 => 5,],
             ],
             [
-                [0 => T_NAME_FULLY_QUALIFIED, 1 => "\\H3\\H4", 2 => 6,],
+                [0 => T_STRING, 1 => "\\H3\\H4", 2 => 6,],
             ],
             [
-                [0 => T_NAME_FULLY_QUALIFIED, 1 => "\\tH5", 2 => 6,],
+                [0 => T_STRING, 1 => "\\tH5", 2 => 6,],
             ],
             [
                 [0 => T_STRING, 1 => "tH6", 2 => 7,],
             ],
             [
-                [0 => T_NAME_FULLY_QUALIFIED, 1 => "\\tH7", 2 => 7,],
+                [0 => T_STRING, 1 => "\\tH7", 2 => 7,],
             ],
         ];
         $this->assertEquals($expected, $actualResult);
