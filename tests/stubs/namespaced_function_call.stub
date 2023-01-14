@@ -1,3 +1,5 @@
 <?php
 
 Name\Spaced\Functio\nCall();
+
+new Name\Spaced\classy\Call(Name\Spaced\classy\Call::class);

@@ -154,6 +154,23 @@ class ClassReferencesProcessTest extends BaseTestClass
         $tokens = token_get_all($string);
 
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
-        $this->markTestSkipped();
+        $expected = [
+           [
+                [
+                    0 => T_STRING,
+                    1 => "Name\Spaced\classy\Call",
+                    2 => 5,
+                ],
+            ],
+            [
+                [
+                    0 => T_STRING,
+                    1 => "Name\Spaced\classy\Call",
+                    2 => 5,
+                ],
+            ],
+        ];
+
+        $this->assertEquals($expected, $output);
     }
 }

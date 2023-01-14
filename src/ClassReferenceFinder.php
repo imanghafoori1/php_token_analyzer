@@ -30,6 +30,7 @@ class ClassReferenceFinder
         $declaringProperty = $force_close = $implements = $collect = false;
         $isImporting = $trait = $isDefiningFunction = $isCatchException = $isSignature = $isDefiningMethod = $isInsideMethod = $isInSideClass = false;
 
+        $isNewing = false;
         $fnLevel = $isInsideArray = 0;
         while (self::$token = current($tokens)) {
             next($tokens);
@@ -192,6 +193,20 @@ class ClassReferenceFinder
                     // so is calling a method by: ()
                     $collect = false;
                 }
+
+               // exclude namespaced function call: \Some\Func();
+                if ($t === '(') {
+                    if (isset($classes[$c]) && ! $isNewing) {
+                        // in php 7.4 or less
+                        unset($classes[$c]);
+                    } elseif (in_array(self::$lastToken[0], [T_NAME_FULLY_QUALIFIED, T_NAME_QUALIFIED]) && self::$secLastToken[0] !== T_NEW) {
+                        // in php 8.0 or more
+                        if ($classes[$c - 1][0] == self::$lastToken) {
+                           unset($classes[--$c]);
+                        }
+                    }
+                }
+
                 if ($t === ')') {
                     $isCatchException = $isDefiningFunction = false;
                 }
@@ -242,7 +257,10 @@ class ClassReferenceFinder
                 // unless we reach a variable name.
                 // currently, tokenizer recognizes CONST NEW = 1; as new keyword.
                 // case New = 'new';
-                ! in_array(self::$lastToken[0], [T_CONST, T_CASE, T_DOUBLE_COLON]) && $collect = true;
+                if (! in_array(self::$lastToken[0], [T_CONST, T_CASE, T_DOUBLE_COLON])) {
+                    $collect = true;
+                    $isNewing = true;
+                }
                 self::forward();
 
                 // we do not want to collect the new keyword itself
