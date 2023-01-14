@@ -13,6 +13,7 @@ use Imanghafoori\TokenAnalyzer\Keywords\DoubleArrow;
 use Imanghafoori\TokenAnalyzer\Keywords\DoubleColon;
 use Imanghafoori\TokenAnalyzer\Keywords\NameQualified;
 use Imanghafoori\TokenAnalyzer\Keywords\CurlyBrackets;
+use Imanghafoori\TokenAnalyzer\Keywords\RoundBrackets;
 use Imanghafoori\TokenAnalyzer\Keywords\SquareBrackets;
 use Imanghafoori\TokenAnalyzer\Keywords\Pipe;
 use Imanghafoori\TokenAnalyzer\Keywords\Question;
@@ -48,36 +49,36 @@ class ClassReferenceFinder
     public static $token = [null, null, null];
 
     public static $keywords = [
-        Keywords\TUse::class,
-        Keywords\DoubleArrow::class,
-        Keywords\TClass::class,
-        Keywords\TTrait::class,
-        Keywords\TCatch::class,
-        Keywords\TNamespace::class,
-        Keywords\AccessModifiers::class,
-        Keywords\TFN::class,
-        Keywords\TFunction::class,
-        Keywords\Variable::class,
-        Keywords\TImplements::class,
-        Keywords\TInsteadOf::class,
-        Keywords\TExtends::class,
-        Keywords\Whitespace::class,
-        Keywords\Semicolon::class,
-        Keywords\Boolean::class,
-        Keywords\Comma::class,
-        Keywords\SquareBrackets::class,
-        Keywords\CurlyBrackets::class,
-        Keywords\RoundBrackets::class,
-        Keywords\Question::class,
-        Keywords\DoubleColon::class,
-        Keywords\Separator::class,
-        Keywords\NameQualified::class,
-        Keywords\TNew::class,
-        Keywords\TInstanceOf::class,
-        Keywords\Pipe::class,
-        Keywords\TConst::class,
-        Keywords\TCase::class,
-        Keywords\Colon::class,
+        TUse::class,
+        DoubleArrow::class,
+        TClass::class,
+        TTrait::class,
+        TCatch::class,
+        TNamespace::class,
+        AccessModifiers::class,
+        TFN::class,
+        TFunction::class,
+        Variable::class,
+        TImplements::class,
+        TInsteadOf::class,
+        TExtends::class,
+        Whitespace::class,
+        Semicolon::class,
+        Boolean::class,
+        Comma::class,
+        SquareBrackets::class,
+        CurlyBrackets::class,
+        RoundBrackets::class,
+        Question::class,
+        DoubleColon::class,
+        Separator::class,
+        NameQualified::class,
+        TNew::class,
+        TInstanceOf::class,
+        Pipe::class,
+        TConst::class,
+        TCase::class,
+        Colon::class,
     ];
 
     /**
