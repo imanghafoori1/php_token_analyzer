@@ -1,0 +1,18 @@
+<?php
+
+namespace Imanghafoori\TokenAnalyzer\Keywords;
+
+use Imanghafoori\TokenAnalyzer\ClassRefProperties;
+
+class TInsteadOf
+{
+    public static function is($token)
+    {
+        return $token === T_INSTEADOF;
+    }
+
+    public static function body(ClassRefProperties $properties)
+    {
+        return TImplements::body($properties);
+    }
+}
