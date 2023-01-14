@@ -318,7 +318,7 @@ class ClassReferenceFinder
 
     public static function isBuiltinType($token)
     {
-        return \in_array($token[1], [
+        return \in_array(strtolower($token[1]), [
             'array',
             'bool',
             'callable',
