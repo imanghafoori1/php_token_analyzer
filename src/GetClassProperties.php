@@ -40,7 +40,7 @@ class GetClassProperties
             // when we reach the first "class", or "interface" or "trait" keyword
             if (! $class && \in_array($tokens[$i][0], [T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM])) {
                 // anonymous class: new class() {...}
-                if ($tokens[$i - 2][0] !== T_NEW && ($tokens[$i + 2][0] ?? null) === T_STRING) {
+                if ($tokens[$i - 2][0] !== T_NEW && ($tokens[$i + 2][0] ?? null) === T_STRING && isset($tokens[$i + 4])) {
                     $class = $tokens[$i + 2][1];
                 } else {
                     $class = null;
@@ -84,12 +84,15 @@ class GetClassProperties
         $terminators[] = '{';
 
         $results = '';
-        if ($tokens[$i][0] !== $target) {
+        if (($tokens[$i][0] ?? '') !== $target) {
             return [$i, $results];
         }
 
         while (true) {
             $i++;
+            if (! isset($tokens[$i])) {
+                return [$i, $results];
+            }
             // ignore white spaces
             if ($tokens[$i][0] === T_WHITESPACE) {
                 continue;
@@ -101,7 +104,7 @@ class GetClassProperties
                 continue;
             }
 
-            if (\in_array($tokens[$i][0], $terminators) || ! isset($tokens[$i])) {
+            if (\in_array($tokens[$i][0], $terminators)) {
                 // we go ahead and collect until we reach:
                 // 1. an opening curly brace {
                 // 2. or a semi-colon ;
