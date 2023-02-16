@@ -1,5 +1,5 @@
 <?php
 
-$r instanceof Hello;
-$r instanceof Hello2 ? '' : '=';
-$r instanceof \Hello3 ? '' : '=';
+$r instanceof Hello or
+$r instanceof Hello2 ? '' : '=' and
+$r instanceof \Hello3 ? '' : '=' && (0 || 0);
