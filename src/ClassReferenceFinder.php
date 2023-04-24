@@ -4,9 +4,6 @@ namespace Imanghafoori\TokenAnalyzer;
 
 use Imanghafoori\TokenAnalyzer\Keywords\AccessModifiers;
 use Imanghafoori\TokenAnalyzer\Keywords\Boolean;
-use Imanghafoori\TokenAnalyzer\Keywords\CircleBrackets;
-use Imanghafoori\TokenAnalyzer\Keywords\CloseCurlyBrackets;
-use Imanghafoori\TokenAnalyzer\Keywords\CloseSquareBracket;
 use Imanghafoori\TokenAnalyzer\Keywords\Colon;
 use Imanghafoori\TokenAnalyzer\Keywords\Comma;
 use Imanghafoori\TokenAnalyzer\Keywords\DoubleArrow;
@@ -39,6 +36,7 @@ use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\Location;
 use phpDocumentor\Reflection\Types\Context;
+use RuntimeException;
 
 class ClassReferenceFinder
 {
@@ -171,15 +169,20 @@ class ClassReferenceFinder
 
         $refs = [];
         foreach ($tokens as $token) {
-            if ($token[0] === T_DOC_COMMENT) {
-                $refs = array_merge($refs, self::getRefsInDocblock(
-                    $docblock->create(
-                        $token[1],
-                        new Context('q1w23e4rt___ffff000'),
-                        new Location($token[2], 4)
-                    )
-                ));
+            if ($token[0] !== T_DOC_COMMENT) {
+                continue;
             }
+            try {
+                $doc = $docblock->create(
+                    $token[1],
+                    new Context('q1w23e4rt___ffff000'),
+                    new Location($token[2], 4)
+                );
+            } catch (RuntimeException $e) {
+                continue;
+            }
+
+            $refs = array_merge($refs, self::getRefsInDocblock($doc));
         }
 
         return $refs;
