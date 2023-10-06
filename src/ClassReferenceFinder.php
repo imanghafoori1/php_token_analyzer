@@ -193,10 +193,10 @@ class ClassReferenceFinder
         $refs = [];
         $line = $docblock->getLocation()->getLineNumber();
         foreach ($docblock->getTagsByName('method') as $method) {
-            $refs = self::addRef(explode('|', (string) $method->getReturnType()), $line, $refs);
+            $refs = self::addRef(self::explode((string) $method->getReturnType()), $line, $refs);
 
             foreach ($method->getArguments() as $argument) {
-                $_refs = explode('|', str_replace('?', '', (string) $argument['type']));
+                $_refs = self::explode(str_replace('?', '', (string) $argument['type']));
                 $refs = self::addRef($_refs, $line, $refs);
             }
         }
@@ -205,12 +205,12 @@ class ClassReferenceFinder
             $refs = [];
             foreach ($docblock->getTagsByName($tagName) as $ref) {
                 if (method_exists($ref, 'getType') && $ref->getType() && method_exists($ref->getType(), 'getFqsen')) {
-                    $refs = self::addRef((explode('|', $ref->getType()->getFqsen())), $line, $refs);
+                    $refs = self::addRef(self::explode($ref->getType()->getFqsen()), $line, $refs);
                     continue;
                 }
                 if (! method_exists($ref, 'getType')) {
                     $ref = (string) $ref;
-                    $ref && $refs = self::addRef(explode('|', $ref), $line, $refs);
+                    $ref && $refs = self::addRef(self::explode($ref), $line, $refs);
                     continue;
                 }
                 // this finds the "Money" ref in: " @var array<int, class-string<Money>> "
@@ -219,7 +219,7 @@ class ClassReferenceFinder
                     continue;
                 }
                 if (! method_exists($type, 'getValueType')) {
-                    $refs = self::addRef(explode('|', (string) $ref->getType()), $line, $refs);
+                    $refs = self::addRef(self::explode((string) $ref->getType()), $line, $refs);
                     continue;
                 }
                 $value = $ref->getType()->getValueType();
@@ -228,7 +228,7 @@ class ClassReferenceFinder
                 }
                 $v = method_exists($value, 'getFqsen') ? $value->getFqsen() : $value->__toString();
 
-                $refs = self::addRef(explode('|', $v), $line, $refs);
+                $refs = self::addRef(self::explode($v), $line, $refs);
             }
 
             return $refs;
@@ -267,7 +267,8 @@ class ClassReferenceFinder
     {
         foreach ($_refs as $ref) {
             $ref = str_replace('[]', '', $ref);
-            ! self::isBuiltinType([0, $ref]) && ! Str::startsWith($ref, ['array<int', 'array<string']) && $ref !== 'class-string' && $refs[] = [
+            $ref = trim($ref, '<>');
+            ! self::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>']) && $ref !== 'class-string' && $refs[] = [
                 'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
                 'line' => $line,
             ];
@@ -283,5 +284,12 @@ class ClassReferenceFinder
         ! defined('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG', -385);
         ! defined('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG', -386);
         ! defined('T_READONLY') && define('T_READONLY', -387);
+    }
+
+    public static function explode(string $ref): array
+    {
+        $ref = str_replace(',', '|', $ref);
+
+        return explode('|', $ref);
     }
 }
