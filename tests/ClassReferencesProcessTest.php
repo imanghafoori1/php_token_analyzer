@@ -69,9 +69,8 @@ class ClassReferencesProcessTest extends BaseTestClass
         $this->assertEquals( ["class" => "Hello2", "line" => 14], $output[4]);
         $this->assertEquals( ["class" => "ArrayIterator", "line" => 14], $output[5]);
         $this->assertEquals( ["class" => "Returny", "line" => 14], $output[6]);
-        $this->assertEquals( ["class" => '$this', "line" => 14], $output[7]);
-        $this->assertEquals( ["class" => "DOMElement", "line" => 14], $output[8]);
-        $this->assertEquals( ["class" => "\Exception", "line" => 14], $output[9]);
+        $this->assertEquals( ["class" => 'DOMElement', "line" => 14], $output[7]);
+        $this->assertEquals( ["class" => "\Exception", "line" => 14], $output[8]);
     }
 
     /** @test */
