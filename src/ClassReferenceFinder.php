@@ -268,7 +268,7 @@ class ClassReferenceFinder
         foreach ($_refs as $ref) {
             $ref = str_replace('[]', '', $ref);
             $ref = trim($ref, '<>');
-            ! self::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>']) && $ref !== 'class-string' && $refs[] = [
+            $ref && ! self::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>', '$']) && $ref !== 'class-string' && $refs[] = [
                 'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
                 'line' => $line,
             ];
