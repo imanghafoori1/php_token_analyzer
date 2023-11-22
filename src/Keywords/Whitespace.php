@@ -6,7 +6,7 @@ class Whitespace
 {
     public static function is($token)
     {
-        return $token === T_WHITESPACE || $token === '&' || $token === T_COMMENT || $token === T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG;
+        return $token === T_WHITESPACE || $token === '&' || $token === T_DOC_COMMENT || $token === T_COMMENT || $token === T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG;
     }
 
     public static function body()

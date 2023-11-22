@@ -2,7 +2,7 @@
 
 class S
 {
-    function t(T1 $m1 = '', T2 $m2 = ['H', 0, null, ['d',], 's' => 's'], T3 $m3) : T33
+    function t(T1 $m1 = '', /** sdvf */ T2 $m2 = ['H', 0, null, ['d',], 's' => 's'], /* t */ T3 $m3) : T33
     {
 	    fn ($path = ['a' => 'b']) => '1-' ? '2=' : '3_';
 	    ['e' => fn ($path = ['a' => 'b']) => '1-' ? '2=' : '3_'];
