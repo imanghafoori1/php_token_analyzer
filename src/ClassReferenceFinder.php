@@ -241,6 +241,8 @@ class ClassReferenceFinder
             $readRef('var'),
             $readRef('return'),
             $readRef('throws'),
+            $readRef('property'),
+            $readRef('property-read'),
             $readRef('see')
         );
 
