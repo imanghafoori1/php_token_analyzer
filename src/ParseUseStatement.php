@@ -55,7 +55,8 @@ class ParseUseStatement
         ! defined('T_NAME_QUALIFIED') && define('T_NAME_QUALIFIED', -352);
         ! defined('T_NAME_FULLY_QUALIFIED') && define('T_NAME_FULLY_QUALIFIED', -373);
 
-        $namespace = $class = $classLevel = $level = null;
+        $namespace = $class = $classLevel = null;
+        $level = 0;
         $output = $uses = [];
         while ($token = \current($tokens)) {
             \next($tokens);
