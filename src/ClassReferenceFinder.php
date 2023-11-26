@@ -265,6 +265,7 @@ class ClassReferenceFinder
             $readRef('throws'),
             $readRef('property'),
             $readRef('property-read'),
+            $readRef('property-write'),
             $readRef('see')
         );
 
