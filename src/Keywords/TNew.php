@@ -22,9 +22,9 @@ class TNew
             $properties->collect = true;
             $properties->isNewing = true;
         }
+        // we do not want to collect the new keyword itself
         ClassReferenceFinder::forward();
 
-        // we do not want to collect the new keyword itself
         return true;
     }
 }

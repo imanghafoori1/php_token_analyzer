@@ -16,7 +16,8 @@ class TClass
     {
         // new class {... }
         // ::class
-        if (ClassReferenceFinder::$lastToken[0] === T_NEW || ClassReferenceFinder::$lastToken[0] === T_DOUBLE_COLON) {
+        $type = ClassReferenceFinder::$lastToken[0];
+        if ($type === T_NEW || $type === T_DOUBLE_COLON) {
             $properties->collect = false;
             ClassReferenceFinder::forward();
 

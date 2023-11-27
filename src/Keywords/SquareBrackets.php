@@ -7,7 +7,7 @@ use Imanghafoori\TokenAnalyzer\ClassRefProperties;
 
 class SquareBrackets
 {
-    public static function is($token, $namespace = null)
+    public static function is($token)
     {
         return $token === '[' || $token === ']';
     }

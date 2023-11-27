@@ -2,36 +2,6 @@
 
 namespace Imanghafoori\TokenAnalyzer;
 
-use Imanghafoori\TokenAnalyzer\Keywords\AccessModifiers;
-use Imanghafoori\TokenAnalyzer\Keywords\Boolean;
-use Imanghafoori\TokenAnalyzer\Keywords\Colon;
-use Imanghafoori\TokenAnalyzer\Keywords\Comma;
-use Imanghafoori\TokenAnalyzer\Keywords\DoubleArrow;
-use Imanghafoori\TokenAnalyzer\Keywords\DoubleColon;
-use Imanghafoori\TokenAnalyzer\Keywords\NameQualified;
-use Imanghafoori\TokenAnalyzer\Keywords\CurlyBrackets;
-use Imanghafoori\TokenAnalyzer\Keywords\RoundBrackets;
-use Imanghafoori\TokenAnalyzer\Keywords\SquareBrackets;
-use Imanghafoori\TokenAnalyzer\Keywords\Pipe;
-use Imanghafoori\TokenAnalyzer\Keywords\Question;
-use Imanghafoori\TokenAnalyzer\Keywords\Semicolon;
-use Imanghafoori\TokenAnalyzer\Keywords\Separator;
-use Imanghafoori\TokenAnalyzer\Keywords\TCase;
-use Imanghafoori\TokenAnalyzer\Keywords\TCatch;
-use Imanghafoori\TokenAnalyzer\Keywords\TClass;
-use Imanghafoori\TokenAnalyzer\Keywords\TConst;
-use Imanghafoori\TokenAnalyzer\Keywords\TExtends;
-use Imanghafoori\TokenAnalyzer\Keywords\TFN;
-use Imanghafoori\TokenAnalyzer\Keywords\TFunction;
-use Imanghafoori\TokenAnalyzer\Keywords\TImplements;
-use Imanghafoori\TokenAnalyzer\Keywords\TInstanceOf;
-use Imanghafoori\TokenAnalyzer\Keywords\TInsteadOf;
-use Imanghafoori\TokenAnalyzer\Keywords\TNamespace;
-use Imanghafoori\TokenAnalyzer\Keywords\TNew;
-use Imanghafoori\TokenAnalyzer\Keywords\TTrait;
-use Imanghafoori\TokenAnalyzer\Keywords\TUse;
-use Imanghafoori\TokenAnalyzer\Keywords\Variable;
-use Imanghafoori\TokenAnalyzer\Keywords\Whitespace;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\Location;
@@ -47,36 +17,36 @@ class ClassReferenceFinder
     public static $token = [null, null, null];
 
     public static $keywords = [
-        TUse::class,
-        DoubleArrow::class,
-        TClass::class,
-        TTrait::class,
-        TCatch::class,
-        TNamespace::class,
-        AccessModifiers::class,
-        TFN::class,
-        TFunction::class,
-        Variable::class,
-        TImplements::class,
-        TInsteadOf::class,
-        TExtends::class,
-        Whitespace::class,
-        Semicolon::class,
-        Boolean::class,
-        Comma::class,
-        SquareBrackets::class,
-        CurlyBrackets::class,
-        RoundBrackets::class,
-        Question::class,
-        DoubleColon::class,
-        Separator::class,
-        NameQualified::class,
-        TNew::class,
-        TInstanceOf::class,
-        Pipe::class,
-        TConst::class,
-        TCase::class,
-        Colon::class,
+        Keywords\TUse::class,
+        Keywords\DoubleArrow::class,
+        Keywords\TClass::class,
+        Keywords\TTrait::class,
+        Keywords\TCatch::class,
+        Keywords\TNamespace::class,
+        Keywords\AccessModifiers::class,
+        Keywords\TFN::class,
+        Keywords\TFunction::class,
+        Keywords\Variable::class,
+        Keywords\TImplements::class,
+        Keywords\TInsteadOf::class,
+        Keywords\TExtends::class,
+        Keywords\Whitespace::class,
+        Keywords\Semicolon::class,
+        Keywords\Boolean::class,
+        Keywords\Comma::class,
+        Keywords\SquareBrackets::class,
+        Keywords\CurlyBrackets::class,
+        Keywords\RoundBrackets::class,
+        Keywords\Question::class,
+        Keywords\DoubleColon::class,
+        Keywords\Separator::class,
+        Keywords\NameQualified::class,
+        Keywords\TNew::class,
+        Keywords\TInstanceOf::class,
+        Keywords\Pipe::class,
+        Keywords\TConst::class,
+        Keywords\TCase::class,
+        Keywords\Colon::class,
     ];
 
     /**
@@ -87,46 +57,12 @@ class ClassReferenceFinder
     public static function process(&$tokens)
     {
         self::defineConstants();
-        $properties = new ClassRefProperties;
 
-        while (self::$token = current($tokens)) {
-            next($tokens);
-            $t = self::$token[0];
-            $isContinue = false;
+        $cursor = self::collectClassReferences($tokens);
 
-            foreach (self::$keywords as $keyword) {
-                if ($keyword::is($t, $properties->namespace)) {
-                    if ($keyword::body($properties, $tokens, $t)) {
-                        $isContinue = true;
-                        break;
-                    }
-                }
-            }
+        self::joinClassRefSegments($cursor);
 
-            if ($isContinue) {
-                continue;
-            }
-
-            if ($properties->collect && ! self::isBuiltinType(self::$token)) {
-                $properties->classes[$properties->c][] = self::$token;
-            }
-            self::forward();
-        }
-
-        foreach ($properties->classes as $i => $classTokens) {
-            $result = [
-                T_STRING,
-                '',
-                $classTokens[0][2]
-
-            ];
-            foreach ($classTokens as $token) {
-                $result[1] .= $token[1];
-            }
-            $properties->classes[$i] = [$result];
-        }
-
-        return [$properties->classes, $properties->namespace];
+        return [$cursor->classes, $cursor->namespace];
     }
 
     public static function forward()
@@ -188,11 +124,11 @@ class ClassReferenceFinder
         return $refs;
     }
 
-    public static function getExpandedDocblockRefs($imports, $docblockRefs, $hostNamespace)
+    public static function getExpandedDocblockRefs($imports, $docblockRefs, $namespace)
     {
-        $imported_ref = [];
+        $importedRefs = [];
         foreach ($imports as $_imps) {
-            $imported_ref = array_merge($imported_ref, $_imps);
+            $importedRefs = array_merge($importedRefs, $_imps);
         }
 
         foreach ($docblockRefs as $i => $ref) {
@@ -200,10 +136,10 @@ class ClassReferenceFinder
             if ($class === '' || $class[0] === '\\') {
                 continue;
             }
-            if (isset($imported_ref[$class])) {
-                $docblockRefs[$i]['class'] = $imported_ref[$class][0];
+            if (isset($importedRefs[$class])) {
+                $docblockRefs[$i]['class'] = $importedRefs[$class][0];
             } else {
-                $docblockRefs[$i]['class'] = $hostNamespace.'\\'.$ref['class'];
+                $docblockRefs[$i]['class'] = $namespace.'\\'.$ref['class'];
             }
         }
 
@@ -212,52 +148,12 @@ class ClassReferenceFinder
 
     private static function getRefsInDocblock(DocBlock $docblock): array
     {
-        $refs = [];
         $line = $docblock->getLocation()->getLineNumber();
-        foreach ($docblock->getTagsByName('method') as $method) {
-            $refs = self::addRef(self::explode((string) $method->getReturnType()), $line, $refs);
 
-            foreach ($method->getArguments() as $argument) {
-                $_refs = self::explode(str_replace('?', '', (string) $argument['type']));
-                $refs = self::addRef($_refs, $line, $refs);
-            }
-        }
+        $readRef = self::getRefReader($docblock, $line);
 
-        $readRef = function ($tagName) use ($docblock, $line) {
-            $refs = [];
-            foreach ($docblock->getTagsByName($tagName) as $ref) {
-                if (method_exists($ref, 'getType') && $ref->getType() && method_exists($ref->getType(), 'getFqsen')) {
-                    $refs = self::addRef(self::explode($ref->getType()->getFqsen()), $line, $refs);
-                    continue;
-                }
-                if (! method_exists($ref, 'getType')) {
-                    $ref = (string) $ref;
-                    $ref && $refs = self::addRef(self::explode($ref), $line, $refs);
-                    continue;
-                }
-                // this finds the "Money" ref in: " @var array<int, class-string<Money>> "
-                $type = $ref->getType();
-                if (! $type) {
-                    continue;
-                }
-                if (! method_exists($type, 'getValueType')) {
-                    $refs = self::addRef(self::explode((string) $ref->getType()), $line, $refs);
-                    continue;
-                }
-                $value = $ref->getType()->getValueType();
-                if (! $value) {
-                    continue;
-                }
-                $v = method_exists($value, 'getFqsen') ? $value->getFqsen() : $value->__toString();
-
-                $refs = self::addRef(self::explode($v), $line, $refs);
-            }
-
-            return $refs;
-        };
-
-        $refs = array_merge(
-            $refs,
+        return array_merge(
+            self::readMethodTag($docblock, $line),
             self::getMixins($docblock, $line),
             $readRef('param'),
             $readRef('var'),
@@ -268,8 +164,6 @@ class ClassReferenceFinder
             $readRef('property-write'),
             $readRef('see')
         );
-
-        return $refs;
     }
 
     private static function getMixins(DocBlock $docblock, int $line)
@@ -316,5 +210,107 @@ class ClassReferenceFinder
         $ref = str_replace(',', '|', $ref);
 
         return explode('|', $ref);
+    }
+
+    private static function readMethodTag(DocBlock $docblock, int $line)
+    {
+        $refs = [];
+
+        foreach ($docblock->getTagsByName('method') as $method) {
+            $refs = self::addRef(self::explode((string) $method->getReturnType()), $line, $refs);
+
+            foreach ($method->getArguments() as $argument) {
+                $_refs = self::explode(str_replace('?', '', (string) $argument['type']));
+                $refs = self::addRef($_refs, $line, $refs);
+            }
+        }
+
+        return $refs;
+    }
+
+    private static function getRefReader(DocBlock $docblock, int $line): \Closure
+    {
+        return function ($tagName) use ($docblock, $line) {
+            $refs = [];
+            foreach ($docblock->getTagsByName($tagName) as $ref) {
+                if (method_exists($ref, 'getType') && $ref->getType() && method_exists($ref->getType(), 'getFqsen')) {
+                    $refs = self::addRef(self::explode($ref->getType()->getFqsen()), $line, $refs);
+                    continue;
+                }
+                if (! method_exists($ref, 'getType')) {
+                    $ref = (string) $ref;
+                    $ref && $refs = self::addRef(self::explode($ref), $line, $refs);
+                    continue;
+                }
+                // this finds the "Money" ref in: " @var array<int, class-string<Money>> "
+                $type = $ref->getType();
+                if (! $type) {
+                    continue;
+                }
+                if (! method_exists($type, 'getValueType')) {
+                    $refs = self::addRef(self::explode((string) $ref->getType()), $line, $refs);
+                    continue;
+                }
+                $value = $ref->getType()->getValueType();
+                if (! $value) {
+                    continue;
+                }
+                $v = method_exists($value, 'getFqsen') ? $value->getFqsen() : $value->__toString();
+
+                $refs = self::addRef(self::explode($v), $line, $refs);
+            }
+
+            return $refs;
+        };
+    }
+
+    private static function joinClassRefSegments(ClassRefProperties $properties)
+    {
+        foreach ($properties->classes as $i => $classTokens) {
+            $result = [
+                T_STRING,
+                '',
+                $classTokens[0][2]
+            ];
+
+            foreach ($classTokens as $token) {
+                $result[1] .= $token[1];
+            }
+            $properties->classes[$i] = [$result];
+        }
+    }
+
+    private static function shouldCollect(ClassRefProperties $properties, array &$tokens)
+    {
+        $t = self::$token[0];
+
+        foreach (self::$keywords as $keyword) {
+            if ($keyword::is($t, $properties->namespace)) {
+                if ($keyword::body($properties, $tokens, $t)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static function collectClassReferences(array &$tokens)
+    {
+        $cursor = new ClassRefProperties;
+
+        while ($token = self::$token = current($tokens)) {
+            next($tokens);
+            if (self::shouldCollect($cursor, $tokens)) {
+                continue;
+            }
+
+            if ($cursor->collect && ! self::isBuiltinType($token)) {
+                $cursor->classes[$cursor->c][] = $token;
+            }
+            self::forward();
+        }
+
+        return $cursor;
     }
 }

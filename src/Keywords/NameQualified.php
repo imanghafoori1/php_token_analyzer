@@ -21,6 +21,5 @@ class NameQualified
 
             return true;
         }
-        //self::forward();
     }
 }

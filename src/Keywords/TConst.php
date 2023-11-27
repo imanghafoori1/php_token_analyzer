@@ -18,6 +18,5 @@ class TConst
             $i++;
         }
         is_int($tokens[$i + 1][0]) && $tokens[$i + 1][0] = T_STRING;
-        unset($i);
     }
 }
