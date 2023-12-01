@@ -205,9 +205,9 @@ class ClassReferenceFinder
         ! defined('T_READONLY') && define('T_READONLY', -387);
     }
 
-    public static function explode(string $ref): array
+    public static function explode($ref): array
     {
-        $ref = str_replace(',', '|', $ref);
+        $ref = str_replace(',', '|', (string) $ref);
 
         return explode('|', $ref);
     }
@@ -217,7 +217,7 @@ class ClassReferenceFinder
         $refs = [];
 
         foreach ($docblock->getTagsByName('method') as $method) {
-            $refs = self::addRef(self::explode((string) $method->getReturnType()), $line, $refs);
+            $refs = self::addRef(self::explode($method->getReturnType()), $line, $refs);
 
             foreach ($method->getArguments() as $argument) {
                 $_refs = self::explode(str_replace('?', '', (string) $argument['type']));
@@ -248,7 +248,7 @@ class ClassReferenceFinder
                     continue;
                 }
                 if (! method_exists($type, 'getValueType')) {
-                    $refs = self::addRef(self::explode((string) $ref->getType()), $line, $refs);
+                    $refs = self::addRef(self::explode($ref->getType()), $line, $refs);
                     continue;
                 }
                 $value = $ref->getType()->getValueType();
