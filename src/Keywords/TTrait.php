@@ -2,7 +2,6 @@
 
 namespace Imanghafoori\TokenAnalyzer\Keywords;
 
-use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 use Imanghafoori\TokenAnalyzer\ClassRefProperties;
 
 class TTrait
