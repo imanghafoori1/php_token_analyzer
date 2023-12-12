@@ -1,0 +1,6 @@
+<?php
+
+class C
+{
+    public function R (): array|\E|F {}
+}

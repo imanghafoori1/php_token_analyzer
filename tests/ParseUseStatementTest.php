@@ -72,4 +72,15 @@ class ParseUseStatementTest extends BaseTestClass
 
         $this->assertEquals([[], ''], ClassReferenceFinder::process($tokens));
     }
+
+
+    /** @test */
+    public function return_types()
+    {
+        $tokens = $this->getTokens('/stubs/multi_return_types.stub');
+
+        $refs = ClassReferenceFinder::process($tokens)[0];
+        $this->assertEquals([311, "\E", 5], $refs[0][0]);
+        $this->assertEquals([311, "F", 5], $refs[1][0]);
+    }
 }
