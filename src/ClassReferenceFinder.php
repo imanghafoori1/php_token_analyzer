@@ -110,8 +110,10 @@ class ClassReferenceFinder
                 continue;
             }
             try {
+                // removed question mark that marked param as nullable.
+                $normalizedDocComment = str_replace('?', '', $token[1]);
                 $doc = $docblock->create(
-                    $token[1],
+                    $normalizedDocComment,
                     new Context('q1w23e4rt___ffff000'),
                     new Location($token[2], 4)
                 );

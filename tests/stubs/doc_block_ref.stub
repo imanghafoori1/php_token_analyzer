@@ -22,4 +22,14 @@ class D {
 	* @throws \Exception|bool|callable
 	*/
 	public function bar () {}
+
+    /**
+     * @var ?User|array
+     */
+    private $user;
+
+    /**
+     * @var string|?Test
+     */
+    private $test;
 }
