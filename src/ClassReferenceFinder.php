@@ -34,6 +34,7 @@ class ClassReferenceFinder
         Keywords\Semicolon::class,
         Keywords\Boolean::class,
         Keywords\Comma::class,
+        Keywords\Enum::class,
         Keywords\SquareBrackets::class,
         Keywords\CurlyBrackets::class,
         Keywords\RoundBrackets::class,
@@ -203,6 +204,7 @@ class ClassReferenceFinder
         ! defined('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG', -385);
         ! defined('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG', -386);
         ! defined('T_READONLY') && define('T_READONLY', -387);
+        ! defined('T_ENUM') && define('T_ENUM', -721);
     }
 
     public static function explode($ref): array

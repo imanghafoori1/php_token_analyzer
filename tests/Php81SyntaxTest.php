@@ -42,6 +42,28 @@ class Php81SyntaxTest extends BaseTestClass
     }
 
     /** @test */
+    public function traits_enum()
+    {
+        $string = file_get_contents(__DIR__.'/stubs/used_trait_enum.stub');
+        $tokens = token_get_all($string);
+
+        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+
+        $this->assertEquals('MyTrait', $output[0][0][1]);
+        $this->assertEquals('Foo\Test', $output[1][0][1]);
+        $this->assertEquals('A', $output[2][0][1]);
+        $this->assertEquals('C', $output[3][0][1]);
+        $this->assertEquals('B', $output[4][0][1]);
+        $this->assertEquals('B', $output[5][0][1]);
+        $this->assertEquals('A', $output[6][0][1]);
+        $this->assertEquals('A', $output[7][0][1]);
+        $this->assertEquals('A', $output[8][0][1]);
+        $this->assertEquals('B', $output[9][0][1]);
+        $this->assertEquals('C', $output[10][0][1]);
+        $this->assertCount(11, $output);
+    }
+
+    /** @test */
     public function intersection_types_in_typehinted_properties()
     {
         $string = file_get_contents(__DIR__.'/stubs/php81/intersection_type.stub');
