@@ -24,7 +24,7 @@ interface interface_sample extends IncompleteTest {
     static function method_3();
 
     // methods with returns type
-    public function method_4(): test;
+    public function method_4(): test|IncompleteTest;
 
     public function method_5(): string;
 

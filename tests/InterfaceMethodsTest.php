@@ -47,6 +47,7 @@ class InterfaceMethodsTest extends BaseTestClass
 
         $this->assertNull($methods[0]['returnType']);
         $this->assertEquals('test', $methods[4]['returnType'][0][1]);
+        $this->assertEquals('PHPUnit\Framework\IncompleteTest', $methods[4]['returnType'][1][1]);
         $this->assertEquals('string', $methods[5]['returnType'][0][1]);
         $this->assertEquals('bool', $methods[6]['returnType'][0][1]);
         $this->assertEquals('int', $methods[7]['returnType'][0][1]);

@@ -13,6 +13,7 @@ class ClassMethods
             'type' => '',
         ];
         $methods = [];
+        [, $uses] = ParseUseStatement::parseUseStatements($tokens);
 
         while (isset($tokens[$i])) {
             $token = $tokens[$i];
@@ -56,7 +57,7 @@ class ClassMethods
             [, $signature, $endSignature] = Ifs::readCondition($tokens, $i + 2);
             [$char, $charIndex] = TokenManager::forwardTo($tokens, $endSignature, [':', ';', '{']);
 
-            [$returnType, $hasNullableReturnType, $char, $charIndex] = self::processReturnType($char, $tokens, $charIndex);
+            [$returnType, $hasNullableReturnType, $char, $charIndex] = self::processReturnType($uses, $char, $tokens, $charIndex);
 
             if ($char == '{') {
                 [$body, $i] = TokenManager::readBody($tokens, $charIndex);
@@ -104,7 +105,7 @@ class ClassMethods
         return [$visibility, $isStatic, $isAbstract, $isFinal];
     }
 
-    private static function processReturnType($endingChar, $tokens, $charIndex)
+    private static function processReturnType($uses, $endingChar, $tokens, $charIndex)
     {
         // No return type is defined.
         if ($endingChar != ':') {
@@ -119,6 +120,9 @@ class ClassMethods
 
         if ($hasNullableReturnType && ! (isset($returnType[1]) && $returnType[1] == 'null')) {
             [$returnType, $returnTypeIndex] = TokenManager::getNextToken($tokens, $returnTypeIndex);
+            if (isset($uses[$returnType[1]][0])) {
+                $returnType[1] = $uses[$returnType[1]][0];
+            }
         }
 
         [$endingChar, $charIndex] = TokenManager::getNextToken($tokens, $returnTypeIndex);
@@ -127,6 +131,9 @@ class ClassMethods
 
         while ($endingChar == '|') {
             [$returnType2, $charIndex] = TokenManager::getNextToken($tokens, $charIndex);
+            if (isset($uses[$returnType2[1]][0])) {
+                $returnType2[1] = $uses[$returnType2[1]][0];
+            }
             $returnType[] = $returnType2;
             [$endingChar, $charIndex] = TokenManager::getNextToken($tokens, $charIndex);
         }
