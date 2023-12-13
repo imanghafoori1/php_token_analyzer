@@ -184,19 +184,19 @@ class ClassReferenceFinder
         return $mixins;
     }
 
-    private static function addRef($_refs, int $line, array $refs): array
+    private static function addRef($refsInDocBlock, int $line, array $allRefs)
     {
-        foreach ($_refs as $ref) {
+        foreach ($refsInDocBlock as $ref) {
             $ref = str_replace('[]', '', $ref);
             $ref = trim($ref, '<>');
-            $ref && ! self::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}']) && $ref !== 'class-string' && $refs[] = [
+            self::shouldBeCollected($ref) && $allRefs[] = [
                 // remove "?" from nullable references like: "?User"
                 'class' => ltrim(str_replace('\\q1w23e4rt___ffff000\\', '', $ref), '?'),
                 'line' => $line,
             ];
         }
 
-        return $refs;
+        return $allRefs;
     }
 
     private static function defineConstants()
@@ -316,5 +316,10 @@ class ClassReferenceFinder
         }
 
         return $cursor;
+    }
+
+    private static function shouldBeCollected(string $ref): bool
+    {
+        return $ref && ! self::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}', '-']) && $ref !== 'class-string';
     }
 }
