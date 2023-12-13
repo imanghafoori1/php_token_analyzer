@@ -13,15 +13,15 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   test:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
       matrix:
+          os: [ubuntu-latest, windows-latest]
           php: ["8.3", "8.2", "8.1", "8.0", "7.4", "7.3", "7.2", "7.1"]
           dependency-version: [prefer-stable]
 
-    name: P${{ matrix.php }} - ${{ matrix.dependency-version }}
+    name: P${{ matrix.php }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
     steps:
         - name: Checkout code
@@ -31,7 +31,7 @@ jobs:
           uses: actions/cache@v2
           with:
               path: ~/.composer/cache/files
-              key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+              key: dependencies-php-${{ matrix.php }}-${{ matrix.os }}-composer-${{ hashFiles('composer.json') }}
 
         - name: Setup PHP
           uses: shivammathur/setup-php@v2
@@ -43,5 +43,5 @@ jobs:
         - name: Install dependencies
           run: |
               composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
-        - name: Execute tests
+        - name: Run tests
           run: vendor/bin/phpunit
