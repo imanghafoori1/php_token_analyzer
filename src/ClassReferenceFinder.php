@@ -112,7 +112,7 @@ class ClassReferenceFinder
             }
             try {
                 $doc = $docblock->create(
-                    $token[1],
+                    str_replace('?', '', $token[1]),
                     new Context('q1w23e4rt___ffff000'),
                     new Location($token[2], 4)
                 );
@@ -189,9 +189,9 @@ class ClassReferenceFinder
         foreach ($refsInDocBlock as $ref) {
             $ref = str_replace('[]', '', $ref);
             $ref = trim($ref, '<>');
-            self::shouldBeCollected($ref) && $allRefs[] = [
-                // remove "?" from nullable references like: "?User"
-                'class' => ltrim(str_replace('\\q1w23e4rt___ffff000\\', '', $ref), '?'),
+            $ref && self::shouldBeCollected($ref) && $allRefs[] = [
+                // Remove "?" from nullable references like: "?User"
+                'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
                 'line' => $line,
             ];
         }
@@ -271,11 +271,7 @@ class ClassReferenceFinder
     private static function joinClassRefSegments(ClassRefProperties $properties)
     {
         foreach ($properties->classes as $i => $classTokens) {
-            $result = [
-                T_STRING,
-                '',
-                $classTokens[0][2]
-            ];
+            $result = [T_STRING, '', $classTokens[0][2]];
 
             foreach ($classTokens as $token) {
                 $result[1] .= $token[1];
@@ -318,8 +314,8 @@ class ClassReferenceFinder
         return $cursor;
     }
 
-    private static function shouldBeCollected(string $ref): bool
+    private static function shouldBeCollected(string $ref)
     {
-        return $ref && ! self::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}', '-']) && $ref !== 'class-string';
+        return ! self::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}', '-']);
     }
 }
