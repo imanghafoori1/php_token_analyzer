@@ -10,7 +10,7 @@ class AccessModifiers
     public static function is($token)
     {
         return \in_array($token, [T_PUBLIC, T_PROTECTED, T_PRIVATE], true) &&
-            ! \in_array(ClassReferenceFinder::$lastToken[0], [T_AS, T_CONST, T_CASE]);
+            ! \in_array(ClassReferenceFinder::$lastToken[0], [T_AS, T_CONST, T_CASE, T_DOUBLE_COLON]);
     }
 
     public static function body(ClassRefProperties $properties, &$tokens)

@@ -10,7 +10,7 @@ class ParseUseStatementTest extends BaseTestClass
     /** @test */
     public function can_extract_imports()
     {
-        $tokens = $this->getTokens('/stubs/interface_sample.stub');
+        $tokens = $this->getTokens(__DIR__.'/stubs/interface_sample.stub');
         [$result, $uses] = ParseUseStatement::parseUseStatements($tokens);
 
         $expected = [
@@ -25,7 +25,7 @@ class ParseUseStatementTest extends BaseTestClass
     /** @test */
     public function can_detect_group_imports()
     {
-        $tokens = $this->getTokens('/stubs/group_import.stub');
+        $tokens = $this->getTokens(__DIR__.'/stubs/group_import.stub');
 
         [$result, $uses] = ParseUseStatement::parseUseStatements($tokens);
 
@@ -46,7 +46,7 @@ class ParseUseStatementTest extends BaseTestClass
     /** @test */
     public function can_detect_comma_seperated_imports()
     {
-        $tokens = $this->getTokens('/stubs/comma_seperated_imports.stub');
+        $tokens = $this->getTokens(__DIR__.'/stubs/comma_seperated_imports.stub');
 
         [$result, $uses] = ParseUseStatement::parseUseStatements($tokens);
 
@@ -63,7 +63,7 @@ class ParseUseStatementTest extends BaseTestClass
     /** @test */
     public function can_skip_imported_global_functions()
     {
-        $tokens = $this->getTokens('/stubs/auth.stub');
+        $tokens = $this->getTokens(__DIR__.'/stubs/auth.stub');
 
         [$result, $uses] = ParseUseStatement::parseUseStatements($tokens);
 
@@ -73,14 +73,14 @@ class ParseUseStatementTest extends BaseTestClass
         $this->assertEquals([[], ''], ClassReferenceFinder::process($tokens));
     }
 
-
     /** @test */
-    public function return_types()
+    public function public_enumeration()
     {
-        $tokens = $this->getTokens('/stubs/multi_return_types.stub');
+        $tokens = $this->getTokens(__DIR__.'/stubs/issue_19.stub');
 
         $refs = ClassReferenceFinder::process($tokens)[0];
-        $this->assertEquals([311, "\E", 5], $refs[0][0]);
-        $this->assertEquals([311, "F", 5], $refs[1][0]);
+
+        $this->assertEquals([T_STRING, "MyClass", 3], $refs[0][0]);
+        $this->assertCount(1, $refs);
     }
 }

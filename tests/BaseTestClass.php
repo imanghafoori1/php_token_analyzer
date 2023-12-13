@@ -15,6 +15,6 @@ class BaseTestClass extends TestCase
      */
     protected function getTokens(string $path): array
     {
-        return token_get_all(file_get_contents(__DIR__.$path));
+        return token_get_all(file_get_contents($path));
     }
 }

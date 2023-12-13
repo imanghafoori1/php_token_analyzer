@@ -1,0 +1,3 @@
+<?php
+
+MyClass::PUBLIC->val;

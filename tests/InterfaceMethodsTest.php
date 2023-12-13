@@ -9,7 +9,7 @@ class InterfaceMethodsTest extends BaseTestClass
     /** @test */
     public function check_methods_has_no_parameters_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/interface_sample.stub'));
+        $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/interface_sample.stub'));
         $methods = $class['methods'];
 
         $this->assertEquals('', $methods[0]['body']);
@@ -37,7 +37,7 @@ class InterfaceMethodsTest extends BaseTestClass
     /** @test */
     public function check_return_types_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/interface_sample.stub'));
+        $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/interface_sample.stub'));
         $methods = $class['methods'];
 
         // check is nullable return types
@@ -59,7 +59,7 @@ class InterfaceMethodsTest extends BaseTestClass
     /** @test */
     public function check_parameter_methods_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/interface_sample.stub'));
+        $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/interface_sample.stub'));
         $methods = $class['methods'];
 
         // check function has parameter
@@ -101,7 +101,7 @@ class InterfaceMethodsTest extends BaseTestClass
     /** @test  */
     public function interface_general_body_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/interface_sample.stub'));
+        $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/interface_sample.stub'));
 
         $this->assertEquals([T_STRING, 'interface_sample', 9], $class['name']);
         $this->assertEquals(T_INTERFACE, $class['type']);

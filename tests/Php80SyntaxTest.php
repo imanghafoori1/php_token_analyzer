@@ -20,7 +20,7 @@ class Php80SyntaxTest extends BaseTestClass
     /** @test */
     public function can_detect_class_general_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/php80/union_types.stub'));
+        $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php80/union_types.stub'));
 
         $this->assertEquals([T_STRING, 'sample_class', 5], $class['name']);
         $this->assertEquals(T_CLASS, $class['type']);
@@ -32,7 +32,7 @@ class Php80SyntaxTest extends BaseTestClass
     /** @test */
     public function can_detect_class_methods_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/php80/union_types.stub'));
+        $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php80/union_types.stub'));
         $methods = $class['methods'];
 
         $this->assertEquals([T_STRING, '__construct', 7], $methods[0]['name']);
@@ -47,7 +47,7 @@ class Php80SyntaxTest extends BaseTestClass
     /** @test */
     public function can_detect_return_types_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/php80/union_types.stub'));
+        $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php80/union_types.stub'));
         $methods = $class['methods'];
 
         $this->assertEquals('G1', $methods[0]['returnType'][0][1]);
@@ -58,7 +58,7 @@ class Php80SyntaxTest extends BaseTestClass
     /** @test */
     public function can_detect_methods_signature_test()
     {
-        $class = ClassMethods::read($this->getTokens('/stubs/php80/union_types.stub'));
+        $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php80/union_types.stub'));
         $methods = $class['methods'];
 
         $this->assertEquals('private', $methods[0]['signature'][0][1]);

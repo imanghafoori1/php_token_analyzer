@@ -2,6 +2,7 @@
 
 namespace Imanghafoori\TokenAnalyzer;
 
+use Closure;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\Location;
@@ -189,7 +190,8 @@ class ClassReferenceFinder
             $ref = str_replace('[]', '', $ref);
             $ref = trim($ref, '<>');
             $ref && ! self::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}']) && $ref !== 'class-string' && $refs[] = [
-                'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
+                // remove "?" from nullable references like: "?User"
+                'class' => ltrim(str_replace('\\q1w23e4rt___ffff000\\', '', $ref), '?'),
                 'line' => $line,
             ];
         }
@@ -230,7 +232,7 @@ class ClassReferenceFinder
         return $refs;
     }
 
-    private static function getRefReader(DocBlock $docblock, int $line): \Closure
+    private static function getRefReader(DocBlock $docblock, int $line): Closure
     {
         return function ($tagName) use ($docblock, $line) {
             $refs = [];
