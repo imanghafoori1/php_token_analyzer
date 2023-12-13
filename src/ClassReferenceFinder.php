@@ -6,6 +6,7 @@ use Closure;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\Location;
+use phpDocumentor\Reflection\Types\Compound;
 use phpDocumentor\Reflection\Types\Context;
 use RuntimeException;
 
@@ -239,6 +240,20 @@ class ClassReferenceFinder
             foreach ($docblock->getTagsByName($tagName) as $ref) {
                 if (method_exists($ref, 'getType') && $ref->getType() && method_exists($ref->getType(), 'getFqsen')) {
                     $refs = self::addRef(self::explode($ref->getType()->getFqsen()), $line, $refs);
+
+                    // For support like this: "Collection<Product|User|Test>"
+                    if (method_exists($ref->getType(), 'getValueType') && ($types = $ref->getType()->getValueType())) {
+                        if ($types instanceof Compound) {
+                            foreach ($types as $type) {
+                                if (!method_exists($type, 'getFqsen')) {
+                                    continue;
+                                }
+                                $refs = self::addRef(self::explode($type->getFqsen()), $line, $refs);
+                            }
+                        } else if (method_exists($types, 'getFqsen')) {
+                            $refs = self::addRef(self::explode($types->getFqsen()), $line, $refs);
+                        }
+                    }
                     continue;
                 }
                 if (! method_exists($ref, 'getType')) {

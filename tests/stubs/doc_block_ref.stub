@@ -32,4 +32,10 @@ class D {
          * @var string|?Test
          */
         private $test;
+
+    /**
+     * @var Products<Product> $products
+     * @var Collection<array|User> $users
+     */
+    private $products;
 }
