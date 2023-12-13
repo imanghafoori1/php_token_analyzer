@@ -71,6 +71,8 @@ class ClassReferencesProcessTest extends BaseTestClass
         $this->assertEquals( ["class" => "Returny", "line" => 14], $output[6]);
         $this->assertEquals( ["class" => 'DOMElement', "line" => 14], $output[7]);
         $this->assertEquals( ["class" => "\Exception", "line" => 14], $output[8]);
+        $this->assertEquals( ["class" => "User", "line" => 26], $output[9]);
+        $this->assertEquals( ["class" => "Test", "line" => 31], $output[10]);
     }
 
     /** @test */
