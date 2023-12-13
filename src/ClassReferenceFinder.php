@@ -6,7 +6,6 @@ use Closure;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\Location;
-use phpDocumentor\Reflection\Types\Compound;
 use phpDocumentor\Reflection\Types\Context;
 use RuntimeException;
 
@@ -238,45 +237,7 @@ class ClassReferenceFinder
         return function ($tagName) use ($docblock, $line) {
             $refs = [];
             foreach ($docblock->getTagsByName($tagName) as $ref) {
-                if (method_exists($ref, 'getType') && $ref->getType() && method_exists($ref->getType(), 'getFqsen')) {
-                    $refs = self::addRef(self::explode($ref->getType()->getFqsen()), $line, $refs);
-
-                    // For support like this: "Collection<Product|User|Test>"
-                    if (method_exists($ref->getType(), 'getValueType') && ($types = $ref->getType()->getValueType())) {
-                        if ($types instanceof Compound) {
-                            foreach ($types as $type) {
-                                if (!method_exists($type, 'getFqsen')) {
-                                    continue;
-                                }
-                                $refs = self::addRef(self::explode($type->getFqsen()), $line, $refs);
-                            }
-                        } else if (method_exists($types, 'getFqsen')) {
-                            $refs = self::addRef(self::explode($types->getFqsen()), $line, $refs);
-                        }
-                    }
-                    continue;
-                }
-                if (! method_exists($ref, 'getType')) {
-                    $ref = (string) $ref;
-                    $ref && $refs = self::addRef(self::explode($ref), $line, $refs);
-                    continue;
-                }
-                // this finds the "Money" ref in: " @var array<int, class-string<Money>> "
-                $type = $ref->getType();
-                if (! $type) {
-                    continue;
-                }
-                if (! method_exists($type, 'getValueType')) {
-                    $refs = self::addRef(self::explode($ref->getType()), $line, $refs);
-                    continue;
-                }
-                $value = $ref->getType()->getValueType();
-                if (! $value) {
-                    continue;
-                }
-                $v = method_exists($value, 'getFqsen') ? $value->getFqsen() : $value->__toString();
-
-                $refs = self::addRef(self::explode($v), $line, $refs);
+                $refs = self::findRefsTags($ref, $line, $refs);
             }
 
             return $refs;
@@ -332,5 +293,30 @@ class ClassReferenceFinder
     private static function shouldBeCollected(string $ref)
     {
         return ! self::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}', '-']);
+    }
+
+    private static function findRefsTags($types, int $line, array $refs): array
+    {
+        if (
+            !method_exists($types, 'getType') &&
+            !method_exists($types, 'getValueType') &&
+            !method_exists($types, 'getFqsen')
+        ) {
+            return self::addRef(self::explode($types), $line, $refs);
+        }
+
+        if (method_exists($types, 'getFqsen')) {
+            $refs = self::addRef(self::explode($types->getFqsen()), $line, $refs);
+        }
+
+        if (method_exists($types, 'getType') && ($type = $types->getType())) {
+            return self::findRefsTags($type, $line, $refs);
+        }
+
+        if (method_exists($types, 'getValueType') && ($types = $types->getValueType())) {
+            return self::findRefsTags($types, $line, $refs);
+        }
+
+        return $refs;
     }
 }

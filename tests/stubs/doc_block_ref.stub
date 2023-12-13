@@ -36,6 +36,7 @@ class D {
     /**
      * @var Products<Product> $products
      * @var Collection<array|User> $users
+     * @var Collection<Test<array<User>>> $users
      */
     private $products;
 }
