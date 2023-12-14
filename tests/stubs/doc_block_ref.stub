@@ -39,4 +39,12 @@ class D {
      * @var Collection<Test<array<User>>> $users
      */
     private $products;
+
+    /**
+     * Invalid docBlocks
+     *
+     * @param Empty<> $n
+     * @param MixArray|array<mixed, string> $n
+     * @param array<mixed>|?User $n
+     */
 }

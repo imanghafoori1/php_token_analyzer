@@ -117,7 +117,15 @@ class ClassReferenceFinder
                     new Location($token[2], 4)
                 );
             } catch (RuntimeException $e) {
-                continue;
+                try {
+                    $doc = $docblock->create(
+                        self::normalizeDocblockContent($token[1]),
+                        new Context('q1w23e4rt___ffff000'),
+                        new Location($token[2], 4)
+                    );
+                }catch (RuntimeException $e) {
+                    continue;
+                }
             }
 
             $refs = array_merge($refs, self::getRefsInDocblock($doc));
@@ -190,7 +198,6 @@ class ClassReferenceFinder
             $ref = str_replace('[]', '', $ref);
             $ref = trim($ref, '<>');
             $ref && self::shouldBeCollected($ref) && $allRefs[] = [
-                // Remove "?" from nullable references like: "?User"
                 'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
                 'line' => $line,
             ];
@@ -318,5 +325,18 @@ class ClassReferenceFinder
         }
 
         return $refs;
+    }
+
+    /*
+     * This method corrects the following invalid docBlocks
+     * @param Empty<>
+     * @param array<mixed, string>
+     * @var ?Test|?User
+     */
+    private static function normalizeDocblockContent(string $docblock)
+    {
+        $docblock = str_replace('mixed', 'string', $docblock);
+
+        return str_replace(['?', '<>'], '', $docblock);
     }
 }
