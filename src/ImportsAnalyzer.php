@@ -58,7 +58,7 @@ class ImportsAnalyzer
         try {
             [$classes, $namespace] = ClassReferenceFinder::process($tokens);
 
-            $docblockRefs = ClassReferenceFinder::readRefsInDocblocks($tokens);
+            $docblockRefs = DocblockReader::readRefsInDocblocks($tokens);
 
             $unusedImports = ParseUseStatement::getUnusedImports($classes, $imports, $docblockRefs);
 

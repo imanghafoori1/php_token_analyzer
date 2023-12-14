@@ -2,12 +2,6 @@
 
 namespace Imanghafoori\TokenAnalyzer;
 
-use Closure;
-use phpDocumentor\Reflection\DocBlock;
-use phpDocumentor\Reflection\DocBlockFactory;
-use phpDocumentor\Reflection\Location;
-use phpDocumentor\Reflection\Types\Context;
-use RuntimeException;
 
 class ClassReferenceFinder
 {
@@ -100,40 +94,6 @@ class ClassReferenceFinder
         ], true) || \in_array($token[0], [T_READONLY]);
     }
 
-    public static function readRefsInDocblocks($tokens)
-    {
-        self::defineConstants();
-        $docblock = DocBlockFactory::createInstance();
-
-        $refs = [];
-        foreach ($tokens as $token) {
-            if ($token[0] !== T_DOC_COMMENT) {
-                continue;
-            }
-            try {
-                $doc = $docblock->create(
-                    str_replace('?', '', $token[1]),
-                    new Context('q1w23e4rt___ffff000'),
-                    new Location($token[2], 4)
-                );
-            } catch (RuntimeException $e) {
-                try {
-                    $doc = $docblock->create(
-                        self::normalizeDocblockContent($token[1]),
-                        new Context('q1w23e4rt___ffff000'),
-                        new Location($token[2], 4)
-                    );
-                }catch (RuntimeException $e) {
-                    continue;
-                }
-            }
-
-            $refs = array_merge($refs, self::getRefsInDocblock($doc));
-        }
-
-        return $refs;
-    }
-
     public static function getExpandedDocblockRefs($imports, $docblockRefs, $namespace)
     {
         $importedRefs = [];
@@ -156,57 +116,7 @@ class ClassReferenceFinder
         return $docblockRefs;
     }
 
-    private static function getRefsInDocblock(DocBlock $docblock): array
-    {
-        $line = $docblock->getLocation()->getLineNumber();
-
-        $readRef = self::getRefReader($docblock, $line);
-
-        return array_merge(
-            self::readMethodTag($docblock, $line),
-            self::getMixins($docblock, $line),
-            $readRef('param'),
-            $readRef('var'),
-            $readRef('return'),
-            $readRef('throws'),
-            $readRef('property'),
-            $readRef('property-read'),
-            $readRef('property-write'),
-            $readRef('see')
-        );
-    }
-
-    private static function getMixins(DocBlock $docblock, int $line)
-    {
-        $mixins = [];
-        foreach ($docblock->getTagsByName('mixin') as $ref) {
-            $desc = $ref->getDescription();
-            if ($desc && $body = $desc->getBodyTemplate()) {
-                $mixins[] = [
-                    'line' => $line,
-                    'class' => $body,
-                ];
-            }
-        }
-
-        return $mixins;
-    }
-
-    private static function addRef($refsInDocBlock, int $line, array $allRefs)
-    {
-        foreach ($refsInDocBlock as $ref) {
-            $ref = str_replace('[]', '', $ref);
-            $ref = trim($ref, '<>');
-            $ref && self::shouldBeCollected($ref) && $allRefs[] = [
-                'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
-                'line' => $line,
-            ];
-        }
-
-        return $allRefs;
-    }
-
-    private static function defineConstants()
+    public static function defineConstants()
     {
         ! defined('T_NAME_QUALIFIED') && define('T_NAME_QUALIFIED', -352);
         ! defined('T_NAME_FULLY_QUALIFIED') && define('T_NAME_FULLY_QUALIFIED', -373);
@@ -214,41 +124,6 @@ class ClassReferenceFinder
         ! defined('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG', -386);
         ! defined('T_READONLY') && define('T_READONLY', -387);
         ! defined('T_ENUM') && define('T_ENUM', -721);
-    }
-
-    public static function explode($ref): array
-    {
-        $ref = str_replace(',', '|', (string) $ref);
-
-        return explode('|', $ref);
-    }
-
-    private static function readMethodTag(DocBlock $docblock, int $line)
-    {
-        $refs = [];
-
-        foreach ($docblock->getTagsByName('method') as $method) {
-            $refs = self::addRef(self::explode($method->getReturnType()), $line, $refs);
-
-            foreach ($method->getArguments() as $argument) {
-                $_refs = self::explode(str_replace('?', '', (string) $argument['type']));
-                $refs = self::addRef($_refs, $line, $refs);
-            }
-        }
-
-        return $refs;
-    }
-
-    private static function getRefReader(DocBlock $docblock, int $line): Closure
-    {
-        return function ($tagName) use ($docblock, $line) {
-            $refs = [];
-            foreach ($docblock->getTagsByName($tagName) as $ref) {
-                $refs = self::findRefsTags($ref, $line, $refs);
-            }
-
-            return $refs;
-        };
     }
 
     private static function joinClassRefSegments(ClassRefProperties $properties)
@@ -295,48 +170,5 @@ class ClassReferenceFinder
         }
 
         return $cursor;
-    }
-
-    private static function shouldBeCollected(string $ref)
-    {
-        return ! self::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}', '-']);
-    }
-
-    private static function findRefsTags($types, int $line, array $refs): array
-    {
-        if (
-            !method_exists($types, 'getType') &&
-            !method_exists($types, 'getValueType') &&
-            !method_exists($types, 'getFqsen')
-        ) {
-            return self::addRef(self::explode($types), $line, $refs);
-        }
-
-        if (method_exists($types, 'getFqsen')) {
-            $refs = self::addRef(self::explode($types->getFqsen()), $line, $refs);
-        }
-
-        if (method_exists($types, 'getType') && ($type = $types->getType())) {
-            return self::findRefsTags($type, $line, $refs);
-        }
-
-        if (method_exists($types, 'getValueType') && ($types = $types->getValueType())) {
-            return self::findRefsTags($types, $line, $refs);
-        }
-
-        return $refs;
-    }
-
-    /*
-     * This method corrects the following invalid docBlocks
-     * @param Empty<>
-     * @param array<mixed, string>
-     * @var ?Test|?User
-     */
-    private static function normalizeDocblockContent(string $docblock)
-    {
-        $docblock = str_replace('mixed', 'string', $docblock);
-
-        return str_replace(['?', '<>'], '', $docblock);
     }
 }

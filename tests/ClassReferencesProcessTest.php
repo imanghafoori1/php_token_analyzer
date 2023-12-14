@@ -3,6 +3,7 @@
 namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
+use Imanghafoori\TokenAnalyzer\DocblockReader;
 
 class ClassReferencesProcessTest extends BaseTestClass
 {
@@ -61,7 +62,7 @@ class ClassReferencesProcessTest extends BaseTestClass
         $string = file_get_contents(__DIR__.'/stubs/doc_block_ref.stub');
         $tokens = token_get_all($string);
 
-        $output = ClassReferenceFinder::readRefsInDocblocks($tokens);
+        $output = DocblockReader::readRefsInDocblocks($tokens);
         $this->assertEquals( ["class" => "A", "line" => 5], $output[0]);
         $this->assertEquals( ["class" => "Logger", "line" => 9], $output[1]);
         $this->assertEquals( ["class" => "Hello", "line" => 14], $output[2]);
