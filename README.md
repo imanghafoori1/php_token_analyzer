@@ -28,12 +28,12 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 <a name="contributing"></a>
 
-### :raising_hand: Contributing:
+#### Contributing:
 If you find an issue or have a better way to do something, feel free to open an issue or a pull request.
 If you use PHP-token-analyzer in your open-source project, create a pull request to provide its URL as a sample application in the README.md file.
 
 <a name="security"></a>
-### :exclamation: Security:
+#### Security:
 If you discover any security-related issues, please email `imanghafoori1@gmail.com` instead of using the issue tracker.
 
 ```
