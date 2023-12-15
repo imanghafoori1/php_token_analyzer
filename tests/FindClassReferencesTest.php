@@ -2,6 +2,7 @@
 
 namespace Imanghafoori\TokenAnalyzer\Tests;
 
+use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 use Imanghafoori\TokenAnalyzer\ParseUseStatement;
 
 class FindClassReferencesTest extends BaseTestClass
@@ -128,5 +129,30 @@ class FindClassReferencesTest extends BaseTestClass
             'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\interfaceOfAnonymous',
             'line' => 78,
         ], $classes[$h]);
+    }
+
+    /** @test */
+    public function function_return_typehint()
+    {
+        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/multi_return_types.stub'));
+
+        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+
+        $expected = [
+            [
+                [T_STRING, '\E', 5],
+            ],
+            [
+                [T_STRING, 'F', 5],
+            ],
+            [
+                [T_STRING, '\A\B', 5],
+            ],
+            [
+                [T_STRING, 'Y\T', 5],
+            ],
+        ];
+
+        $this->assertEquals($expected, $output);
     }
 }
