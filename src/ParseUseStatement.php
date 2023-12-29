@@ -54,6 +54,7 @@ class ParseUseStatement
     {
         ! defined('T_NAME_QUALIFIED') && define('T_NAME_QUALIFIED', -352);
         ! defined('T_NAME_FULLY_QUALIFIED') && define('T_NAME_FULLY_QUALIFIED', -373);
+        ! defined('T_ENUM') && define('T_ENUM', -144);
 
         $namespace = $class = $classLevel = null;
         $level = 0;
@@ -67,6 +68,7 @@ class ParseUseStatement
                     break;
 
                 case T_CLASS:
+                case T_ENUM:
                 case T_INTERFACE:
                 case T_TRAIT:
                     if ($name = self::fetch($tokens, T_STRING)) {
