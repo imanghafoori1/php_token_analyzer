@@ -150,7 +150,7 @@ class ParseUseStatement
         return self::fetch($tokens, [T_STRING, T_NS_SEPARATOR, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED]);
     }
 
-    public static function getUnusedImports($classes, $attributeRefs, $imports, $docblockRefs = [])
+    public static function getUnusedImports($classes, $imports, $docblockRefs = [])
     {
         $inline_refs = [];
         foreach ($classes as $refs) {
