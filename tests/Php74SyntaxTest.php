@@ -18,8 +18,7 @@ class TypeHintedPropertiesTest extends BaseTestClass
     /** @test */
     public function type_hinted_property()
     {
-        $string = file_get_contents(__DIR__.'/stubs/type_hinted_property.stub');
-        $tokens = token_get_all($string);
+        $tokens = $this->getTokens(__DIR__.'/stubs/type_hinted_property.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('', $namespace);
@@ -36,7 +35,7 @@ class TypeHintedPropertiesTest extends BaseTestClass
     /** @test */
     public function can_detect_arrow_functions_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/php74/arrow_functions.stubs'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/php74/arrow_functions.stubs');
         [$output,] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('T4', $output[0][0][1]);

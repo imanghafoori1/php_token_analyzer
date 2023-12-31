@@ -1,0 +1,5 @@
+<?php
+
+$a instanceof User === true;
+$a instanceof App\User === true;
+$a instanceof \App\User === true;

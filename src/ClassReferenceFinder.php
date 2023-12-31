@@ -43,6 +43,7 @@ class ClassReferenceFinder
         Keywords\TConst::class,
         Keywords\TCase::class,
         Keywords\Colon::class,
+        Keywords\Comparison::class,
     ];
 
     /**
