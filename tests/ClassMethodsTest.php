@@ -9,9 +9,7 @@ class ClassMethodsTest extends BaseTestClass
     /** @test */
     public function can_detect_method_visibility()
     {
-        $string = file_get_contents(__DIR__.'/stubs/sample_class.stub');
-        $tokens = token_get_all($string);
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/sample_class.stub');
         $class = ClassMethods::read($tokens);
 
         $this->assertFalse($class['is_abstract']);
@@ -43,9 +41,7 @@ class ClassMethodsTest extends BaseTestClass
     /** @test */
     public function can_detect_method_visibility_on_interfaces()
     {
-        $string = file_get_contents(__DIR__.'/stubs/PasswordBroker.stub');
-        $tokens = token_get_all($string);
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/PasswordBroker.stub');
         $class = ClassMethods::read($tokens);
 
         $this->assertCount(2, $class['methods']);
@@ -57,9 +53,7 @@ class ClassMethodsTest extends BaseTestClass
     /** @test */
     public function can_detect_methods_on_traits()
     {
-        $string = file_get_contents(__DIR__.'/stubs/sample_trait.stub');
-        $tokens = token_get_all($string);
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/sample_trait.stub');
         $trait = ClassMethods::read($tokens);
 
         $this->assertCount(6, $trait['methods']);

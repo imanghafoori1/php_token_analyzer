@@ -84,7 +84,7 @@ class Php80SyntaxTest extends BaseTestClass
     /** @test */
     public function can_detect_class_references()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/php80/class_references.stub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/php80/class_references.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals([[T_STRING, '\A\ParentClass', 7],], $output[0]);
@@ -108,7 +108,7 @@ class Php80SyntaxTest extends BaseTestClass
     /** @test */
     public function can_find_class_references()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/php80/class_references.stub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/php80/class_references.stub');
         [$classes, $namespace] = ParseUseStatement::findClassReferences($tokens);
         $h = 0;
 

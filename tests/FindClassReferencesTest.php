@@ -10,9 +10,9 @@ class FindClassReferencesTest extends BaseTestClass
     /** @test */
     public function can_find_class_references()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/class_references.stub'));
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/class_references.stub');
         [$classes, $namespace] = ParseUseStatement::findClassReferences($tokens);
+
         $this->assertEquals("Imanghafoori\LaravelMicroscope\FileReaders", $namespace);
         $h = 0;
         $this->assertEquals([
@@ -134,8 +134,7 @@ class FindClassReferencesTest extends BaseTestClass
     /** @test */
     public function function_return_typehint()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/multi_return_types.stub'));
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/multi_return_types.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
 
         $expected = [
