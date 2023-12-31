@@ -15,7 +15,8 @@ class NameQualified
     public static function body(ClassRefProperties $properties)
     {
         if (! $properties->isImporting) {
-            $properties->classes[$properties->c++][] = ClassReferenceFinder::$token;
+            $properties->addRef(ClassReferenceFinder::$token);
+            $properties->c++;
             $properties->collect = false;
             ClassReferenceFinder::forward();
 

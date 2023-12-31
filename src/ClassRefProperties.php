@@ -40,4 +40,21 @@ class ClassRefProperties
 
     public $isNewing = false;
 
+    public $isAttribute = false;
+
+    public $attributeRefs = [];
+
+    /**
+     * @param array $token
+     * @return void
+     */
+    public function addRef(array $token)
+    {
+        if ($this->isAttribute) {
+            $this->attributeRefs[][] = $token;
+            return;
+        }
+
+        $this->classes[$this->c][] = $token;
+    }
 }

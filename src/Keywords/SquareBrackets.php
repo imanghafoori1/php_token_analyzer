@@ -23,7 +23,7 @@ class SquareBrackets
 
         $properties->fnLevel--;
         $properties->isInsideArray--;
-        $properties->force_close = $properties->collect = false;
+        $properties->isAttribute = $properties->force_close = $properties->collect = false;
         isset($properties->classes[$properties->c]) && $properties->c++;
         ClassReferenceFinder::forward();
 

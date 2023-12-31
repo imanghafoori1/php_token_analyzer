@@ -11,43 +11,46 @@ class ClassReferencesProcessTest extends BaseTestClass
     public function traits()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/used_trait.stub');
-        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
 
-        $this->assertEquals('MyTrait', $output[0][0][1]);
-        $this->assertEquals('Foo\Test', $output[1][0][1]);
-        $this->assertEquals('A', $output[2][0][1]);
-        $this->assertEquals('C', $output[3][0][1]);
-        $this->assertEquals('B', $output[4][0][1]);
-        $this->assertEquals('B', $output[5][0][1]);
-        $this->assertEquals('A', $output[6][0][1]);
-        $this->assertEquals('A', $output[7][0][1]);
-        $this->assertEquals('A', $output[8][0][1]);
-        $this->assertEquals('B', $output[9][0][1]);
-        $this->assertEquals('C', $output[10][0][1]);
-        $this->assertCount(11, $output);
+        $this->assertEquals('MyTrait', $classRefs[0][0][1]);
+        $this->assertEquals('Foo\Test', $classRefs[1][0][1]);
+        $this->assertEquals('A', $classRefs[2][0][1]);
+        $this->assertEquals('C', $classRefs[3][0][1]);
+        $this->assertEquals('B', $classRefs[4][0][1]);
+        $this->assertEquals('B', $classRefs[5][0][1]);
+        $this->assertEquals('A', $classRefs[6][0][1]);
+        $this->assertEquals('A', $classRefs[7][0][1]);
+        $this->assertEquals('A', $classRefs[8][0][1]);
+        $this->assertEquals('B', $classRefs[9][0][1]);
+        $this->assertEquals('C', $classRefs[10][0][1]);
+        $this->assertCount(11, $classRefs);
+        $this->assertCount(0, $attributeRefs);
     }
 
     /** @test */
     public function can_instanceof()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/instanceof.stub');
-        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
 
-        $this->assertEquals('Hello', $output[0][0][1]);
-        $this->assertEquals('Hello2', $output[1][0][1]);
-        $this->assertEquals('\Hello3', $output[2][0][1]);
-        $this->assertCount(3, $output);
+        $this->assertEquals('Hello', $classRefs[0][0][1]);
+        $this->assertEquals('Hello2', $classRefs[1][0][1]);
+        $this->assertEquals('\Hello3', $classRefs[2][0][1]);
+        $this->assertCount(3, $classRefs);
+        $this->assertCount(0, $attributeRefs);
     }
 
     /** @test */
     public function refs_in_flat_files()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/non_in_class_refs.stub');
-        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $attributeRefs, $namespace] = ClassReferenceFinder::process($tokens);
 
-        $this->assertEquals("Model\User", $output[0][0][1]);
-        $this->assertEquals("H", $output[1][0][1]);
-        $this->assertEquals("T", $output[2][0][1]);
+        $this->assertEquals("Model\User", $classRefs[0][0][1]);
+        $this->assertEquals("H", $classRefs[1][0][1]);
+        $this->assertEquals("T", $classRefs[2][0][1]);
+        $this->assertCount(0, $attributeRefs);
         $this->assertEquals("", $namespace);
     }
 
@@ -84,76 +87,78 @@ class ClassReferencesProcessTest extends BaseTestClass
     public function can_detect_class_references()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/class_references.stub');
-        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $attributeRefs, $namespace] = ClassReferenceFinder::process($tokens);
 
-        $this->assertEquals([[T_STRING, 'A', 9]], $output[0]);
-        $this->assertEquals([[T_STRING, 'InterF1', 9]], $output[1]);
-        $this->assertEquals([[T_STRING, 'InterF2', 9]], $output[2]);
-        $this->assertEquals([[T_STRING, 'B', 9]], $output[3]);
+        $this->assertEquals([[T_STRING, 'A', 9]], $classRefs[0]);
+        $this->assertEquals([[T_STRING, 'InterF1', 9]], $classRefs[1]);
+        $this->assertEquals([[T_STRING, 'InterF2', 9]], $classRefs[2]);
+        $this->assertEquals([[T_STRING, 'B', 9]], $classRefs[3]);
 
-        $this->assertEquals([[T_STRING, 'Trait1', 11]], $output[4]);
-        $this->assertEquals([[T_STRING, 'Trait2', 11]], $output[5]);
-        $this->assertEquals([[T_STRING, 'Trait3', 13]], $output[6]);
+        $this->assertEquals([[T_STRING, 'Trait1', 11]], $classRefs[4]);
+        $this->assertEquals([[T_STRING, 'Trait2', 11]], $classRefs[5]);
+        $this->assertEquals([[T_STRING, 'Trait3', 13]], $classRefs[6]);
 
-        $this->assertEquals([[T_STRING, 'TypeHint1', 17]], $output[7]);
-        $this->assertEquals([[T_STRING, 'TypeHint2', 17]], $output[8]);
-        $this->assertEquals([[T_STRING, 'Finder', 23]], $output[9]);
-        $this->assertEquals([[T_STRING, 'DirectoryNotFoundException', 31]], $output[10]);
-        $this->assertEquals([[T_STRING, 'MyAmIClass', 35]], $output[11]);
-        $this->assertEquals([[T_STRING, 'TypeHint1', 43]], $output[12]);
-        $this->assertEquals([[T_STRING, 'ReturnyType2', 43]], $output[13]);
-        $this->assertEquals([[T_STRING, 'Newed', 51]], $output[14]);
-        $this->assertEquals([[T_STRING, 'Newed', 51]], $output[15]);
+        $this->assertEquals([[T_STRING, 'TypeHint1', 17]], $classRefs[7]);
+        $this->assertEquals([[T_STRING, 'TypeHint2', 17]], $classRefs[8]);
+        $this->assertEquals([[T_STRING, 'Finder', 23]], $classRefs[9]);
+        $this->assertEquals([[T_STRING, 'DirectoryNotFoundException', 31]], $classRefs[10]);
+        $this->assertEquals([[T_STRING, 'MyAmIClass', 35]], $classRefs[11]);
+        $this->assertEquals([[T_STRING, 'TypeHint1', 43]], $classRefs[12]);
+        $this->assertEquals([[T_STRING, 'ReturnyType2', 43]], $classRefs[13]);
+        $this->assertEquals([[T_STRING, 'Newed', 51]], $classRefs[14]);
+        $this->assertEquals([[T_STRING, 'Newed', 51]], $classRefs[15]);
 
         $this->assertEquals("Imanghafoori\LaravelMicroscope\FileReaders", $namespace);
-        $this->assertEquals([[T_STRING, 'InConstructor', 58]], $output[16]);
+        $this->assertEquals([[T_STRING, 'InConstructor', 58]], $classRefs[16]);
 
-        $this->assertEquals([[T_STRING, 'F', 63]], $output[17]);
+        $this->assertEquals([[T_STRING, 'F', 63]], $classRefs[17]);
+        $this->assertCount(0, $attributeRefs);
     }
 
     /** @test */
     public function can_detect_inline_class_references()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/inline_class_references.stub');
-        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $attributeRefs, $namespace] = ClassReferenceFinder::process($tokens);
 
-        $this->assertEquals([[T_STRING, '\A', 9]], $output[0]);
-        $this->assertEquals([[T_STRING, '\InterF1', 9]], $output[1]);
-        $this->assertEquals([[T_STRING, '\InterF2', 9]], $output[2]);
-        $this->assertEquals([[T_STRING, '\B', 9]], $output[3]);
+        $this->assertEquals([[T_STRING, '\A', 9]], $classRefs[0]);
+        $this->assertEquals([[T_STRING, '\InterF1', 9]], $classRefs[1]);
+        $this->assertEquals([[T_STRING, '\InterF2', 9]], $classRefs[2]);
+        $this->assertEquals([[T_STRING, '\B', 9]], $classRefs[3]);
 
-        $this->assertEquals([[T_STRING, '\Trait1', 11]], $output[4]);
-        $this->assertEquals([[T_STRING, '\Trait2', 11]], $output[5]);
-        $this->assertEquals([[T_STRING, '\Trait3', 13]], $output[6]);
+        $this->assertEquals([[T_STRING, '\Trait1', 11]], $classRefs[4]);
+        $this->assertEquals([[T_STRING, '\Trait2', 11]], $classRefs[5]);
+        $this->assertEquals([[T_STRING, '\Trait3', 13]], $classRefs[6]);
 
-        $this->assertEquals([[T_STRING, '\TypeHint1', 17]], $output[7]);
-        $this->assertEquals([[T_STRING, '\TypeHint2', 17]], $output[8]);
-        $this->assertEquals([[T_STRING, '\Finder', 23]], $output[9]);
-        $this->assertEquals([[T_STRING, '\DirectoryNotFoundException', 31]], $output[10]);
-        $this->assertEquals([[T_STRING, '\MyAmIClass', 35]], $output[11]);
-        $this->assertEquals([[T_STRING, '\TypeHint1', 43]], $output[12]);
-        $this->assertEquals([[T_STRING, '\ReturnyType2', 43]], $output[13]);
-        $this->assertEquals([[T_STRING, '\Newed', 51]], $output[14]);
-        $this->assertEquals([[T_STRING, '\Newed', 51]], $output[15]);
+        $this->assertEquals([[T_STRING, '\TypeHint1', 17]], $classRefs[7]);
+        $this->assertEquals([[T_STRING, '\TypeHint2', 17]], $classRefs[8]);
+        $this->assertEquals([[T_STRING, '\Finder', 23]], $classRefs[9]);
+        $this->assertEquals([[T_STRING, '\DirectoryNotFoundException', 31]], $classRefs[10]);
+        $this->assertEquals([[T_STRING, '\MyAmIClass', 35]], $classRefs[11]);
+        $this->assertEquals([[T_STRING, '\TypeHint1', 43]], $classRefs[12]);
+        $this->assertEquals([[T_STRING, '\ReturnyType2', 43]], $classRefs[13]);
+        $this->assertEquals([[T_STRING, '\Newed', 51]], $classRefs[14]);
+        $this->assertEquals([[T_STRING, '\Newed', 51]], $classRefs[15]);
 
         $this->assertEquals("Imanghafoori\LaravelMicroscope\FileReaders", $namespace);
-        $this->assertEquals([[T_STRING, '\InConstructor', 58]], $output[16]);
+        $this->assertEquals([[T_STRING, '\InConstructor', 58]], $classRefs[16]);
 
-        $this->assertEquals([[T_STRING, '\F', 63]], $output[17]);
-        $this->assertEquals([[T_STRING, '\iteable', 66]], $output[18]);
+        $this->assertEquals([[T_STRING, '\F', 63]], $classRefs[17]);
+        $this->assertEquals([[T_STRING, '\iteable', 66]], $classRefs[18]);
 
-        $this->assertEquals([[T_STRING, '\countable', 66]], $output[19]);
-        $this->assertEquals([[T_STRING, '\User', 68]], $output[20]);
-        $this->assertEquals([[T_STRING, '\ParentOfAnonymous', 77]], $output[21]);
-        $this->assertEquals([[T_STRING, '\interfaceOfAnonymous', 78]], $output[22]);
-        $this->assertEquals([[T_STRING, '\A\interfaceOfAnonymous', 79]], $output[23]);
+        $this->assertEquals([[T_STRING, '\countable', 66]], $classRefs[19]);
+        $this->assertEquals([[T_STRING, '\User', 68]], $classRefs[20]);
+        $this->assertEquals([[T_STRING, '\ParentOfAnonymous', 77]], $classRefs[21]);
+        $this->assertEquals([[T_STRING, '\interfaceOfAnonymous', 78]], $classRefs[22]);
+        $this->assertEquals([[T_STRING, '\A\interfaceOfAnonymous', 79]], $classRefs[23]);
+        $this->assertCount(0, $attributeRefs);
     }
 
     /** @test */
     public function namespaced_function_call()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/namespaced_function_call.stub');
-        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
         $expected = [
            [
                 [
@@ -171,6 +176,7 @@ class ClassReferencesProcessTest extends BaseTestClass
             ],
         ];
 
-        $this->assertEquals($expected, $output);
+        $this->assertEquals($expected, $classRefs);
+        $this->assertCount(0, $attributeRefs);
     }
 }

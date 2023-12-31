@@ -67,7 +67,7 @@ class ParseUseStatementTest extends BaseTestClass
         $this->assertEquals([], $uses);
         $this->assertEquals([], $result);
 
-        $this->assertEquals([[], ''], ClassReferenceFinder::process($tokens));
+        $this->assertEquals([[], [], ''], ClassReferenceFinder::process($tokens));
     }
 
     /** @test */
