@@ -10,29 +10,29 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test */
     public function constants()
     {
-        $string = file_get_contents(__DIR__.'/stubs/const.stub');
-        $tokens = token_get_all($string);
+        $tokens = $this->getTokens(__DIR__.'/stubs/const.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
+
         $this->assertCount(0, $output);
     }
 
     /** @test */
     public function check_final_class_is_detected2_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/arguments.stub'));
-
+        $tokens = $this->getTokens(__DIR__ . '/stubs/arguments.stub');
         [$output,] = ClassReferenceFinder::process($tokens);
-           $this->assertEquals('T1', $output[0][0][1]);
-           $this->assertEquals('T2', $output[1][0][1]);
-           $this->assertEquals('T3', $output[2][0][1]);
-           $this->assertEquals('T33', $output[3][0][1]);
-           $this->assertEquals('T8', $output[4][0][1]);
+
+        $this->assertEquals('T1', $output[0][0][1]);
+        $this->assertEquals('T2', $output[1][0][1]);
+        $this->assertEquals('T3', $output[2][0][1]);
+        $this->assertEquals('T33', $output[3][0][1]);
+        $this->assertEquals('T8', $output[4][0][1]);
     }
 
     /** @test */
     public function check_final_class_is_detected_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/final_class.stub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/final_class.stub');
         $class = ClassMethods::read($tokens);
 
         $this->assertTrue($class['is_final']);
@@ -45,7 +45,7 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test */
     public function check_is_abstract_method_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);
         $methods = $class['methods'];
         // Checks all the methods are abstract
@@ -81,7 +81,7 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test */
     public function check_return_types_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);
         $methods = $class['methods'];
         // check is nullable return types
@@ -103,7 +103,7 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test */
     public function check_visibility_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);
         $methods = $class['methods'];
 
@@ -127,7 +127,7 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test */
     public function check_is_static_method_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);
         $methods = $class['methods'];
 
@@ -140,7 +140,7 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test  */
     public function abstract_class_general_body_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);
 
         $this->assertEquals([T_STRING, 'abstract_sample', 7], $class['name']);
@@ -152,7 +152,7 @@ class AbstractMethodsClassTest extends BaseTestClass
     /** @test */
     public function check_parameter_methods()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/abstract_sample_class.stub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);
         $methods = $class['methods'];
 

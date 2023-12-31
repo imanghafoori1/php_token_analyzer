@@ -20,9 +20,9 @@ class Php81SyntaxTest extends BaseTestClass
     /** @test */
     public function readonly_properties()
     {
-        $string = file_get_contents(__DIR__.'/stubs/php81/readonly_property.stub');
-        $tokens = token_get_all($string);
+        $tokens = $this->getTokens(__DIR__.'/stubs/php81/readonly_property.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
+
         $this->assertCount(3, $output);
         $this->assertEquals('Hello1', $output[0][0][1]);
         $this->assertEquals('Hello2', $output[1][0][1]);
@@ -44,9 +44,7 @@ class Php81SyntaxTest extends BaseTestClass
     /** @test */
     public function traits_enum()
     {
-        $string = file_get_contents(__DIR__.'/stubs/used_trait_enum.stub');
-        $tokens = token_get_all($string);
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/used_trait_enum.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('MyTrait', $output[0][0][1]);
@@ -66,8 +64,7 @@ class Php81SyntaxTest extends BaseTestClass
     /** @test */
     public function intersection_types_in_typehinted_properties()
     {
-        $string = file_get_contents(__DIR__.'/stubs/php81/intersection_type.stub');
-        $tokens = token_get_all($string);
+        $tokens = $this->getTokens(__DIR__.'/stubs/php81/intersection_type.stub');
         [$actualResult, $namespace] = ClassReferenceFinder::process($tokens);
         $expected = [
             [
@@ -95,7 +92,7 @@ class Php81SyntaxTest extends BaseTestClass
     /** @test */
     public function can_find_class_references()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/php81/class_references.stub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/php81/class_references.stub');
         [$classes, $namespace] = ParseUseStatement::findClassReferences($tokens);
         $h = 0;
 

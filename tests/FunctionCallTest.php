@@ -9,7 +9,7 @@ class FunctionCallTest extends BaseTestClass
     /** @test */
     public function has_dd_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/some_function.sub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/some_function.sub');
 
         $index = null;
         foreach ($tokens as $i => $token) {
@@ -25,7 +25,7 @@ class FunctionCallTest extends BaseTestClass
     /** @test */
     public function count_arraysum_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/some_function.sub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/some_function.sub');
 
         $countArraySum = 0;
         foreach ($tokens as $i => $token) {
@@ -40,7 +40,7 @@ class FunctionCallTest extends BaseTestClass
     /** @test */
     public function is_static_call_without_send_classname_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/some_function.sub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/some_function.sub');
 
         $countArraySum = 0;
         foreach ($tokens as $i => $token) {
@@ -55,7 +55,7 @@ class FunctionCallTest extends BaseTestClass
     /** @test */
     public function is_static_call_test()
     {
-        $tokens = token_get_all(file_get_contents(__DIR__.'/stubs/some_function.sub'));
+        $tokens = $this->getTokens(__DIR__.'/stubs/some_function.sub');
 
         $countArraySum = 0;
         foreach ($tokens as $i => $token) {

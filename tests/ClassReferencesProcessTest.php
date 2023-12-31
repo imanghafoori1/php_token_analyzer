@@ -10,9 +10,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     /** @test */
     public function traits()
     {
-        $string = file_get_contents(__DIR__.'/stubs/used_trait.stub');
-        $tokens = token_get_all($string);
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/used_trait.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('MyTrait', $output[0][0][1]);
@@ -32,9 +30,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     /** @test */
     public function can_instanceof()
     {
-        $string = file_get_contents(__DIR__.'/stubs/instanceof.stub');
-        $tokens = token_get_all($string);
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/instanceof.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('Hello', $output[0][0][1]);
@@ -46,10 +42,9 @@ class ClassReferencesProcessTest extends BaseTestClass
     /** @test */
     public function refs_in_flat_files()
     {
-        $string = file_get_contents(__DIR__.'/stubs/non_in_class_refs.stub');
-        $tokens = token_get_all($string);
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/non_in_class_refs.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
+
         $this->assertEquals("Model\User", $output[0][0][1]);
         $this->assertEquals("H", $output[1][0][1]);
         $this->assertEquals("T", $output[2][0][1]);
@@ -59,10 +54,9 @@ class ClassReferencesProcessTest extends BaseTestClass
     /** @test */
     public function can_detect_docblocks()
     {
-        $string = file_get_contents(__DIR__.'/stubs/doc_block_ref.stub');
-        $tokens = token_get_all($string);
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/doc_block_ref.stub');
         $output = DocblockReader::readRefsInDocblocks($tokens);
+
         $this->assertEquals( ["class" => "A", "line" => 5], $output[0]);
         $this->assertEquals( ["class" => "Logger", "line" => 9], $output[1]);
         $this->assertEquals( ["class" => "Hello", "line" => 14], $output[2]);
@@ -89,9 +83,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     /** @test */
     public function can_detect_class_references()
     {
-        $string = file_get_contents(__DIR__.'/stubs/class_references.stub');
-        $tokens = token_get_all($string);
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/class_references.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals([[T_STRING, 'A', 9]], $output[0]);
@@ -122,9 +114,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     /** @test */
     public function can_detect_inline_class_references()
     {
-        $string = file_get_contents(__DIR__.'/stubs/inline_class_references.stub');
-        $tokens = token_get_all($string);
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/inline_class_references.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals([[T_STRING, '\A', 9]], $output[0]);
@@ -162,9 +152,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     /** @test */
     public function namespaced_function_call()
     {
-        $string = file_get_contents(__DIR__.'/stubs/namespaced_function_call.stub');
-        $tokens = token_get_all($string);
-
+        $tokens = $this->getTokens(__DIR__.'/stubs/namespaced_function_call.stub');
         [$output, $namespace] = ClassReferenceFinder::process($tokens);
         $expected = [
            [
