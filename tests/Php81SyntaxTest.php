@@ -21,12 +21,13 @@ class Php81SyntaxTest extends BaseTestClass
     public function readonly_properties()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php81/readonly_property.stub');
-        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
-        $this->assertCount(3, $output);
-        $this->assertEquals('Hello1', $output[0][0][1]);
-        $this->assertEquals('Hello2', $output[1][0][1]);
-        $this->assertEquals('Hello3', $output[2][0][1]);
+        $this->assertCount(3, $classRefs);
+        $this->assertEquals('Hello1', $classRefs[0][0][1]);
+        $this->assertEquals('Hello2', $classRefs[1][0][1]);
+        $this->assertEquals('Hello3', $classRefs[2][0][1]);
+        $this->assertCount(0, $attributeRefs);
     }
 
     /** @test */
@@ -45,27 +46,28 @@ class Php81SyntaxTest extends BaseTestClass
     public function traits_enum()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/used_trait_enum.stub');
-        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
 
-        $this->assertEquals('MyTrait', $output[0][0][1]);
-        $this->assertEquals('Foo\Test', $output[1][0][1]);
-        $this->assertEquals('A', $output[2][0][1]);
-        $this->assertEquals('C', $output[3][0][1]);
-        $this->assertEquals('B', $output[4][0][1]);
-        $this->assertEquals('B', $output[5][0][1]);
-        $this->assertEquals('A', $output[6][0][1]);
-        $this->assertEquals('A', $output[7][0][1]);
-        $this->assertEquals('A', $output[8][0][1]);
-        $this->assertEquals('B', $output[9][0][1]);
-        $this->assertEquals('C', $output[10][0][1]);
-        $this->assertCount(11, $output);
+        $this->assertEquals('MyTrait', $classRefs[0][0][1]);
+        $this->assertEquals('Foo\Test', $classRefs[1][0][1]);
+        $this->assertEquals('A', $classRefs[2][0][1]);
+        $this->assertEquals('C', $classRefs[3][0][1]);
+        $this->assertEquals('B', $classRefs[4][0][1]);
+        $this->assertEquals('B', $classRefs[5][0][1]);
+        $this->assertEquals('A', $classRefs[6][0][1]);
+        $this->assertEquals('A', $classRefs[7][0][1]);
+        $this->assertEquals('A', $classRefs[8][0][1]);
+        $this->assertEquals('B', $classRefs[9][0][1]);
+        $this->assertEquals('C', $classRefs[10][0][1]);
+        $this->assertCount(11, $classRefs);
+        $this->assertCount(0, $attributeRefs);
     }
 
     /** @test */
     public function intersection_types_in_typehinted_properties()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php81/intersection_type.stub');
-        [$actualResult, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
         $expected = [
             [
                 [0 => T_STRING, 1 => "H1", 2 => 5],
@@ -86,7 +88,8 @@ class Php81SyntaxTest extends BaseTestClass
                 [0 => T_STRING, 1 => "\\tH7", 2 => 7,],
             ],
         ];
-        $this->assertEquals($expected, $actualResult);
+        $this->assertEquals($expected, $classRefs);
+        $this->assertCount(0, $attributeRefs);
     }
 
     /** @test */

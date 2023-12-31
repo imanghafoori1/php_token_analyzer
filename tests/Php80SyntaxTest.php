@@ -18,6 +18,29 @@ class Php80SyntaxTest extends BaseTestClass
     }
 
     /** @test */
+    public function annotations()
+    {
+        $tokens = $this->getTokens(__DIR__.'/stubs/php80/php8_attributes.stub');
+        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+
+        $expected = [
+            [[T_STRING, "FooAttribute", 3]],
+            [[T_STRING, "BarClassAttrib", 4]],
+            [[T_STRING, "ConstAttr", 6]],
+            [[T_STRING, "FooAttribute", 8]],
+            [[T_STRING, "PropAttr", 11]],
+            [[T_STRING, "Foo", 11]],
+            [[T_NAME_QUALIFIED, "SomeoneElse\FooMethodAttrib", 14]],
+            [[T_STRING, "FooClassAttrib", 15]],
+            [[T_STRING, "FooAttribute", 18]],
+            [[T_STRING, "FooParamAttrib", 19]],
+        ];
+
+        $this->assertEquals($expected, $attributeRefs);
+        $this->assertCount(0, $classRefs);
+    }
+
+    /** @test */
     public function can_detect_class_general_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php80/union_types.stub'));
@@ -85,24 +108,25 @@ class Php80SyntaxTest extends BaseTestClass
     public function can_detect_class_references()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php80/class_references.stub');
-        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
 
-        $this->assertEquals([[T_STRING, '\A\ParentClass', 7],], $output[0]);
-        $this->assertEquals([[T_STRING, '\Inline\InterF3', 7]], $output[1]);
-        $this->assertEquals([[T_STRING, 'Finder', 12]], $output[2]);
-        $this->assertEquals([[T_STRING, '\Exception', 13]], $output[3]);
-        $this->assertEquals([[T_STRING, '\ErrorException', 13]], $output[4]);
-        $this->assertEquals([[T_STRING, '\YetAnotherclass', 17]], $output[5]);
-        $this->assertEquals([[T_STRING, 'HalfImported\TheRest', 19]], $output[6]);
-        $this->assertEquals([[T_STRING, 'A\Newed', 24],], $output[7]);
-        $this->assertEquals([[T_STRING, '\A\ReturnType', 27]], $output[8]);
-        $this->assertEquals([[T_STRING, 'F', 29]], $output[9]);
-        $this->assertEquals([[T_STRING, 'a\a', 30]], $output[10]);
-        $this->assertEquals([[T_STRING, 'b\b', 30]], $output[11]);
-        $this->assertEquals([[T_STRING, 'ParentOfAnonymous', 31]], $output[12]);
-        $this->assertEquals([[T_STRING, 'interfaceOfAnonymous', 31]], $output[13]);
-        $this->assertEquals([[T_STRING, '\T', 32]], $output[14]);
-        $this->assertEquals([[T_STRING, '\interfaceOfAnonymous', 34]], $output[15]);
+        $this->assertEquals([[T_STRING, '\A\ParentClass', 7],], $classRefs[0]);
+        $this->assertEquals([[T_STRING, '\Inline\InterF3', 7]], $classRefs[1]);
+        $this->assertEquals([[T_STRING, 'Finder', 12]], $classRefs[2]);
+        $this->assertEquals([[T_STRING, '\Exception', 13]], $classRefs[3]);
+        $this->assertEquals([[T_STRING, '\ErrorException', 13]], $classRefs[4]);
+        $this->assertEquals([[T_STRING, '\YetAnotherclass', 17]], $classRefs[5]);
+        $this->assertEquals([[T_STRING, 'HalfImported\TheRest', 19]], $classRefs[6]);
+        $this->assertEquals([[T_STRING, 'A\Newed', 24],], $classRefs[7]);
+        $this->assertEquals([[T_STRING, '\A\ReturnType', 27]], $classRefs[8]);
+        $this->assertEquals([[T_STRING, 'F', 29]], $classRefs[9]);
+        $this->assertEquals([[T_STRING, 'a\a', 30]], $classRefs[10]);
+        $this->assertEquals([[T_STRING, 'b\b', 30]], $classRefs[11]);
+        $this->assertEquals([[T_STRING, 'ParentOfAnonymous', 31]], $classRefs[12]);
+        $this->assertEquals([[T_STRING, 'interfaceOfAnonymous', 31]], $classRefs[13]);
+        $this->assertEquals([[T_STRING, '\T', 32]], $classRefs[14]);
+        $this->assertEquals([[T_STRING, '\interfaceOfAnonymous', 34]], $classRefs[15]);
+        $this->assertCount(0, $attributeRefs);
     }
 
     /** @test */

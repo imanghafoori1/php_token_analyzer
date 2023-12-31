@@ -22,7 +22,7 @@ class Separator
         // In case the namespace does not start with '\'
         // like: App\User::where(...
         if (ClassReferenceFinder::$lastToken[0] === T_STRING && $properties->collect && ! isset($properties->classes[$properties->c])) {
-            $properties->classes[$properties->c][] = ClassReferenceFinder::$lastToken;
+            $properties->addRef(ClassReferenceFinder::$lastToken);
         }
     }
 }

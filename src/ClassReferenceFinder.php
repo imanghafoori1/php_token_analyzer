@@ -44,6 +44,7 @@ class ClassReferenceFinder
         Keywords\TCase::class,
         Keywords\Colon::class,
         Keywords\Comparison::class,
+        Keywords\TAttribute::class,
     ];
 
     /**
@@ -59,7 +60,7 @@ class ClassReferenceFinder
 
         self::joinClassRefSegments($cursor);
 
-        return [$cursor->classes, $cursor->namespace];
+        return [$cursor->classes, $cursor->attributeRefs, $cursor->namespace];
     }
 
     public static function forward()
@@ -124,7 +125,8 @@ class ClassReferenceFinder
         ! defined('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG', -385);
         ! defined('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') && define('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG', -386);
         ! defined('T_READONLY') && define('T_READONLY', -387);
-        ! defined('T_ENUM') && define('T_ENUM', -721);
+        ! defined('T_ENUM') && define('T_ENUM', -121);
+        ! defined('T_ATTRIBUTE') && define('T_ATTRIBUTE', -226);
     }
 
     private static function joinClassRefSegments(ClassRefProperties $properties)
@@ -165,7 +167,7 @@ class ClassReferenceFinder
             }
 
             if ($cursor->collect && ! self::isBuiltinType($token)) {
-                $cursor->classes[$cursor->c][] = $token;
+                $cursor->addRef($token);
             }
             self::forward();
         }

@@ -135,7 +135,7 @@ class FindClassReferencesTest extends BaseTestClass
     public function function_return_typehint()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/multi_return_types.stub');
-        [$output, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
 
         $expected = [
             [
@@ -152,6 +152,7 @@ class FindClassReferencesTest extends BaseTestClass
             ],
         ];
 
-        $this->assertEquals($expected, $output);
+        $this->assertEquals($expected, $classRefs);
+        $this->assertCount(0, $attributeRefs);
     }
 }

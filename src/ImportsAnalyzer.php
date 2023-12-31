@@ -15,6 +15,7 @@ class ImportsAnalyzer
     {
         [
             $classReferences,
+            $attributeReferences,
             $hostNamespace,
             $extraImports,
             $docblockRefs,
@@ -56,16 +57,21 @@ class ImportsAnalyzer
     private static function findClassRefs($tokens, $absFilePath, $imports)
     {
         try {
-            [$classes, $namespace] = ClassReferenceFinder::process($tokens);
+            [$classes, $attributeRefs, $namespace] = ClassReferenceFinder::process($tokens);
 
             $docblockRefs = DocblockReader::readRefsInDocblocks($tokens);
 
-            $unusedImports = ParseUseStatement::getUnusedImports($classes, $imports, $docblockRefs);
+            $extraImports = ParseUseStatement::getUnusedImports(
+                array_merge($classes, $attributeRefs),
+                $imports,
+                $docblockRefs
+            );
 
             [$classReferences, $hostNamespace] = ClassRefExpander::expendReferences($classes, $imports, $namespace);
+            [$attributeReferences,] = ClassRefExpander::expendReferences($attributeRefs, $imports, $namespace);
             $docblockRefs = ClassReferenceFinder::getExpandedDocblockRefs($imports, $docblockRefs, $hostNamespace);
 
-            return [$classReferences, $hostNamespace, $unusedImports, $docblockRefs];
+            return [$classReferences, $attributeReferences, $hostNamespace, $extraImports, $docblockRefs];
         } catch (ErrorException $e) {
             self::requestIssue($absFilePath);
 

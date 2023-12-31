@@ -37,7 +37,7 @@ class ParseUseStatement
     {
         $imports = self::parseUseStatements($tokens);
         $imports = $imports[0] ?: [$imports[1]];
-        [$classes, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classes, $attributeRefs, $namespace] = ClassReferenceFinder::process($tokens);
 
         return ClassRefExpander::expendReferences($classes, $imports, $namespace);
     }
@@ -150,7 +150,7 @@ class ParseUseStatement
         return self::fetch($tokens, [T_STRING, T_NS_SEPARATOR, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED]);
     }
 
-    public static function getUnusedImports($classes, $imports, $docblockRefs = [])
+    public static function getUnusedImports($classes, $attributeRefs, $imports, $docblockRefs = [])
     {
         $inline_refs = [];
         foreach ($classes as $refs) {
