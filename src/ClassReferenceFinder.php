@@ -60,7 +60,7 @@ class ClassReferenceFinder
 
         self::joinClassRefSegments($cursor);
 
-        return [$cursor->classes, $cursor->attributeRefs, $cursor->namespace];
+        return [$cursor->classes, $cursor->namespace, $cursor->attributeRefs];
     }
 
     public static function forward()

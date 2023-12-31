@@ -11,7 +11,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     public function traits()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/used_trait.stub');
-        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('MyTrait', $classRefs[0][0][1]);
         $this->assertEquals('Foo\Test', $classRefs[1][0][1]);
@@ -32,7 +32,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     public function can_instanceof()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/instanceof.stub');
-        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('Hello', $classRefs[0][0][1]);
         $this->assertEquals('Hello2', $classRefs[1][0][1]);
@@ -45,7 +45,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     public function refs_in_flat_files()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/non_in_class_refs.stub');
-        [$classRefs, $attributeRefs, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals("Model\User", $classRefs[0][0][1]);
         $this->assertEquals("H", $classRefs[1][0][1]);
@@ -87,7 +87,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     public function can_detect_class_references()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/class_references.stub');
-        [$classRefs, $attributeRefs, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals([[T_STRING, 'A', 9]], $classRefs[0]);
         $this->assertEquals([[T_STRING, 'InterF1', 9]], $classRefs[1]);
@@ -119,7 +119,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     public function can_detect_inline_class_references()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/inline_class_references.stub');
-        [$classRefs, $attributeRefs, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals([[T_STRING, '\A', 9]], $classRefs[0]);
         $this->assertEquals([[T_STRING, '\InterF1', 9]], $classRefs[1]);
@@ -158,7 +158,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     public function namespaced_function_call()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/namespaced_function_call.stub');
-        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
         $expected = [
            [
                 [

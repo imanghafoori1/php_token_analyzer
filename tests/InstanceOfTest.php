@@ -10,7 +10,7 @@ class InstanceOfTest extends BaseTestClass
     public function instance_of()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/instance_of.stub');
-        [$classRefs, $attributeRefs, ] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs, ] = ClassReferenceFinder::process($tokens);
 
         $expected = [
             [[T_STRING, 'User', 3,]],

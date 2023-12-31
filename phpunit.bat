@@ -1,0 +1,7 @@
+@ECHO OFF
+setlocal DISABLEDELAYEDEXPANSION
+SET BIN_TARGET=%~dp0/vendor/bin/phpunit
+SET COMPOSER_BIN_DIR=%~dp0
+php "%BIN_TARGET%" %*
+php80 "%BIN_TARGET%" %*
+php74 "%BIN_TARGET%" %*

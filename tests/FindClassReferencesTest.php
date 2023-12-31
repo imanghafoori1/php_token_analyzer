@@ -135,7 +135,7 @@ class FindClassReferencesTest extends BaseTestClass
     public function function_return_typehint()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/multi_return_types.stub');
-        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
 
         $expected = [
             [

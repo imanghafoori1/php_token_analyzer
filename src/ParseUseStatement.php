@@ -37,7 +37,7 @@ class ParseUseStatement
     {
         $imports = self::parseUseStatements($tokens);
         $imports = $imports[0] ?: [$imports[1]];
-        [$classes, $attributeRefs, $namespace] = ClassReferenceFinder::process($tokens);
+        [$classes, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         return ClassRefExpander::expendReferences($classes, $imports, $namespace);
     }

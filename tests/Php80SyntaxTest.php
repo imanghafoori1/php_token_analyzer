@@ -21,7 +21,7 @@ class Php80SyntaxTest extends BaseTestClass
     public function annotations()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php80/php8_attributes.stub');
-        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
 
         $expected = [
             [[T_STRING, "FooAttribute", 3]],
@@ -108,7 +108,7 @@ class Php80SyntaxTest extends BaseTestClass
     public function can_detect_class_references()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php80/class_references.stub');
-        [$classRefs, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals([[T_STRING, '\A\ParentClass', 7],], $classRefs[0]);
         $this->assertEquals([[T_STRING, '\Inline\InterF3', 7]], $classRefs[1]);
