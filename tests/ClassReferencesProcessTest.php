@@ -84,6 +84,20 @@ class ClassReferencesProcessTest extends BaseTestClass
     }
 
     /** @test */
+    public function can_ignore_template_dockblocks()
+    {
+        $tokens = $this->getTokens(__DIR__.'/stubs/template_doc_block.stub');
+        $output = DocblockReader::readRefsInDocblocks($tokens);
+
+        $excepted = [
+            ['line' => 5, 'class' => '\Exception'],
+        ];
+
+        $this->assertEquals($excepted, $output);
+        $this->assertCount(1, $output);
+    }
+
+    /** @test */
     public function can_detect_class_references()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/class_references.stub');

@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Http\Controllers;
+
+/**
+ * @template T of \Exception
+ * @template TKey of array-key
+ * @template MyObject of object
+ * @template TValue
+ */
+class Templates
+{
+    /**
+     * Push an item onto the beginning of the collection.
+     *
+     * @param  TValue  $value
+     * @param  TKey  $key
+     * @return static
+     */
+    public function test($key, $value)
+    {
+        return $this;
+    }
+}

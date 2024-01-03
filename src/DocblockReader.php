@@ -11,12 +11,18 @@ use RuntimeException;
 
 class DocblockReader
 {
+    private static $ignoreTemplateRefs = [
+        'array-key',
+        'object',
+    ];
+
     public static function readRefsInDocblocks($tokens)
     {
         ClassReferenceFinder::defineConstants();
         $docblock = DocBlockFactory::createInstance();
 
         $refs = [];
+        $generics = [];
         foreach ($tokens as $token) {
             if ($token[0] !== T_DOC_COMMENT) {
                 continue;
@@ -32,10 +38,14 @@ class DocblockReader
                 }
             }
 
-            $refs = array_merge($refs, self::getRefsInDocblock($doc));
+            [$tGenerics, $tRefs] = self::parseTemplatesInDocblock($doc);
+            $refs = array_merge($refs, $tRefs, self::getRefsInDocblock($doc));
+            $generics = array_merge($generics, $tGenerics);
         }
 
-        return $refs;
+        return array_filter($refs, function ($ref) use ($generics) {
+            return ! in_array($ref['class'], $generics);
+        });
     }
 
     private static function read(DocBlockFactory $docblock, $content, $lineNumber): DocBlock
@@ -80,7 +90,72 @@ class DocblockReader
 
         $readRef = self::getRefReader($docblock, $line);
 
-        return array_merge(self::readMethodTag($docblock, $line), self::getMixins($docblock, $line), $readRef('param'), $readRef('var'), $readRef('return'), $readRef('throws'), $readRef('property'), $readRef('property-read'), $readRef('property-write'), $readRef('see'));
+        return array_merge(
+            self::readMethodTag($docblock, $line),
+            self::getMixins($docblock, $line),
+            $readRef('param'),
+            $readRef('var'),
+            $readRef('return'),
+            $readRef('throws'),
+            $readRef('property'),
+            $readRef('property-read'),
+            $readRef('property-write'),
+            $readRef('see')
+        );
+    }
+
+    private static function parseTemplatesInDocblock(DocBlock $docblock): array
+    {
+        if (! method_exists($docblock, 'getTags')) {
+            return [[], []];
+        }
+
+        $line = $docblock->getLocation()->getLineNumber();
+        $generics = self::extractGenericTags($docblock, $line);
+        $refs = self::extractTemplateRefs($docblock, $line);
+
+        return [$generics, $refs];
+    }
+
+    private static function extractGenericTags(DocBlock $docblock, int $line): array
+    {
+        $generics = [];
+
+        foreach ($docblock->getTags() as $tag) {
+            if (!$tag instanceof DocBlock\Tags\Generic) {
+                continue;
+            }
+            $tagName = $tag->__toString();
+            if (empty($tagName)) {
+                continue;
+            }
+            $generics[] = explode(' of ', $tagName)[0];
+        }
+
+        return $generics;
+    }
+
+    private static function extractTemplateRefs(DocBlock $docblock, int $line): array
+    {
+        $refs = [];
+
+        foreach ($docblock->getTags() as $tag) {
+            if (!$tag instanceof DocBlock\Tags\Generic) {
+                continue;
+            }
+            $tagName = $tag->__toString();
+            if (empty($tagName)) {
+                continue;
+            }
+            $partsOfName = explode(' of ', $tagName);
+            if (!isset($partsOfName[1]) || in_array($partsOfName[1], self::$ignoreTemplateRefs)) {
+                continue;
+            }
+
+            $refs[] = ['line' => $line, 'class' => $partsOfName[1]];
+        }
+
+        return $refs;
     }
 
     private static function getMixins(DocBlock $docblock, int $line)
