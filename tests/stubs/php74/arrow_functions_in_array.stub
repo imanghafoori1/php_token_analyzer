@@ -1,0 +1,21 @@
+<?php
+
+$array = [
+    new class() {
+         public $num = ['asd', 234, fn(Exception $e) => 'Ex...'];
+     },
+     array(
+         fn (M $d1, L $d2, N $d3): N23 => 123,
+     ),
+];
+
+[
+    'fn' => function test(
+        $b = [
+            1,
+            2,
+            fn(Sn $sn, $b = [1,2,3]) => true
+        ]
+    ) {
+    }
+];

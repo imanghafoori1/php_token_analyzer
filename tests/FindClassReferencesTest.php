@@ -155,4 +155,41 @@ class FindClassReferencesTest extends BaseTestClass
         $this->assertEquals($expected, $classRefs);
         $this->assertCount(0, $attributeRefs);
     }
+
+    /** @test */
+    public function can_detected_references_in_array()
+    {
+        $tokens = $this->getTokens(__DIR__.'/stubs/references_in_array.stub');
+        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+
+        $expected = [
+            [
+                [T_STRING, 'T1', 4],
+            ],
+            [
+                [T_STRING, 'T2', 4],
+            ],
+            [
+                [T_STRING, 'T3', 4],
+            ],
+            [
+                [T_STRING, 'T33', 4],
+            ],
+            [
+                [T_STRING, 'User', 8],
+            ],
+            [
+                [T_STRING, 'Product', 8],
+            ],
+            [
+                [T_STRING, 'Exam', 8],
+            ],
+            [
+                [T_STRING, 'BBB', 18],
+            ],
+        ];
+
+        $this->assertEquals($expected, $classRefs);
+        $this->assertCount(0, $attributeRefs);
+    }
 }

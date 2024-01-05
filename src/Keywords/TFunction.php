@@ -14,7 +14,7 @@ class TFunction
     public static function body(ClassRefProperties $properties)
     {
         $properties->isDefiningFunction = true;
-        if ($properties->isInSideClass and ! $properties->isInsideMethod) {
+        if ($properties->isInSideClass && ! $properties->isInsideMethod) {
             $properties->isDefiningMethod = true;
         }
     }
