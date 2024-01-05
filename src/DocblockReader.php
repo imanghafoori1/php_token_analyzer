@@ -22,7 +22,7 @@ class DocblockReader
         $docblock = DocBlockFactory::createInstance();
 
         $refs = [];
-        $generics = [];
+        $atTemplate = [];
         foreach ($tokens as $token) {
             if ($token[0] !== T_DOC_COMMENT) {
                 continue;
@@ -38,14 +38,15 @@ class DocblockReader
                 }
             }
 
-            [$tGenerics, $tRefs] = self::parseTemplatesInDocblock($doc);
+            [$tTemplates, $tRefs] = self::parseTemplatesInDocblock($doc);
             $refs = array_merge($refs, $tRefs, self::getRefsInDocblock($doc));
-            $generics = array_merge($generics, $tGenerics);
+            $atTemplate = array_merge($atTemplate, $tTemplates);
         }
 
-        return array_filter($refs, function ($ref) use ($generics) {
-            return ! in_array($ref['class'], $generics);
-        });
+        // use array_values for reset array keys.
+        return array_values(array_filter($refs, function ($ref) use ($atTemplate) {
+            return ! in_array($ref['class'], $atTemplate);
+        }));
     }
 
     private static function read(DocBlockFactory $docblock, $content, $lineNumber): DocBlock
@@ -111,28 +112,28 @@ class DocblockReader
         }
 
         $line = $docblock->getLocation()->getLineNumber();
-        $generics = self::extractGenericTags($docblock, $line);
+        $atTemplate = self::extractTemplateTags($docblock, $line);
         $refs = self::extractTemplateRefs($docblock, $line);
 
-        return [$generics, $refs];
+        return [$atTemplate, $refs];
     }
 
-    private static function extractGenericTags(DocBlock $docblock, int $line): array
+    private static function extractTemplateTags(DocBlock $docblock, int $line): array
     {
-        $generics = [];
+        $atTemplate = [];
 
         foreach ($docblock->getTags() as $tag) {
-            if (!$tag instanceof DocBlock\Tags\Generic) {
+            if ($tag->getName() !== 'template') {
                 continue;
             }
             $tagName = $tag->__toString();
             if (empty($tagName)) {
                 continue;
             }
-            $generics[] = explode(' of ', $tagName)[0];
+            $atTemplate[] = explode(' of ', $tagName)[0];
         }
 
-        return $generics;
+        return $atTemplate;
     }
 
     private static function extractTemplateRefs(DocBlock $docblock, int $line): array
@@ -140,7 +141,7 @@ class DocblockReader
         $refs = [];
 
         foreach ($docblock->getTags() as $tag) {
-            if (!$tag instanceof DocBlock\Tags\Generic) {
+            if ($tag->getName() !== 'template') {
                 continue;
             }
             $tagName = $tag->__toString();
@@ -163,12 +164,14 @@ class DocblockReader
         $mixins = [];
         foreach ($docblock->getTagsByName('mixin') as $ref) {
             $desc = $ref->getDescription();
-            if ($desc && $body = $desc->getBodyTemplate()) {
-                $mixins[] = [
-                    'line' => $line,
-                    'class' => $body,
-                ];
+            if (!$desc) {
+                continue;
             }
+
+            $mixins[] = [
+                'line' => $line,
+                'class' => strtok($desc->__toString(), ' '),
+            ];
         }
 
         return $mixins;
