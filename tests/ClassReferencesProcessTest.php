@@ -3,7 +3,6 @@
 namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
-use Imanghafoori\TokenAnalyzer\DocblockReader;
 
 class ClassReferencesProcessTest extends BaseTestClass
 {
@@ -52,49 +51,6 @@ class ClassReferencesProcessTest extends BaseTestClass
         $this->assertEquals("T", $classRefs[2][0][1]);
         $this->assertCount(0, $attributeRefs);
         $this->assertEquals("", $namespace);
-    }
-
-    /** @test */
-    public function can_detect_docblocks()
-    {
-        $tokens = $this->getTokens(__DIR__.'/stubs/doc_block_ref.stub');
-        $output = DocblockReader::readRefsInDocblocks($tokens);
-
-        $this->assertEquals( ["class" => "A", "line" => 5], $output[0]);
-        $this->assertEquals( ["class" => "Logger", "line" => 9], $output[1]);
-        $this->assertEquals( ["class" => "Hello", "line" => 14], $output[2]);
-        $this->assertEquals( ["class" => "Hello3", "line" => 14], $output[3]);
-        $this->assertEquals( ["class" => "Hello2", "line" => 14], $output[4]);
-        $this->assertEquals( ["class" => "ArrayIterator", "line" => 14], $output[5]);
-        $this->assertEquals( ["class" => "Returny", "line" => 14], $output[6]);
-        $this->assertEquals( ["class" => 'DOMElement', "line" => 14], $output[7]);
-        $this->assertEquals( ["class" => "\Exception", "line" => 14], $output[8]);
-        $this->assertEquals( ["class" => "User", "line" => 26], $output[9]);
-        $this->assertEquals( ["class" => "Test", "line" => 31], $output[10]);
-        $this->assertEquals( ["class" => "Products", "line" => 36], $output[11]);
-        $this->assertEquals( ["class" => "Product", "line" => 36], $output[12]);
-        $this->assertEquals( ["class" => "Collection", "line" => 36], $output[13]);
-        $this->assertEquals( ["class" => "User", "line" => 36], $output[14]);
-        $this->assertEquals( ["class" => "Collection", "line" => 36], $output[15]);
-        $this->assertEquals( ["class" => "Test", "line" => 36], $output[16]);
-        $this->assertEquals( ["class" => "User", "line" => 36], $output[17]);
-        $this->assertEquals( ["class" => "Empty", "line" => 43], $output[18]);
-        $this->assertEquals( ["class" => "MixArray", "line" => 43], $output[19]);
-        $this->assertEquals( ["class" => "User", "line" => 43], $output[20]);
-    }
-
-    /** @test */
-    public function can_ignore_template_dockblocks()
-    {
-        $tokens = $this->getTokens(__DIR__.'/stubs/template_doc_block.stub');
-        $output = DocblockReader::readRefsInDocblocks($tokens);
-
-        $excepted = [
-            ['line' => 5, 'class' => '\Exception'],
-        ];
-
-        $this->assertEquals($excepted, $output);
-        $this->assertCount(1, $output);
     }
 
     /** @test */

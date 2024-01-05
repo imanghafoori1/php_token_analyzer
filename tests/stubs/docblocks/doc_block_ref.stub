@@ -1,8 +1,11 @@
 <?php
 
 namespace A1\A2;
+use Illuminate\Database\Eloquent\Builder as Eloquent;
 
 /**
+ * @mixin Eloquent test shod
+ * @mixin \App\Eloquent
  * @see A
  */
 class D {
