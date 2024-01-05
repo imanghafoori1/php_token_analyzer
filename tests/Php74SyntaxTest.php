@@ -36,15 +36,47 @@ class TypeHintedPropertiesTest extends BaseTestClass
     /** @test */
     public function can_detect_arrow_functions_test()
     {
-        $tokens = $this->getTokens(__DIR__.'/stubs/php74/arrow_functions.stubs');
+        $tokens = $this->getTokens(__DIR__.'/stubs/php74/arrow_functions.stub');
+        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        $i = 0;
+
+        $this->assertEquals('T4', $classRefs[$i++][0][1]);
+        $this->assertEquals('T5', $classRefs[$i++][0][1]);
+        $this->assertEquals('T6', $classRefs[$i++][0][1]);
+        $this->assertEquals('T7', $classRefs[$i++][0][1]);
+        $this->assertEquals("H", $classRefs[$i++][0][1]);
+        $this->assertEquals("T", $classRefs[$i++][0][1]);
+        $this->assertCount(0, $attributeRefs);
+    }
+
+    /** @test*/
+    public function can_detect_arrow_functions_in_array()
+    {
+        $tokens = $this->getTokens(__DIR__.'/stubs/php74/arrow_functions_in_array.stub');
         [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
 
-        $this->assertEquals('T4', $classRefs[0][0][1]);
-        $this->assertEquals('T5', $classRefs[1][0][1]);
-        $this->assertEquals('T6', $classRefs[2][0][1]);
-        $this->assertEquals('T7', $classRefs[3][0][1]);
-        $this->assertEquals("H", $classRefs[4][0][1]);
-        $this->assertEquals("T", $classRefs[5][0][1]);
+        $expected = [
+            [
+                [T_STRING, 'Exception', 5],
+            ],
+            [
+                [T_STRING, 'M', 8],
+            ],
+            [
+                [T_STRING, 'L', 8],
+            ],
+            [
+                [T_STRING, 'N', 8],
+            ],
+            [
+                [T_STRING, 'N23', 8],
+            ],
+            [
+                [T_STRING, 'Sn', 17],
+            ],
+        ];
+
+        $this->assertEquals($expected, $classRefs);
         $this->assertCount(0, $attributeRefs);
     }
 }

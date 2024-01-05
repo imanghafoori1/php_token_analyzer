@@ -1,0 +1,19 @@
+<?php
+
+$array = [
+    function(T1 $m1 = '', /** sdvf */ T2 $m2 = ['p' => 3.14, 0, null, ['d',], 'sss' => 's'], /* t */ T3 $m3) : T33 {
+        return 123;
+    },
+    new class() {
+         function m1(User $b1, Product $b2, Exam $b3)
+         {
+            $p = array(234,897,123);
+         }
+     }
+    },
+    array(1,2,3,4,5,),
+    [6,7,8,9,10],
+    'test',
+    [[array('xcv')]],
+    BBB::class,
+];
