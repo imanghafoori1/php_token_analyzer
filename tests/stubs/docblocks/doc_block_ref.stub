@@ -52,6 +52,7 @@ class D {
      */
 
     /**
+     * @extends AbstractSchemaManager<SQLServerPlatform>
      * @return MockObject&Generator
      */
 }
