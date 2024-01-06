@@ -59,4 +59,8 @@ class D {
       * @param array<int, resource> $streams
       */
 
+    /**
+     * @extends AbstractSchemaManager<SQLServerPlatform>
+     * @return MockObject&Generator
+     */
 }
