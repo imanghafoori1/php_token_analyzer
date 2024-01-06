@@ -50,4 +50,13 @@ class D {
      * @param MixArray|array<mixed, string> $n
      * @param array<mixed>|?User $n
      */
+
+     /**
+      * @param array<int,mixed>|false $row
+      *
+      * @return list<mixed>|false
+      * @param array<scalar|array> $value
+      * @param array<int, resource> $streams
+      */
+
 }
