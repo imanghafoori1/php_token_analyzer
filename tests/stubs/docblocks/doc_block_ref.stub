@@ -51,6 +51,14 @@ class D {
      * @param array<mixed>|?User $n
      */
 
+     /**
+      * @param array<int,mixed>|false $row
+      *
+      * @return list<mixed>|false
+      * @param array<scalar|array> $value
+      * @param array<int, resource> $streams
+      */
+
     /**
      * @extends AbstractSchemaManager<SQLServerPlatform>
      * @return MockObject&Generator

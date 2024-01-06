@@ -93,6 +93,9 @@ class ClassReferenceFinder
             'true',
             'void',
             '::',
+            'list',
+            'scalar',
+            'resource',
         ], true) || \in_array($token[0], [T_READONLY]);
     }
 
