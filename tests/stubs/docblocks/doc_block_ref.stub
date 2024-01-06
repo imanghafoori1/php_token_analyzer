@@ -50,4 +50,9 @@ class D {
      * @param MixArray|array<mixed, string> $n
      * @param array<mixed>|?User $n
      */
+
+    /**
+     * @extends AbstractSchemaManager<SQLServerPlatform>
+     * @return MockObject&Generator
+     */
 }
