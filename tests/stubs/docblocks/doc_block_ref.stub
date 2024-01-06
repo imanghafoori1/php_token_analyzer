@@ -50,4 +50,8 @@ class D {
      * @param MixArray|array<mixed, string> $n
      * @param array<mixed>|?User $n
      */
+
+    /**
+     * @return MockObject&Generator
+     */
 }

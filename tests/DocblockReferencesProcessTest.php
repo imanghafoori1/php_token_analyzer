@@ -36,6 +36,9 @@ class DocblockReferencesProcessTest extends BaseTestClass
         $this->assertEquals( ["class" => "Empty", "line" => 46], $output[$i++]);
         $this->assertEquals( ["class" => "MixArray", "line" => 46], $output[$i++]);
         $this->assertEquals( ["class" => "User", "line" => 46], $output[$i++]);
+        $this->assertEquals( ["class" => "MockObject", "line" => 54], $output[$i++]);
+        $this->assertEquals( ["class" => "Generator", "line" => 54], $output[$i++]);
+        $this->assertCount($i, $output);
     }
 
     /** @test */

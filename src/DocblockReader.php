@@ -229,7 +229,7 @@ class DocblockReader
 
     public static function explode($ref): array
     {
-        $ref = str_replace(',', '|', (string) $ref);
+        $ref = str_replace([',', '&'], '|', (string) $ref);
 
         return explode('|', $ref);
     }
