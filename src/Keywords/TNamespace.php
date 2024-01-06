@@ -9,7 +9,9 @@ class TNamespace
 {
     public static function is($token, $namespace = null)
     {
-        return $token === T_NAMESPACE && ! $namespace && ClassReferenceFinder::$lastToken[0] !== T_DOUBLE_COLON;
+        $lastToken = ClassReferenceFinder::$lastToken[0];
+
+        return $token === T_NAMESPACE && ! $namespace && $lastToken !== T_DOUBLE_COLON && $lastToken !== T_OBJECT_OPERATOR;
     }
 
     public static function body(ClassRefProperties $properties, &$tokens)
