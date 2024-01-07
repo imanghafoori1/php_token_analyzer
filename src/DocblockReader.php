@@ -28,8 +28,8 @@ class DocblockReader
                  * Extends tag was replaced with var
                  * Because we don't have phpDocumentor\Reflection\Types\Collection in the extends tag
                  */
-                $content = str_replace('@extends', '@var', $content);
-                $doc = self::read($docblock, str_replace('?', '', $content), $line);
+                $content = \str_replace('@extends', '@var', $content);
+                $doc = self::read($docblock, \str_replace('?', '', $content), $line);
             } catch (RuntimeException $e) {
                 try {
                     $doc = self::read($docblock, self::normalizeDocblockContent($content), $line);
@@ -39,14 +39,16 @@ class DocblockReader
             }
 
             [$tTemplates, $tRefs] = self::parseTemplatesInDocblock($doc);
-            $refs = array_merge($refs, $tRefs, self::getRefsInDocblock($doc));
-            $atTemplate = array_merge($atTemplate, $tTemplates);
+            $refs = \array_merge($refs, $tRefs, self::getRefsInDocblock($doc));
+            $atTemplate = \array_merge($atTemplate, $tTemplates);
         }
 
         // use array_values for reset array keys.
-        return array_values(array_filter($refs, function ($ref) use ($atTemplate) {
-            return ! in_array($ref['class'], $atTemplate);
-        }));
+        return \array_values(
+            \array_filter($refs, function ($ref) use ($atTemplate) {
+                return ! \in_array($ref['class'], $atTemplate);
+            })
+        );
     }
 
     private static function read(DocBlockFactory $docblock, $content, $lineNumber): DocBlock
@@ -66,18 +68,20 @@ class DocblockReader
      */
     private static function normalizeDocblockContent(string $docblock)
     {
-        $docblock = str_replace('mixed', 'string', $docblock);
+        $docblock = \str_replace('mixed', 'string', $docblock);
 
-        return str_replace(['?', '<>'], '', $docblock);
+        return \str_replace(['?', '<>'], '', $docblock);
     }
 
     private static function addRef($refsInDocBlock, int $line, array $allRefs)
     {
         foreach ($refsInDocBlock as $ref) {
-            $ref = str_replace('[]', '', $ref);
-            $ref = trim($ref, '<>');
+            $ref = \str_replace('[]', '', $ref);
+            $ref = \trim($ref, '<>');
+            // For parse this "ColumnCase::LOWER"
+            $ref = \strtok($ref, '::');
             $ref && self::shouldBeCollected($ref) && $allRefs[] = [
-                'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
+                'class' => \str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
                 'line' => $line,
             ];
         }
@@ -91,7 +95,7 @@ class DocblockReader
 
         $readRef = self::getRefReader($docblock, $line);
 
-        return array_merge(
+        return \array_merge(
             self::readMethodTag($docblock, $line),
             self::getMixins($docblock, $line),
             $readRef('param'),
@@ -107,7 +111,7 @@ class DocblockReader
 
     private static function parseTemplatesInDocblock(DocBlock $docblock): array
     {
-        if (! method_exists($docblock, 'getTags')) {
+        if (! \method_exists($docblock, 'getTags')) {
             return [[], []];
         }
 
@@ -130,7 +134,7 @@ class DocblockReader
             if (empty($tagName)) {
                 continue;
             }
-            $atTemplate[] = explode(' of ', $tagName)[0];
+            $atTemplate[] = \explode(' of ', $tagName)[0];
         }
 
         return $atTemplate;
@@ -148,7 +152,7 @@ class DocblockReader
             if (empty($tagName)) {
                 continue;
             }
-            $partsOfName = explode(' of ', $tagName);
+            $partsOfName = \explode(' of ', $tagName);
             if (! isset($partsOfName[1]) || ! self::shouldBeCollected($partsOfName[1])) {
                 continue;
             }
@@ -170,7 +174,7 @@ class DocblockReader
 
             $mixins[] = [
                 'line' => $line,
-                'class' => strtok($desc->__toString(), ' '),
+                'class' => \strtok($desc->__toString(), ' '),
             ];
         }
 
@@ -184,9 +188,9 @@ class DocblockReader
         foreach ($docblock->getTagsByName('method') as $method) {
             $refs = self::addRef(self::explode($method->getReturnType()), $line, $refs);
 
-            $methodName = method_exists($method, 'getParameters') ? 'getParameters' : 'getArguments';
+            $methodName = \method_exists($method, 'getParameters') ? 'getParameters' : 'getArguments';
             foreach ($method->$methodName() as $argument) {
-                $_refs = self::explode(str_replace('?', '', (string) $argument['type']));
+                $_refs = self::explode(\str_replace('?', '', (string) $argument['type']));
                 $refs = self::addRef($_refs, $line, $refs);
             }
         }
@@ -208,19 +212,21 @@ class DocblockReader
 
     private static function findRefsTags($types, int $line, array $refs): array
     {
-        if (! method_exists($types, 'getType') && ! method_exists($types, 'getValueType') && ! method_exists($types, 'getFqsen')) {
+        if (! \method_exists($types, 'getType')
+            && ! \method_exists($types, 'getValueType')
+            && ! \method_exists($types, 'getFqsen')) {
             return self::addRef(self::explode($types), $line, $refs);
         }
 
-        if (method_exists($types, 'getFqsen')) {
+        if (\method_exists($types, 'getFqsen')) {
             $refs = self::addRef(self::explode($types->getFqsen()), $line, $refs);
         }
 
-        if (method_exists($types, 'getType') && ($type = $types->getType())) {
+        if (\method_exists($types, 'getType') && ($type = $types->getType())) {
             return self::findRefsTags($type, $line, $refs);
         }
 
-        if (method_exists($types, 'getValueType') && ($types = $types->getValueType())) {
+        if (\method_exists($types, 'getValueType') && ($types = $types->getValueType())) {
             return self::findRefsTags($types, $line, $refs);
         }
 
@@ -229,13 +235,14 @@ class DocblockReader
 
     public static function explode($ref): array
     {
-        $ref = str_replace([',', '&'], '|', (string) $ref);
+        $ref = \str_replace([',', '&'], '|', (string) $ref);
 
-        return explode('|', $ref);
+        return \explode('|', $ref);
     }
 
     private static function shouldBeCollected(string $ref): bool
     {
-        return ! ClassReferenceFinder::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}', '-']);
+        return ! ClassReferenceFinder::isBuiltinType([0, $ref])
+            && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}', '-']);
     }
 }

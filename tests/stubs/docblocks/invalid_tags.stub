@@ -1,0 +1,14 @@
+<?php
+
+namespace A1\A2;
+
+/**
+ * {@inheritDoc}
+ *
+  * @param T $value
+ *
+ * @return (T is null ? null : DateTimeInterface)
+ *
+ * @template T
+ */
+class Test {}
