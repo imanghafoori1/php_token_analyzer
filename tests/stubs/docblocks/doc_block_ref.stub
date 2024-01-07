@@ -50,4 +50,29 @@ class D {
      * @param MixArray|array<mixed, string> $n
      * @param array<mixed>|?User $n
      */
+
+     /**
+      * @param array<int,mixed>|false $row
+      *
+      * @return list<mixed>|false
+      * @param array<scalar|array> $value
+      * @param array<int, resource> $streams
+      */
+
+    /**
+     * @extends AbstractSchemaManager<SQLServerPlatform>
+     * @return MockObject&Generator
+     */
+
+     /** @var 0|ColumnCase::LOWER|ColumnCase::UPPER */
+     private int $case;
+
+     /**
+      * Creates a new named parameter and bind the value $value to it.
+      *
+      * This method provides a shortcut for {@see Statement::bindValue()}
+      * when using prepared statements. {@var Cat $cat}
+      * test empty {@return list<mixed>|false}
+      * test multiple {@var Yellow<list<array<LaraCast>>> $users}
+      */
 }

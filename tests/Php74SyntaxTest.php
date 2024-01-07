@@ -30,6 +30,7 @@ class TypeHintedPropertiesTest extends BaseTestClass
         $this->assertEquals('tH5', $classRefs[5][0][1]);
         $this->assertEquals('\tH7\tH8', $classRefs[6][0][1]);
         $this->assertEquals('tH9', $classRefs[7][0][1]);
+        $this->assertCount(8, $classRefs);
         $this->assertCount(0, $attributeRefs);
     }
 
@@ -46,6 +47,7 @@ class TypeHintedPropertiesTest extends BaseTestClass
         $this->assertEquals('T7', $classRefs[$i++][0][1]);
         $this->assertEquals("H", $classRefs[$i++][0][1]);
         $this->assertEquals("T", $classRefs[$i++][0][1]);
+        $this->assertCount($i, $classRefs);
         $this->assertCount(0, $attributeRefs);
     }
 
