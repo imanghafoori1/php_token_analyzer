@@ -42,6 +42,10 @@ class DocblockReferencesProcessTest extends BaseTestClass
         $this->assertEquals( ["class" => "Generator", "line" => 62], $output[$i++]);
         $this->assertEquals( ["class" => "ColumnCase", "line" => 67], $output[$i++]);
         $this->assertEquals( ["class" => "ColumnCase", "line" => 67], $output[$i++]);
+        $this->assertEquals( ["class" => "Statement", "line" => 70], $output[$i++]);
+        $this->assertEquals( ["class" => "Cat", "line" => 70], $output[$i++]);
+        $this->assertEquals( ["class" => "Yellow", "line" => 70], $output[$i++]);
+        $this->assertEquals( ["class" => "LaraCast", "line" => 70], $output[$i++]);
 
         $this->assertCount($i, $output);
     }
