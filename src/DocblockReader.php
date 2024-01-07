@@ -11,12 +11,7 @@ use RuntimeException;
 
 class DocblockReader
 {
-    private static $ignoreTemplateRefs = [
-        'array-key',
-        'object',
-    ];
-
-    public static function readRefsInDocblocks($tokens)
+    public static function readRefsInDocblocks($tokens): array
     {
         ClassReferenceFinder::defineConstants();
         $docblock = DocBlockFactory::createInstance();
@@ -154,7 +149,7 @@ class DocblockReader
                 continue;
             }
             $partsOfName = explode(' of ', $tagName);
-            if (!isset($partsOfName[1]) || in_array($partsOfName[1], self::$ignoreTemplateRefs)) {
+            if (! isset($partsOfName[1]) || ! self::shouldBeCollected($partsOfName[1])) {
                 continue;
             }
 
@@ -182,7 +177,7 @@ class DocblockReader
         return $mixins;
     }
 
-    private static function readMethodTag(DocBlock $docblock, int $line)
+    private static function readMethodTag(DocBlock $docblock, int $line): array
     {
         $refs = [];
 
@@ -239,7 +234,7 @@ class DocblockReader
         return explode('|', $ref);
     }
 
-    private static function shouldBeCollected(string $ref)
+    private static function shouldBeCollected(string $ref): bool
     {
         return ! ClassReferenceFinder::isBuiltinType([0, $ref]) && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}', '-']);
     }
