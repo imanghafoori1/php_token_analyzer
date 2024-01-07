@@ -40,6 +40,8 @@ class DocblockReferencesProcessTest extends BaseTestClass
         $this->assertEquals( ["class" => "SQLServerPlatform", "line" => 62], $output[$i++]);
         $this->assertEquals( ["class" => "MockObject", "line" => 62], $output[$i++]);
         $this->assertEquals( ["class" => "Generator", "line" => 62], $output[$i++]);
+        $this->assertEquals( ["class" => "ColumnCase", "line" => 67], $output[$i++]);
+        $this->assertEquals( ["class" => "ColumnCase", "line" => 67], $output[$i++]);
 
         $this->assertCount($i, $output);
     }

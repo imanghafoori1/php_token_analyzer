@@ -47,6 +47,33 @@ class ClassReferenceFinder
         Keywords\TAttribute::class,
     ];
 
+    public static $ignoreRefs = [
+        'array',
+        'bool',
+        'callable',
+        'false',
+        'float',
+        'int',
+        'iterable',
+        'mixed',
+        'never',
+        'null',
+        'object',
+        'private',
+        'public',
+        'protected',
+        'parent',
+        'static',
+        'self',
+        'string',
+        'true',
+        'void',
+        '::',
+        'list',
+        'scalar',
+        'resource',
+    ];
+
     /**
      * @param  array  $tokens
      *
@@ -71,32 +98,8 @@ class ClassReferenceFinder
 
     public static function isBuiltinType($token)
     {
-        return \in_array(strtolower($token[1]), [
-            'array',
-            'bool',
-            'callable',
-            'false',
-            'float',
-            'int',
-            'iterable',
-            'mixed',
-            'never',
-            'null',
-            'object',
-            'private',
-            'public',
-            'protected',
-            'parent',
-            'static',
-            'self',
-            'string',
-            'true',
-            'void',
-            '::',
-            'list',
-            'scalar',
-            'resource',
-        ], true) || \in_array($token[0], [T_READONLY]);
+        return \in_array(strtolower($token[1]), self::$ignoreRefs, true)
+            || \in_array($token[0], [T_READONLY]);
     }
 
     public static function getExpandedDocblockRefs($imports, $docblockRefs, $namespace)

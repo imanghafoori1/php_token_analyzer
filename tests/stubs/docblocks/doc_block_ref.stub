@@ -63,4 +63,7 @@ class D {
      * @extends AbstractSchemaManager<SQLServerPlatform>
      * @return MockObject&Generator
      */
+
+     /** @var 0|ColumnCase::LOWER|ColumnCase::UPPER */
+     private int $case;
 }
