@@ -96,6 +96,7 @@ class DocblockReader
         $readRef = self::getRefReader($docblock, $line);
 
         return \array_merge(
+            self::readDescriptionRefs($docblock, $line),
             self::readMethodTag($docblock, $line),
             self::getMixins($docblock, $line),
             $readRef('param'),
@@ -200,7 +201,7 @@ class DocblockReader
 
     private static function getRefReader(DocBlock $docblock, int $line): Closure
     {
-        return function ($tagName) use ($docblock, $line) {
+        return function ($tagName) use ($docblock, $line): array {
             $refs = [];
             foreach ($docblock->getTagsByName($tagName) as $ref) {
                 $refs = self::findRefsTags($ref, $line, $refs);
@@ -208,6 +209,20 @@ class DocblockReader
 
             return $refs;
         };
+    }
+
+    private static function readDescriptionRefs(DocBlock $docblock, int $line): array
+    {
+        $description = $docblock->getDescription();
+
+        $refs = [];
+        if (\method_exists($description, 'getTags')) {
+            foreach ($docblock->getDescription()->getTags() as $tag) {
+                $refs = self::findRefsTags($tag, $line, $refs);
+            }
+        }
+
+        return $refs;
     }
 
     private static function findRefsTags($types, int $line, array $refs): array
