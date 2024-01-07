@@ -20,18 +20,17 @@ class TypeHintedPropertiesTest extends BaseTestClass
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/type_hinted_property.stub');
         [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
-        $i = 0;
 
         $this->assertEquals('', $namespace);
-        $this->assertEquals('tH0', $classRefs[$i++][0][1]);
-        $this->assertEquals('tH1', $classRefs[$i++][0][1]);
-        $this->assertEquals('t\H2', $classRefs[$i++][0][1]);
-        $this->assertEquals('\tH3', $classRefs[$i++][0][1]);
-        $this->assertEquals('tH4', $classRefs[$i++][0][1]);
-        $this->assertEquals('tH5', $classRefs[$i++][0][1]);
-        $this->assertEquals('\tH7\tH8', $classRefs[$i++][0][1]);
-        $this->assertEquals('tH9', $classRefs[$i++][0][1]);
-        $this->assertCount($i, $classRefs);
+        $this->assertEquals('tH0', $classRefs[0][0][1]);
+        $this->assertEquals('tH1', $classRefs[1][0][1]);
+        $this->assertEquals('t\H2', $classRefs[2][0][1]);
+        $this->assertEquals('\tH3', $classRefs[3][0][1]);
+        $this->assertEquals('tH4', $classRefs[4][0][1]);
+        $this->assertEquals('tH5', $classRefs[5][0][1]);
+        $this->assertEquals('\tH7\tH8', $classRefs[6][0][1]);
+        $this->assertEquals('tH9', $classRefs[7][0][1]);
+        $this->assertCount(8, $classRefs);
         $this->assertCount(0, $attributeRefs);
     }
 
