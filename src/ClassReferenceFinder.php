@@ -72,6 +72,7 @@ class ClassReferenceFinder
         'list',
         'scalar',
         'resource',
+        'is',
     ];
 
     /**

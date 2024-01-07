@@ -57,4 +57,18 @@ class DocblockReferencesProcessTest extends BaseTestClass
         $this->assertEquals($excepted, $output);
         $this->assertCount(1, $output);
     }
+
+    /** @test */
+    public function can_detect_invalid_tags()
+    {
+        $tokens = $this->getTokens(__DIR__ . '/stubs/docblocks/invalid_tags.stub');
+        $output = DocblockReader::readRefsInDocblocks($tokens);
+
+        $excepted = [
+            ['line' => 5, 'class' => 'DateTimeInterface'],
+            ['line' => 16, 'class' => 'ColumnCase'],
+        ];
+
+        $this->assertEquals($excepted, $output);
+    }
 }
