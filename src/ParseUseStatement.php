@@ -25,7 +25,9 @@ class ParseUseStatement
             $rest && $rest = '\\'.$rest;
         }
 
-        return ($refs[1][$className][0] ?? ($namespace.'\\'.$className)).$rest;
+        $namespace && ($namespace = $namespace.'\\');
+
+        return ($refs[1][$className][0] ?? ($namespace.$className)).$rest;
     }
 
     public static function getUseStatementsByPath($namespacedClassName, $absPath)
