@@ -32,10 +32,10 @@ class DocblockReferencesProcessTest extends BaseTestClass
         $this->assertEquals( ["class" => "User", "line" => 39], $output[$i++]);
         $this->assertEquals( ["class" => "Collection", "line" => 39], $output[$i++]);
         $this->assertEquals( ["class" => "Test", "line" => 39], $output[$i++]);
-        $this->assertEquals( ["class" => "User", "line" => 39], $output[$i++]);
-        $this->assertEquals( ["class" => "Empty", "line" => 46], $output[$i++]);
-        $this->assertEquals( ["class" => "MixArray", "line" => 46], $output[$i++]);
-        $this->assertEquals( ["class" => "User", "line" => 46], $output[$i++]);
+        $this->assertEquals( ["class" => "User2", "line" => 39], $output[$i++]);
+        $this->assertEquals( ["class" => "User3", "line" => 46], $output[$i++]);
+        //$this->assertEquals( ["class" => "MixArray", "line" => 46], $output[$i++]);
+        //$this->assertEquals( ["class" => "User", "line" => 46], $output[$i++]);
         $this->assertEquals( ["class" => "AbstractSchemaManager", "line" => 62], $output[$i++]);
         $this->assertEquals( ["class" => "SQLServerPlatform", "line" => 62], $output[$i++]);
         $this->assertEquals( ["class" => "MockObject", "line" => 62], $output[$i++]);

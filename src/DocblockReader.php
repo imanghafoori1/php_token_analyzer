@@ -187,6 +187,9 @@ class DocblockReader
         $refs = [];
 
         foreach ($docblock->getTagsByName('method') as $method) {
+            if (! method_exists($method, 'getReturnType')) {
+                continue;
+            }
             $refs = self::addRef(self::explode($method->getReturnType()), $line, $refs);
 
             $methodName = \method_exists($method, 'getParameters') ? 'getParameters' : 'getArguments';

@@ -39,7 +39,7 @@ class D {
     /**
      * @var Products<Product> $products
      * @var Collection<array|User> $users
-     * @var Collection<Test<array<User>>> $users
+     * @var Collection<Test<array<User2>>> $users
      */
     private $products;
 
@@ -48,7 +48,7 @@ class D {
      *
      * @param Empty<> $n
      * @param MixArray|array<mixed, string> $n
-     * @param array<mixed>|?User $n
+     * @param array<mixed>|?User3 $n
      */
 
      /**
