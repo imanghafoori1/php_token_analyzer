@@ -33,7 +33,6 @@ class DocblockReferencesProcessTest extends BaseTestClass
         $this->assertEquals( ["class" => "Collection", "line" => 39], $output[$i++]);
         $this->assertEquals( ["class" => "Test", "line" => 39], $output[$i++]);
         $this->assertEquals( ["class" => "User2", "line" => 39], $output[$i++]);
-        $this->assertEquals( ["class" => "User3", "line" => 46], $output[$i++]);
         //$this->assertEquals( ["class" => "MixArray", "line" => 46], $output[$i++]);
         //$this->assertEquals( ["class" => "User", "line" => 46], $output[$i++]);
         $this->assertEquals( ["class" => "AbstractSchemaManager", "line" => 62], $output[$i++]);
@@ -46,6 +45,7 @@ class DocblockReferencesProcessTest extends BaseTestClass
         $this->assertEquals( ["class" => "Cat", "line" => 70], $output[$i++]);
         $this->assertEquals( ["class" => "Yellow", "line" => 70], $output[$i++]);
         $this->assertEquals( ["class" => "LaraCast", "line" => 70], $output[$i++]);
+        $this->assertEquals( ["class" => "User3", "line" => 79], $output[$i++]);
 
         $this->assertCount($i, $output);
     }
