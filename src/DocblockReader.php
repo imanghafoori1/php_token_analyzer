@@ -79,7 +79,7 @@ class DocblockReader
             $ref = \str_replace('[]', '', $ref);
             $ref = \trim($ref, '<>');
             // For parse this "ColumnCase::LOWER"
-            $ref = \strtok($ref, '::');
+            strpos($ref, '::') && ($ref = \strtok($ref, '::'));
             $ref && self::shouldBeCollected($ref) && $allRefs[] = [
                 'class' => \str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
                 'line' => $line,
@@ -191,7 +191,7 @@ class DocblockReader
 
             $methodName = \method_exists($method, 'getParameters') ? 'getParameters' : 'getArguments';
             foreach ($method->$methodName() as $argument) {
-                $_refs = self::explode(\str_replace('?', '', self::getType($argument)));
+                $_refs = self::explode(\str_replace('?', '', (string) $argument['type']));
                 $refs = self::addRef($_refs, $line, $refs);
             }
         }
@@ -258,17 +258,6 @@ class DocblockReader
     private static function shouldBeCollected(string $ref): bool
     {
         return ! ClassReferenceFinder::isBuiltinType([0, $ref])
-            && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}', '-']);
-    }
-
-    private static function getType($argument)
-    {
-        if (is_object($argument)) {
-            $type = $argument->getType();
-        } else {
-            $type = (string) $argument['type'];
-        }
-
-        return $type;
+            && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}', '-', '/', '.']);
     }
 }

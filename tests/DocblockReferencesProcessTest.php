@@ -50,6 +50,16 @@ class DocblockReferencesProcessTest extends BaseTestClass
         $this->assertCount($i, $output);
     }
 
+    /**
+     * @test
+     */
+    public function see_tag()
+    {
+        $tokens = $this->getTokens(__DIR__.'/stubs/docblocks/doc_block_ref_see.stub');
+        $output = DocblockReader::readRefsInDocblocks($tokens);
+        $this->assertEquals([], $output);
+    }
+
     /** @test */
     public function can_ignore_template_dockblocks()
     {
