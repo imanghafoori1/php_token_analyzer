@@ -6,8 +6,7 @@ use Imanghafoori\TokenAnalyzer\ClassMethods;
 
 class InterfaceMethodsTest extends BaseTestClass
 {
-    /** @test */
-    public function check_methods_has_no_parameters_test()
+    public function test_check_methods_has_no_parameters_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/interface_sample.stub'));
         $methods = $class['methods'];
@@ -34,8 +33,7 @@ class InterfaceMethodsTest extends BaseTestClass
         $this->assertEquals('', $methods[19]['body']);
     }
 
-    /** @test */
-    public function check_return_types_test()
+    public function test_check_return_types_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/interface_sample.stub'));
         $methods = $class['methods'];
@@ -56,8 +54,7 @@ class InterfaceMethodsTest extends BaseTestClass
         $this->assertEquals('string', $methods[11]['returnType'][0][1]);
     }
 
-    /** @test */
-    public function check_parameter_methods_test()
+    public function test_check_parameter_methods_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/interface_sample.stub'));
         $methods = $class['methods'];
@@ -98,8 +95,7 @@ class InterfaceMethodsTest extends BaseTestClass
         $this->assertEquals('null', $methods[19]['signature'][4][1]);
     }
 
-    /** @test  */
-    public function interface_general_body_test()
+    public function test_interface_general_body_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/interface_sample.stub'));
 

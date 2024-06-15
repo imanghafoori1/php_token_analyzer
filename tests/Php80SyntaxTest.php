@@ -17,8 +17,7 @@ class Php80SyntaxTest extends BaseTestClass
         }
     }
 
-    /** @test */
-    public function annotations()
+    public function test_annotations()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php80/php8_attributes.stub');
         [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
@@ -40,8 +39,7 @@ class Php80SyntaxTest extends BaseTestClass
         $this->assertCount(0, $classRefs);
     }
 
-    /** @test */
-    public function can_detect_class_general_test()
+    public function test_can_detect_class_general_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php80/union_types.stub'));
 
@@ -52,8 +50,7 @@ class Php80SyntaxTest extends BaseTestClass
         $this->assertCount(1, $class['methods']);
     }
 
-    /** @test */
-    public function can_detect_class_methods_test()
+    public function test_can_detect_class_methods_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php80/union_types.stub'));
         $methods = $class['methods'];
@@ -67,8 +64,7 @@ class Php80SyntaxTest extends BaseTestClass
         $this->assertFalse($methods[0]['nullable_return_type']);
     }
 
-    /** @test */
-    public function can_detect_return_types_test()
+    public function test_can_detect_return_types_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php80/union_types.stub'));
         $methods = $class['methods'];
@@ -78,8 +74,7 @@ class Php80SyntaxTest extends BaseTestClass
         $this->assertEquals('G3', $methods[0]['returnType'][2][1]);
     }
 
-    /** @test */
-    public function can_detect_methods_signature_test()
+    public function test_can_detect_methods_signature_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php80/union_types.stub'));
         $methods = $class['methods'];
@@ -104,8 +99,7 @@ class Php80SyntaxTest extends BaseTestClass
         $this->assertEquals('0.0', $methods[0]['signature'][17][1]);
     }
 
-    /** @test */
-    public function can_detect_class_references()
+    public function test_can_detect_class_references()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php80/class_references.stub');
         [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
@@ -129,8 +123,7 @@ class Php80SyntaxTest extends BaseTestClass
         $this->assertCount(0, $attributeRefs);
     }
 
-    /** @test */
-    public function can_find_class_references()
+    public function test_can_find_class_references()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php80/class_references.stub');
         [$classes, $namespace] = ParseUseStatement::findClassReferences($tokens);

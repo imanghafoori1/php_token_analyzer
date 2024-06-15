@@ -4,7 +4,7 @@ namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 
-class TypeHintedPropertiesTest extends BaseTestClass
+class Php74SyntaxTest extends BaseTestClass
 {
     public function setUp(): void
     {
@@ -15,8 +15,7 @@ class TypeHintedPropertiesTest extends BaseTestClass
         }
     }
 
-    /** @test */
-    public function type_hinted_property()
+    public function test_type_hinted_property()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/type_hinted_property.stub');
         [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
@@ -34,8 +33,7 @@ class TypeHintedPropertiesTest extends BaseTestClass
         $this->assertCount(0, $attributeRefs);
     }
 
-    /** @test */
-    public function can_detect_arrow_functions_test()
+    public function test_can_detect_arrow_functions_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php74/arrow_functions.stub');
         [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
@@ -51,8 +49,7 @@ class TypeHintedPropertiesTest extends BaseTestClass
         $this->assertCount(0, $attributeRefs);
     }
 
-    /** @test*/
-    public function can_detect_arrow_functions_in_array()
+    public function test_can_detect_arrow_functions_in_array()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php74/arrow_functions_in_array.stub');
         [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);

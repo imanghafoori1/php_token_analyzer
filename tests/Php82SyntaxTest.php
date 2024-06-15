@@ -15,8 +15,7 @@ class Php82SyntaxTest extends BaseTestClass
         }
     }
 
-    /** @test */
-    public function check_class_return_types_test()
+    public function test_check_class_return_types_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php82/sample_class.stub'));
         $methods = $class['methods'];
@@ -32,8 +31,7 @@ class Php82SyntaxTest extends BaseTestClass
         $this->assertEquals('false', $methods[2]['returnType'][0][1]);
     }
 
-    /** @test */
-    public function check_abstract_class_return_types_test()
+    public function test_check_abstract_class_return_types_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php82/abstract_sample_class.stub'));
         $methods = $class['methods'];
@@ -47,8 +45,7 @@ class Php82SyntaxTest extends BaseTestClass
         $this->assertCount(3, $methods);
     }
 
-    /** @test */
-    public function check_interface_return_types_test()
+    public function test_check_interface_return_types_test()
     {
         $class = ClassMethods::read($this->getTokens(__DIR__.'/stubs/php82/interface_sample.stub'));
         $methods = $class['methods'];

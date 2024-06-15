@@ -7,8 +7,7 @@ use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
 
 class AbstractMethodsClassTest extends BaseTestClass
 {
-    /** @test */
-    public function constants()
+    public function test_constants()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/const.stub');
         [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
@@ -17,8 +16,7 @@ class AbstractMethodsClassTest extends BaseTestClass
         $this->assertCount(0, $attributeRefs);
     }
 
-    /** @test */
-    public function check_final_class_is_detected2_test()
+    public function test_check_final_class_is_detected2_test()
     {
         $tokens = $this->getTokens(__DIR__ . '/stubs/arguments.stub');
         [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
@@ -31,8 +29,7 @@ class AbstractMethodsClassTest extends BaseTestClass
         $this->assertCount(0, $attributeRefs);
     }
 
-    /** @test */
-    public function check_final_class_is_detected_test()
+    public function test_check_final_class_is_detected_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/final_class.stub');
         $class = ClassMethods::read($tokens);
@@ -44,8 +41,7 @@ class AbstractMethodsClassTest extends BaseTestClass
         $this->assertTrue($methods[1]['is_final']);
     }
 
-    /** @test */
-    public function check_is_abstract_method_test()
+    public function test_check_is_abstract_method_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);
@@ -80,8 +76,7 @@ class AbstractMethodsClassTest extends BaseTestClass
         $this->assertFalse($methods[26]['is_abstract']);
     }
 
-    /** @test */
-    public function check_return_types_test()
+    public function test_check_return_types_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);
@@ -102,8 +97,7 @@ class AbstractMethodsClassTest extends BaseTestClass
         $this->assertEquals('string', $methods[13]['returnType'][0][1]);
     }
 
-    /** @test */
-    public function check_visibility_test()
+    public function test_check_visibility_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);
@@ -126,8 +120,7 @@ class AbstractMethodsClassTest extends BaseTestClass
         $this->assertEquals('public', $methods[25]['visibility'][1]);
     }
 
-    /** @test */
-    public function check_is_static_method_test()
+    public function test_check_is_static_method_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);
@@ -139,8 +132,7 @@ class AbstractMethodsClassTest extends BaseTestClass
         $this->assertTrue($methods[25]['is_static']);
     }
 
-    /** @test  */
-    public function abstract_class_general_body_test()
+    public function test_abstract_class_general_body_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);
@@ -151,8 +143,7 @@ class AbstractMethodsClassTest extends BaseTestClass
         $this->assertEquals(T_CLASS, $class['type']);
     }
 
-    /** @test */
-    public function check_parameter_methods()
+    public function test_check_parameter_methods()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/abstract_sample_class.stub');
         $class = ClassMethods::read($tokens);

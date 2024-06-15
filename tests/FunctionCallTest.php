@@ -6,8 +6,7 @@ use Imanghafoori\TokenAnalyzer\FunctionCall;
 
 class FunctionCallTest extends BaseTestClass
 {
-    /** @test */
-    public function has_dd_test()
+    public function test_has_dd_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/some_function.sub');
 
@@ -22,8 +21,7 @@ class FunctionCallTest extends BaseTestClass
         $this->assertEquals($index, 27);
     }
 
-    /** @test */
-    public function count_arraysum_test()
+    public function test_count_arraysum_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/some_function.sub');
 
@@ -37,8 +35,7 @@ class FunctionCallTest extends BaseTestClass
         $this->assertEquals($countArraySum, 4);
     }
 
-    /** @test */
-    public function is_static_call_without_send_classname_test()
+    public function test_is_static_call_without_send_classname_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/some_function.sub');
 
@@ -52,8 +49,7 @@ class FunctionCallTest extends BaseTestClass
         $this->assertEquals($countArraySum, 5);
     }
 
-    /** @test */
-    public function is_static_call_test()
+    public function test_is_static_call_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/some_function.sub');
 
