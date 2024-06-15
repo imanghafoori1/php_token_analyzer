@@ -194,7 +194,7 @@ class DocblockReader
 
             $methodName = \method_exists($method, 'getParameters') ? 'getParameters' : 'getArguments';
             foreach ($method->$methodName() as $argument) {
-                $_refs = self::explode(\str_replace('?', '', (string) $argument['type']));
+                $_refs = self::explode(\str_replace('?', '', self::getType($argument)));
                 $refs = self::addRef($_refs, $line, $refs);
             }
         }
@@ -262,5 +262,16 @@ class DocblockReader
     {
         return ! ClassReferenceFinder::isBuiltinType([0, $ref])
             && ! Str::contains($ref, ['<', '>', '$', ':', '(', ')', '{', '}', '-', '/', '.']);
+    }
+
+    private static function getType($argument)
+    {
+        if (is_object($argument)) {
+            $type = $argument->getType();
+        } else {
+            $type = (string) $argument['type'];
+        }
+
+        return $type;
     }
 }
