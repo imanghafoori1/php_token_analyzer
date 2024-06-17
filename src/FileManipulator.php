@@ -6,9 +6,9 @@ class FileManipulator
 {
     public static function removeLine($file, $_line = null)
     {
-        $lineChanger = function ($lineNum) use ($_line) {
+        $lineChanger = function ($lineNum, $line) use ($_line) {
             // Replace only the first occurrence in the file
-            if ($lineNum === $_line) {
+            if ($lineNum === $_line && $line !== false) {
                 return '';
             }
         };

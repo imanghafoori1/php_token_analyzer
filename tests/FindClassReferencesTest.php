@@ -7,8 +7,7 @@ use Imanghafoori\TokenAnalyzer\ParseUseStatement;
 
 class FindClassReferencesTest extends BaseTestClass
 {
-    /** @test */
-    public function can_find_class_references()
+    public function test_can_find_class_references()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/class_references.stub');
         [$classes, $namespace] = ParseUseStatement::findClassReferences($tokens);
@@ -131,8 +130,7 @@ class FindClassReferencesTest extends BaseTestClass
         ], $classes[$h]);
     }
 
-    /** @test */
-    public function function_return_typehint()
+    public function test_function_return_typehint()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/multi_return_types.stub');
         [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
@@ -156,8 +154,7 @@ class FindClassReferencesTest extends BaseTestClass
         $this->assertCount(0, $attributeRefs);
     }
 
-    /** @test */
-    public function can_detected_references_in_array()
+    public function test_can_detected_references_in_array()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/references_in_array.stub');
         [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);

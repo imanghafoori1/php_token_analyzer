@@ -1,0 +1,18 @@
+<?php
+
+if (! $condition) {
+	try {
+		$files = Finder::create()->files()->name('*.php')->in('tpsd');
+
+		$paths = [];
+		foreach ($files as $f) {
+			$paths[] = $f->getRealPath();
+		}
+
+		return $paths;
+	} catch (DirectoryNotFoundException $e) {
+		return [];
+	}
+} else {
+    return true;
+}
