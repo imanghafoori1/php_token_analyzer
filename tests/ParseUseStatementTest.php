@@ -3,7 +3,9 @@
 namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
+use Imanghafoori\TokenAnalyzer\ImportsAnalyzer;
 use Imanghafoori\TokenAnalyzer\ParseUseStatement;
+use Imanghafoori\TokenAnalyzer\Tests\Fakes\ExistenceChecker;
 
 class ParseUseStatementTest extends BaseTestClass
 {
@@ -20,6 +22,34 @@ class ParseUseStatementTest extends BaseTestClass
 
         $this->assertEquals($expected, $uses);
         $this->assertEquals($expected, $result['interface_sample']);
+
+
+        ImportsAnalyzer::$existenceChecker = ExistenceChecker::class;
+        $uses = $result ?: [$uses];
+        $actual = ImportsAnalyzer::getWrongRefs($tokens, __DIR__.'/stubs/interface_sample.stub', $uses);
+
+        $expected = [
+            '',
+            [
+                'Countable' => [
+                    'Countable',
+                    4,
+                ],
+            ],
+            [],
+            [
+                [
+                    'class' => 'PHPUnit\Framework\IncompleteTest',
+                    'line' => 9,
+                ],
+                [
+                    'class' => 'test',
+                    'line' => 27,
+                ],
+            ],
+            [],
+        ];
+        $this->assertEquals($expected, $actual);
     }
 
     /** @test */
