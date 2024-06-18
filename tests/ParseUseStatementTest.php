@@ -9,8 +9,7 @@ use Imanghafoori\TokenAnalyzer\Tests\Fakes\ExistenceChecker;
 
 class ParseUseStatementTest extends BaseTestClass
 {
-    /** @test */
-    public function can_extract_imports()
+    public function test_can_extract_imports()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/interface_sample.stub');
         [$result, $uses] = ParseUseStatement::parseUseStatements($tokens);
@@ -52,8 +51,7 @@ class ParseUseStatementTest extends BaseTestClass
         $this->assertEquals($expected, $actual);
     }
 
-    /** @test */
-    public function can_detect_group_imports()
+    public function test_can_detect_group_imports()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/group_import.stub');
         [$result, $uses] = ParseUseStatement::parseUseStatements($tokens);
@@ -72,8 +70,7 @@ class ParseUseStatementTest extends BaseTestClass
         $this->assertEquals($expected, $uses);
     }
 
-    /** @test */
-    public function can_detect_comma_seperated_imports()
+    public function test_can_detect_comma_seperated_imports()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/comma_seperated_imports.stub');
         [$result, $uses] = ParseUseStatement::parseUseStatements($tokens);
@@ -88,8 +85,7 @@ class ParseUseStatementTest extends BaseTestClass
         $this->assertEquals($expected, $uses);
     }
 
-    /** @test */
-    public function can_skip_imported_global_functions()
+    public function test_can_skip_imported_global_functions()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/auth.stub');
         [$result, $uses] = ParseUseStatement::parseUseStatements($tokens);
@@ -100,8 +96,7 @@ class ParseUseStatementTest extends BaseTestClass
         $this->assertEquals([[], '', []], ClassReferenceFinder::process($tokens));
     }
 
-    /** @test */
-    public function public_enumeration()
+    public function test_public_enumeration()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/issue_19.stub');
         $refs = ClassReferenceFinder::process($tokens)[0];

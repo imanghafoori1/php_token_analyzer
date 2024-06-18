@@ -1,0 +1,11 @@
+<?php
+
+foreach ($vars as $f) {
+	if ($f) {
+		$little = 'a';
+		$little = 'a';
+		$little = 'a';
+		$little = 'a';
+		$little = 'a';
+	}
+}

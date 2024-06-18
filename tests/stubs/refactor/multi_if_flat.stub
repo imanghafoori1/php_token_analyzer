@@ -1,2 +1,2 @@
 <?php
- if (! $foo && $bar !== 23 && $baz > 3) { $r = 'hello'   }
+ if (! $foo && $bar !== 23 && $baz > 3) { $r = 'hello';   }

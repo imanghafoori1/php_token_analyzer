@@ -3,7 +3,7 @@
 if (! $foo) {
 	if ($bar !== 23) {
 		if ($baz > 3) {
-			$r = 'hello'
+			$r = 'hello';
 		}
 	}
 }

@@ -14,14 +14,11 @@ class FlattenTest extends BaseTestClass
         $tokens = token_get_all($code);
         [$tokens, $changes] = Refactor::flatten($tokens);
 
-        foreach ($tokens as $i => $token) {
-            if ($token[0] === T_WHITESPACE) {
-                $tokens[$i][1] = ' ';
-            }
-        }
+        $tokens = $this->normalizeSpaces($tokens);
         $result = Refactor::toString($tokens);
         $this->assertEquals(file_get_contents($dir.'nested_if_flat.stub'). '  ', $result);
         $this->assertEquals(1, $changes);
+
     }
 
     public function test_flatten2()
@@ -32,13 +29,17 @@ class FlattenTest extends BaseTestClass
         $tokens = token_get_all($code);
         [$tokens, $changes] = Refactor::flatten($tokens);
 
-        foreach ($tokens as $i => $token) {
-            if ($token[0] === T_WHITESPACE) {
-                $tokens[$i][1] = ' ';
-            }
-        }
+        $tokens = $this->normalizeSpaces($tokens);
         $result = Refactor::toString($tokens);
         $this->assertEquals(file_get_contents($dir.'multi_if_flat.stub'). '', $result);
+        $this->assertEquals(2, $changes);
+
+        $code = file_get_contents($dir.'multi_if_no_curly.stub');
+        $tokens = token_get_all($code);
+        [$tokens, $changes] = Refactor::flatten($tokens);
+        $tokens = $this->normalizeSpaces($tokens);
+        $result = Refactor::toString($tokens);
+        $this->assertEquals(file_get_contents($dir.'multi_if_no_curly_flat.stub'). '', $result);
         $this->assertEquals(2, $changes);
     }
 
@@ -50,11 +51,7 @@ class FlattenTest extends BaseTestClass
         $tokens = token_get_all($code);
         [$tokens, $changes] = Refactor::flatten($tokens);
 
-        foreach ($tokens as $i => $token) {
-            if ($token[0] === T_WHITESPACE) {
-                $tokens[$i][1] = ' ';
-            }
-        }
+        $tokens = $this->normalizeSpaces($tokens);
         $result = Refactor::toString($tokens);
         $this->assertEquals(file_get_contents($dir.'early_return_2_flat.stub'). '  ', $result);
         $this->assertEquals(1, $changes);
@@ -68,14 +65,34 @@ class FlattenTest extends BaseTestClass
         $tokens = token_get_all($code);
         [$tokens, $changes] = Refactor::flatten($tokens);
 
+        $tokens = $this->normalizeSpaces($tokens);
+
+        $result = Refactor::toString($tokens);
+        $this->assertEquals(file_get_contents($dir.'early_return_3_flat.stub'), $result);
+        $this->assertEquals(1, $changes);
+    }
+
+    public function test_flatten5()
+    {
+        $dir = __DIR__.DIRECTORY_SEPARATOR.'stubs'.DIRECTORY_SEPARATOR.'refactor'.DIRECTORY_SEPARATOR;
+        $code = file_get_contents($dir.'early_return_4.stub');
+
+        $tokens = token_get_all($code);
+        [$tokens, $changes] = Refactor::flatten($tokens);
+
+        $result = Refactor::toString($tokens);
+        $this->assertEquals(file_get_contents($dir.'early_return_4.stub'), $result);
+        $this->assertEquals(0, $changes);
+    }
+
+    private function normalizeSpaces($tokens)
+    {
         foreach ($tokens as $i => $token) {
             if ($token[0] === T_WHITESPACE) {
                 $tokens[$i][1] = ' ';
             }
         }
 
-        $result = Refactor::toString($tokens);
-        $this->assertEquals(file_get_contents($dir.'early_return_3_flat.stub'), $result);
-        $this->assertEquals(1, $changes);
+        return $tokens;
     }
 }

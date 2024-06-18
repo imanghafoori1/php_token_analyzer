@@ -6,8 +6,7 @@ use Imanghafoori\TokenAnalyzer\ParseUseStatement;
 
 class ExpandClassRefTest extends BaseTestClass
 {
-    /** @test */
-    public function can_extract_imports()
+    public function test_can_extract_imports()
     {
         $tokens =  $this->getTokens(__DIR__.'/stubs/simple_refs.stub');
 
