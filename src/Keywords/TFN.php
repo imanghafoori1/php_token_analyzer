@@ -8,7 +8,7 @@ class TFN
 {
     public static function is($token)
     {
-        return defined('T_FN') && $token === T_FN;
+        return $token === T_FN;
     }
 
     public static function body(ClassRefProperties $properties)

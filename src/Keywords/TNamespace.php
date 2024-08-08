@@ -7,15 +7,19 @@ use Imanghafoori\TokenAnalyzer\ClassRefProperties;
 
 class TNamespace
 {
-    public static function is($token, $namespace = null)
+    public static function is($token)
     {
-        $lastToken = ClassReferenceFinder::$lastToken[0];
-
-        return $token === T_NAMESPACE && ! $namespace && $lastToken !== T_DOUBLE_COLON && $lastToken !== T_OBJECT_OPERATOR;
+        return $token === T_NAMESPACE;
     }
 
     public static function body(ClassRefProperties $properties, &$tokens)
     {
+        $previousToken = ClassReferenceFinder::$lastToken[0];
+
+        if ($previousToken === T_DOUBLE_COLON || $previousToken === T_OBJECT_OPERATOR || $previousToken === T_FUNCTION) {
+            return true;
+        }
+
         $properties->collect = false;
         next($tokens);
         while (current($tokens)[0] !== ';') {

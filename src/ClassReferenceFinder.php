@@ -11,42 +11,6 @@ class ClassReferenceFinder
 
     public static $token = [null, null, null];
 
-    public static $keywords = [
-        Keywords\Whitespace::class,
-        Keywords\RoundBrackets::class,
-        Keywords\Variable::class,
-        Keywords\Semicolon::class,
-        Keywords\Comma::class,
-        Keywords\CurlyBrackets::class,
-        Keywords\TUse::class,
-        Keywords\DoubleColon::class,
-        Keywords\SquareBrackets::class,
-        Keywords\AccessModifiers::class,
-        Keywords\NameQualified::class,
-        Keywords\DoubleArrow::class,
-        Keywords\TExtends::class,
-        Keywords\TClass::class,
-        Keywords\TNamespace::class,
-        Keywords\TTrait::class,
-        Keywords\TCatch::class,
-        Keywords\Colon::class,
-        Keywords\TFN::class,
-        Keywords\TFunction::class,
-        Keywords\TImplements::class,
-        Keywords\Boolean::class,
-        Keywords\Comparison::class,
-        Keywords\Enum::class,
-        Keywords\Question::class,
-        Keywords\TNew::class,
-        Keywords\TInstanceOf::class,
-        Keywords\Pipe::class,
-        Keywords\TConst::class,
-        Keywords\TCase::class,
-        Keywords\Separator::class,
-        Keywords\TAttribute::class,
-        Keywords\TInsteadOf::class,
-    ];
-
     public static $ignoreRefs = [
         'array',
         'bool',
@@ -133,6 +97,7 @@ class ClassReferenceFinder
         ! defined('T_READONLY') && define('T_READONLY', -387);
         ! defined('T_ENUM') && define('T_ENUM', -121);
         ! defined('T_ATTRIBUTE') && define('T_ATTRIBUTE', -226);
+        ! defined('T_FN') && define('T_FN', -29);
     }
 
     private static function joinClassRefSegments(ClassRefProperties $properties)
@@ -149,14 +114,63 @@ class ClassReferenceFinder
 
     private static function shouldCollect(ClassRefProperties $properties, array &$tokens)
     {
-        $t = self::$token[0];
+        $tokenType = self::$token[0];
 
-        foreach (self::$keywords as $keyword) {
-            if ($keyword::is($t, $properties->namespace)) {
-                if ($keyword::body($properties, $tokens, $t)) {
-                    return true;
-                }
-            }
+        $hashMap = [
+            T_WHITESPACE => Keywords\Whitespace::class,
+            '&' => Keywords\Whitespace::class,
+            T_DOC_COMMENT => Keywords\Whitespace::class,
+            T_COMMENT => Keywords\Whitespace::class,
+            T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG => Keywords\Whitespace::class,
+            '(' => Keywords\RoundBrackets::class,
+            ')' => Keywords\RoundBrackets::class,
+            T_VARIABLE => Keywords\Variable::class,
+            T_ELLIPSIS => Keywords\Variable::class,
+            ';' => Keywords\Semicolon::class,
+            ',' => Keywords\Comma::class,
+            '{' => Keywords\CurlyBrackets::class,
+            '}' => Keywords\CurlyBrackets::class,
+            T_USE => Keywords\TUse::class,
+            T_DOUBLE_COLON => Keywords\DoubleColon::class,
+            T_PUBLIC => Keywords\AccessModifiers::class,
+            T_PROTECTED => Keywords\AccessModifiers::class,
+            T_PRIVATE => Keywords\AccessModifiers::class,
+            ']' => Keywords\SquareBrackets::class,
+            '[' => Keywords\SquareBrackets::class,
+            T_NAME_QUALIFIED => Keywords\NameQualified::class,
+            T_NAME_FULLY_QUALIFIED => Keywords\NameQualified::class,
+            T_DOUBLE_ARROW => Keywords\DoubleArrow::class,
+            T_EXTENDS => Keywords\TExtends::class,
+            T_NAMESPACE => Keywords\TNamespace::class,
+            T_CLASS => Keywords\TClass::class,
+            T_TRAIT => Keywords\TTrait::class,
+            T_CATCH => Keywords\TCatch::class,
+            ':' => Keywords\Colon::class,
+            T_FN => Keywords\TFN::class,
+            T_FUNCTION => Keywords\TFunction::class,
+            T_IMPLEMENTS => Keywords\TImplements::class,
+            T_BOOLEAN_AND => Keywords\Boolean::class,
+            T_BOOLEAN_OR => Keywords\Boolean::class,
+            T_LOGICAL_OR => Keywords\Boolean::class,
+            T_LOGICAL_AND => Keywords\Boolean::class,
+            T_IS_IDENTICAL => Keywords\Comparison::class,
+            T_IS_EQUAL => Keywords\Comparison::class,
+            T_ENUM => Keywords\Enum::class,
+            '?' => Keywords\Question::class,
+            T_NS_SEPARATOR => Keywords\Separator::class,
+            T_NEW => Keywords\TNew::class,
+            T_INSTANCEOF => Keywords\TInstanceOf::class,
+            '|' => Keywords\Pipe::class,
+            T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG => Keywords\Pipe::class,
+            T_CONST => Keywords\TConst::class,
+            T_CASE => Keywords\TCase::class,
+            T_ATTRIBUTE => Keywords\TAttribute::class,
+            T_INSTEADOF => Keywords\TInsteadOf::class,
+        ];
+
+        $keyword = ($hashMap[$tokenType] ?? '');
+        if ($keyword && $keyword::body($properties, $tokens, $tokenType)) {
+            return true;
         }
 
         return false;
@@ -168,7 +182,9 @@ class ClassReferenceFinder
 
         while ($token = self::$token = current($tokens)) {
             next($tokens);
-            if (self::shouldCollect($cursor, $tokens)) {
+            $co = self::shouldCollect($cursor, $tokens);
+
+            if ($co) {
                 continue;
             }
 

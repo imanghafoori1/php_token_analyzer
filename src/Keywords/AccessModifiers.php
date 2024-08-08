@@ -9,12 +9,15 @@ class AccessModifiers
 {
     public static function is($token)
     {
-        return \in_array($token, [T_PUBLIC, T_PROTECTED, T_PRIVATE], true) &&
-            ! \in_array(ClassReferenceFinder::$lastToken[0], [T_AS, T_CONST, T_CASE, T_DOUBLE_COLON]);
+        return in_array($token, [T_PUBLIC, T_PROTECTED, T_PRIVATE], true);
     }
 
     public static function body(ClassRefProperties $properties, &$tokens)
     {
+        if (in_array(ClassReferenceFinder::$lastToken[0], [T_AS, T_CONST, T_CASE, T_DOUBLE_COLON])) {
+            return true;
+        }
+
         $_ = next($tokens);
 
         if ($_[0] === T_STATIC && $_[1] === 'static') {
