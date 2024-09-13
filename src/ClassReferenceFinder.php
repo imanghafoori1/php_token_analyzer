@@ -188,7 +188,7 @@ class ClassReferenceFinder
                 continue;
             }
 
-            if ($cursor->collect && ! (self::isBuiltinType($token) && ! $cursor->isNewing)) {
+            if ($cursor->collect && ! self::isBuiltinType($token)) {
                 $cursor->addRef($token);
             }
             self::forward();
