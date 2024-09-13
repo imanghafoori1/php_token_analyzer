@@ -49,6 +49,8 @@ class RoundBrackets
         isset($properties->classes[$properties->c]) && $properties->c++;
         ClassReferenceFinder::forward();
 
+        $properties->isNewing = false;
+
         return true;
     }
 }

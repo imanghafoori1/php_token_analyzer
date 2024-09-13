@@ -20,6 +20,7 @@ class Semicolon
         $t === ';' && ($properties->declaringProperty = $properties->isImporting = $properties->isSignature = false);
         $properties->collect && isset($properties->classes[$properties->c]) && $properties->c++;
         $properties->collect = false;
+        $properties->isNewing = false;
 
         ClassReferenceFinder::forward();
 

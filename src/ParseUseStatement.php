@@ -6,7 +6,7 @@ class ParseUseStatement
 {
     public static function getExpandedRef($tokens, $className)
     {
-        $refs = ParseUseStatement::parseUseStatements($tokens, $className);
+        $refs = self::parseUseStatements($tokens, $className);
 
         $namespace = '';
         foreach($refs[0] as $classPath => $y) {
