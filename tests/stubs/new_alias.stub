@@ -1,0 +1,9 @@
+<?php
+
+class ShowController
+{
+    public function invoke()
+    {
+        new Resource;
+    }
+}

@@ -149,4 +149,19 @@ class ClassReferencesProcessTest extends BaseTestClass
         $this->assertEquals($expected, $classRefs);
         $this->assertCount(0, $attributeRefs);
     }
+
+    /**
+     * @test
+     */
+    public function test_new_alias()
+    {
+        $tokens = $this->getTokens(__DIR__.'/stubs/new_alias.stub');
+        [$classRefs] = ClassReferenceFinder::process($tokens);
+
+        $this->assertEquals([
+            [
+                [T_STRING, 'Resource', 7,],
+            ],
+        ], $classRefs);
+    }
 }
