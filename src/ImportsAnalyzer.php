@@ -34,7 +34,7 @@ class ImportsAnalyzer
         ];
     }
 
-    private static function filterWrongClassRefs($classReferences, $absFilePath)
+    public static function filterWrongClassRefs($classReferences, $absFilePath)
     {
         $wrongClassRefs = [];
         $correctClassRefs = [];
@@ -54,7 +54,7 @@ class ImportsAnalyzer
         return [$wrongClassRefs, $correctClassRefs];
     }
 
-    private static function findClassRefs($tokens, $absFilePath, $imports)
+    public static function findClassRefs($tokens, $absFilePath, $imports)
     {
         try {
             [$classes, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
