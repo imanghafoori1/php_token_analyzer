@@ -4,38 +4,40 @@ namespace Imanghafoori\TokenAnalyzer;
 
 class Condition
 {
+    public static $comparison = [
+        '!=' => '==',
+        '!==' => '===',
+        '<=' => '>',
+        '>=' => '<',
+        '<' => '>=',
+        '>' => '<=',
+        '==' => '!=',
+        '===' => '!==',
+    ];
+
+    public static $operators = [
+        '==',
+        '===',
+        '>',
+        '<',
+        '>=',
+        '<=',
+        '!=',
+        '!==',
+    ];
+
     public static function negate($conditionTokens)
     {
         $found = false;
 
-        $ops = [
-            '==',
-            '===',
-            '>',
-            '<',
-            '>=',
-            '<=',
-            '!=',
-            '!==',
-        ];
-
         $logic = ['&&', '||', 'or', 'and', '?:', '??', '-', '+', '*', '**', '%', '<=>'];
 
-        $ops = array_merge($ops, $logic);
+        $ops = array_merge(self::$operators, $logic);
 
-        $comparison = [
-            '!=' => '==',
-            '!==' => '===',
-            '<=' => '>',
-            '>=' => '<',
-            '<' => '>=',
-            '>' => '<=',
-            '==' => '!=',
-            '===' => '!==',
-        ];
-        if (self::count($conditionTokens, $comparison) == 1 &&
+        if (self::count($conditionTokens, self::$comparison) == 1 &&
             self::count($conditionTokens, $logic) == 0) {
-            return self::replace($conditionTokens, $comparison);
+
+            return self::replace($conditionTokens, self::$comparison);
         }
 
         foreach ($conditionTokens as $t) {
@@ -58,13 +60,13 @@ class Condition
         return $conditionTokens;
     }
 
-    private static function count($conditionTokens, $ops)
+    private static function count($conditionTokens, $operators)
     {
         $level = $found = 0;
-        foreach ($conditionTokens as $t) {
-            $t === '(' && $level++;
-            $t === ')' && $level--;
-            if ($level === 0 && \in_array($t[1] ?? $t[0], $ops)) {
+        foreach ($conditionTokens as $token) {
+            $token === '(' && $level++;
+            $token === ')' && $level--;
+            if ($level === 0 && in_array($token[1] ?? $token[0], $operators)) {
                 $found++;
             }
         }
@@ -72,14 +74,14 @@ class Condition
         return $found;
     }
 
-    private static function replace($conditionTokens, $ops)
+    private static function replace($conditionTokens, $operators)
     {
         $newTokens = [];
         foreach ($conditionTokens as $token) {
             $char = \is_array($token) ? $token[1] : $token[0];
-            if (isset($ops[$char])) {
+            if (isset($operators[$char])) {
                 $r = (array) $token;
-                $r[1] = $ops[$char];
+                $r[1] = $operators[$char];
 
                 $newTokens[] = $r;
             } else {
