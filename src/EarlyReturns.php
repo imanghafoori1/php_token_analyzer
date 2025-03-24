@@ -2,6 +2,8 @@
 
 namespace Imanghafoori\TokenAnalyzer;
 
+use Exception;
+
 class EarlyReturns
 {
     const scopeKeywords = [
@@ -21,7 +23,7 @@ class EarlyReturns
                 break;
             }
 
-            if (! \in_array($token[0], [T_FOREACH, T_FUNCTION, T_WHILE, T_FOR])) {
+            if (! in_array($token[0], [T_FOREACH, T_FUNCTION, T_WHILE, T_FOR])) {
                 continue;
             }
 
@@ -39,7 +41,7 @@ class EarlyReturns
 
                 // get the very last token of function (or foreach) body.
                 [$ifBody, $condition] = TokenManager::readBackUntil($tokens, $methodBodyCloseIndex);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 continue;
             }
 
@@ -48,7 +50,7 @@ class EarlyReturns
             }
 
             // in order to avoid touching the else without curly braces.
-            if (\in_array(TokenManager::getNextToken($tokens, $ifBody[1][1])[0][0], [T_ELSE, T_ELSEIF])) {
+            if (in_array(TokenManager::getNextToken($tokens, $ifBody[1][1])[0][0], [T_ELSE, T_ELSEIF])) {
                 continue;
             }
 
