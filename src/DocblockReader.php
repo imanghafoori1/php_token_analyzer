@@ -9,6 +9,12 @@ use phpDocumentor\Reflection\Location;
 use phpDocumentor\Reflection\Types\Context;
 use RuntimeException;
 
+use function array_filter;
+use function array_merge;
+use function in_array;
+use function str_replace;
+use function trim;
+
 class DocblockReader
 {
     public static function readRefsInDocblocks($tokens): array
@@ -39,14 +45,14 @@ class DocblockReader
             }
 
             [$tTemplates, $tRefs] = self::parseTemplatesInDocblock($doc);
-            $refs = \array_merge($refs, $tRefs, self::getRefsInDocblock($doc));
-            $atTemplate = \array_merge($atTemplate, $tTemplates);
+            $refs = array_merge($refs, $tRefs, self::getRefsInDocblock($doc));
+            $atTemplate = array_merge($atTemplate, $tTemplates);
         }
 
         // use array_values for reset array keys.
         return \array_values(
-            \array_filter($refs, function ($ref) use ($atTemplate) {
-                return ! \in_array($ref['class'], $atTemplate);
+            array_filter($refs, function ($ref) use ($atTemplate) {
+                return ! in_array($ref['class'], $atTemplate);
             })
         );
     }
@@ -68,20 +74,20 @@ class DocblockReader
      */
     private static function normalizeDocblockContent(string $docblock)
     {
-        $docblock = \str_replace('mixed', 'string', $docblock);
+        $docblock = str_replace('mixed', 'string', $docblock);
 
-        return \str_replace(['?', '<>'], '', $docblock);
+        return str_replace(['?', '<>'], '', $docblock);
     }
 
     private static function addRef($refsInDocBlock, int $line, array $allRefs)
     {
         foreach ($refsInDocBlock as $ref) {
-            $ref = \str_replace('[]', '', $ref);
-            $ref = \trim($ref, '<>');
+            $ref = str_replace('[]', '', $ref);
+            $ref = trim($ref, '<>');
             // For parse this "ColumnCase::LOWER"
             strpos($ref, '::') && ($ref = \strtok($ref, '::'));
             $ref && self::shouldBeCollected($ref) && $allRefs[] = [
-                'class' => \str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
+                'class' => str_replace('\\q1w23e4rt___ffff000\\', '', $ref),
                 'line' => $line,
             ];
         }
@@ -95,7 +101,7 @@ class DocblockReader
 
         $readRef = self::getRefReader($docblock, $line);
 
-        return \array_merge(
+        return array_merge(
             self::readDescriptionRefs($docblock, $line),
             self::readMethodTag($docblock, $line),
             self::getMixins($docblock, $line),
@@ -194,7 +200,7 @@ class DocblockReader
 
             $methodName = \method_exists($method, 'getParameters') ? 'getParameters' : 'getArguments';
             foreach ($method->$methodName() as $argument) {
-                $_refs = self::explode(\str_replace('?', '', self::getType($argument)));
+                $_refs = self::explode(str_replace('?', '', self::getType($argument)));
                 $refs = self::addRef($_refs, $line, $refs);
             }
         }
@@ -253,7 +259,7 @@ class DocblockReader
 
     public static function explode($ref): array
     {
-        $ref = \str_replace([',', '&'], '|', (string) $ref);
+        $ref = str_replace([',', '&'], '|', (string) $ref);
 
         return \explode('|', $ref);
     }
