@@ -34,8 +34,8 @@ class DocblockReader
                  * Extends tag was replaced with var
                  * Because we don't have phpDocumentor\Reflection\Types\Collection in the extends tag
                  */
-                $content = \str_replace('@extends', '@var', $content);
-                $doc = self::read($docblock, \str_replace('?', '', $content), $line);
+                $content = str_replace(['@extends', '@mixin'], '@var', $content);
+                $doc = self::read($docblock, str_replace('?', '', $content), $line);
             } catch (RuntimeException $e) {
                 try {
                     $doc = self::read($docblock, self::normalizeDocblockContent($content), $line);
