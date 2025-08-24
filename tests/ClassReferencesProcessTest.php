@@ -100,7 +100,7 @@ class ClassReferencesProcessTest extends BaseTestClass
         $this->assertEquals([[T_STRING, '\Trait2', 11]], $classRefs[5]);
         $this->assertEquals([[T_STRING, '\Trait3', 13]], $classRefs[6]);
 
-        $this->assertEquals([[T_STRING, '\TypeHint1', 17]], $classRefs[7]);
+        $this->assertEquals([[T_STRING, '\Type\Hint1', 17]], $classRefs[7]);
         $this->assertEquals([[T_STRING, '\TypeHint2', 17]], $classRefs[8]);
         $this->assertEquals([[T_STRING, '\Finder', 23]], $classRefs[9]);
         $this->assertEquals([[T_STRING, '\DirectoryNotFoundException', 31]], $classRefs[10]);

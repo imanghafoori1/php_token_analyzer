@@ -14,7 +14,7 @@ class Paths extends \A implements \InterF1, \InterF2, \B
     const NEW = 1;
 
 
-    public static function getAbsFilePaths(\TypeHint1 $dirs, ?\TypeHint2 $dir3, $arg = [1, 2])
+    public static function getAbsFilePaths(\Type\Hint1 $dirs, ?\TypeHint2 $dir3, $arg = [1, 2])
     {
         if (! $dirs) {
             return [];

@@ -2,5 +2,5 @@
 
 use App\Model;
 
-Model\User;
+Model\User::class;
 function (H $r) { T::class; }

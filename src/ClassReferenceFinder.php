@@ -137,8 +137,6 @@ class ClassReferenceFinder
             T_PRIVATE => Keywords\AccessModifiers::class,
             ']' => Keywords\SquareBrackets::class,
             '[' => Keywords\SquareBrackets::class,
-            T_NAME_QUALIFIED => Keywords\NameQualified::class,
-            T_NAME_FULLY_QUALIFIED => Keywords\NameQualified::class,
             T_DOUBLE_ARROW => Keywords\DoubleArrow::class,
             T_EXTENDS => Keywords\TExtends::class,
             T_NAMESPACE => Keywords\TNamespace::class,

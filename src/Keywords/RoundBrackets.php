@@ -35,11 +35,6 @@ class RoundBrackets
             if (isset($properties->classes[$properties->c]) && (! $properties->isNewing && ! $properties->isAttribute)) {
                 // in php 7.4 or less
                 unset($properties->classes[$properties->c]);
-            } elseif (in_array(ClassReferenceFinder::$lastToken[0], [T_NAME_FULLY_QUALIFIED, T_NAME_QUALIFIED]) && ClassReferenceFinder::$secLastToken[0] !== T_NEW) {
-                // in php 8.0 or more
-                if ($properties->classes[$properties->c - 1][0] == ClassReferenceFinder::$lastToken) {
-                    unset($properties->classes[--$properties->c]);
-                }
             }
         }
 
