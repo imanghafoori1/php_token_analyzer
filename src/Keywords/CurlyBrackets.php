@@ -26,7 +26,7 @@ class CurlyBrackets
         if ($properties->isDefiningMethod) {
             $properties->isInsideMethod = true;
         }
-        $properties->isDefiningMethod = $properties->implements = $properties->isSignature = false;
+        $properties->isExtending = $properties->isDefiningMethod = $properties->implements = $properties->isSignature = false;
         // After "extends \Some\other\Class_v"
         // we need to switch to the next level.
         if ($properties->collect) {

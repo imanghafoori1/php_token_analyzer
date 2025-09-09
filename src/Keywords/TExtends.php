@@ -14,7 +14,7 @@ class TExtends
 
     public static function body(ClassRefProperties $properties)
     {
-        $properties->collect = true;
+        $properties->isExtending = $properties->collect = true;
         //isset($classes[$c]) && $c++;
         ClassReferenceFinder::forward();
 

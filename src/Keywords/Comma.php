@@ -35,6 +35,7 @@ class Comma
         return $properties->isDefiningMethod
             || $properties->isDefiningFunction
             || $properties->implements
+            || $properties->isExtending
             || $properties->trait;
     }
 }
