@@ -104,12 +104,12 @@ class FindClassReferencesTest extends BaseTestClass
             'line' => 63,
         ], $classes[$h++]);
 
-       $this->assertEquals([
+        $this->assertEquals([
             'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\iteable',
             'line' => 66,
         ], $classes[$h++]);
 
-       $this->assertEquals([
+        $this->assertEquals([
             'class' => 'Imanghafoori\LaravelMicroscope\FileReaders\countable',
             'line' => 66,
         ], $classes[$h++]);
@@ -133,7 +133,7 @@ class FindClassReferencesTest extends BaseTestClass
     public function test_function_return_typehint()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/multi_return_types.stub');
-        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         $expected = [
             [
@@ -157,7 +157,7 @@ class FindClassReferencesTest extends BaseTestClass
     public function test_can_detected_references_in_array()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/references_in_array.stub');
-        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         $expected = [
             [

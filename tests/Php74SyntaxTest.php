@@ -36,15 +36,15 @@ class Php74SyntaxTest extends BaseTestClass
     public function test_can_detect_arrow_functions_test()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php74/arrow_functions.stub');
-        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
         $i = 0;
 
         $this->assertEquals('T4', $classRefs[$i++][0][1]);
         $this->assertEquals('T5', $classRefs[$i++][0][1]);
         $this->assertEquals('T6', $classRefs[$i++][0][1]);
         $this->assertEquals('T7', $classRefs[$i++][0][1]);
-        $this->assertEquals("H", $classRefs[$i++][0][1]);
-        $this->assertEquals("T", $classRefs[$i++][0][1]);
+        $this->assertEquals('H', $classRefs[$i++][0][1]);
+        $this->assertEquals('T', $classRefs[$i++][0][1]);
         $this->assertCount($i, $classRefs);
         $this->assertCount(0, $attributeRefs);
     }
@@ -52,7 +52,7 @@ class Php74SyntaxTest extends BaseTestClass
     public function test_can_detect_arrow_functions_in_array()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php74/arrow_functions_in_array.stub');
-        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         $expected = [
             [
@@ -79,5 +79,3 @@ class Php74SyntaxTest extends BaseTestClass
         $this->assertCount(0, $attributeRefs);
     }
 }
-
-

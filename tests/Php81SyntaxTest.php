@@ -33,7 +33,7 @@ class Php81SyntaxTest extends BaseTestClass
     {
         [$namespace, $name, $type, $parent, $interfaces] = GetClassProperties::fromFilePath(__DIR__.'/stubs/php81/sample_enum.stub');
 
-        $this->assertEquals("Hello", $namespace);
+        $this->assertEquals('Hello', $namespace);
         $this->assertEquals('Hi', $name);
         $this->assertEquals(T_ENUM, $type);
         $this->assertEquals('', $parent);
@@ -43,7 +43,7 @@ class Php81SyntaxTest extends BaseTestClass
     public function test_traits_enum()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/used_trait_enum.stub');
-        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('MyTrait', $classRefs[0][0][1]);
         $this->assertEquals('Foo\Test', $classRefs[1][0][1]);
@@ -63,25 +63,25 @@ class Php81SyntaxTest extends BaseTestClass
     public function test_intersection_types_in_typehinted_properties()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/php81/intersection_type.stub');
-        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
         $expected = [
             [
-                [0 => T_STRING, 1 => "H1", 2 => 5],
+                [0 => T_STRING, 1 => 'H1', 2 => 5],
             ],
             [
-                [0 => T_STRING, 1 => "H2", 2 => 5,],
+                [0 => T_STRING, 1 => 'H2', 2 => 5],
             ],
             [
-                [0 => T_STRING, 1 => "\\H3\\H4", 2 => 6,],
+                [0 => T_STRING, 1 => '\\H3\\H4', 2 => 6],
             ],
             [
-                [0 => T_STRING, 1 => "\\tH5", 2 => 6,],
+                [0 => T_STRING, 1 => '\\tH5', 2 => 6],
             ],
             [
-                [0 => T_STRING, 1 => "tH6", 2 => 7,],
+                [0 => T_STRING, 1 => 'tH6', 2 => 7],
             ],
             [
-                [0 => T_STRING, 1 => "\\tH7", 2 => 7,],
+                [0 => T_STRING, 1 => '\\tH7', 2 => 7],
             ],
         ];
         $this->assertEquals($expected, $classRefs);
