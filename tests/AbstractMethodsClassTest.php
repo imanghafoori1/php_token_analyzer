@@ -10,7 +10,7 @@ class AbstractMethodsClassTest extends BaseTestClass
     public function test_constants()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/const.stub');
-        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         $this->assertCount(0, $classRefs);
         $this->assertCount(0, $attributeRefs);
@@ -18,8 +18,8 @@ class AbstractMethodsClassTest extends BaseTestClass
 
     public function test_check_final_class_is_detected2_test()
     {
-        $tokens = $this->getTokens(__DIR__ . '/stubs/arguments.stub');
-        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        $tokens = $this->getTokens(__DIR__.'/stubs/arguments.stub');
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('T1', $classRefs[0][0][1]);
         $this->assertEquals('T2', $classRefs[1][0][1]);

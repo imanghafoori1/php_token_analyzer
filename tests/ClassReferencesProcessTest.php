@@ -10,7 +10,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     public function traits()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/used_trait.stub');
-        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('MyTrait', $classRefs[0][0][1]);
         $this->assertEquals('Foo\Test', $classRefs[1][0][1]);
@@ -31,7 +31,7 @@ class ClassReferencesProcessTest extends BaseTestClass
     public function can_instanceof()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/instanceof.stub');
-        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
         $this->assertEquals('Hello', $classRefs[0][0][1]);
         $this->assertEquals('Hello2', $classRefs[1][0][1]);
@@ -46,11 +46,11 @@ class ClassReferencesProcessTest extends BaseTestClass
         $tokens = $this->getTokens(__DIR__.'/stubs/non_in_class_refs.stub');
         [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
 
-        $this->assertEquals("Model\User", $classRefs[0][0][1]);
-        $this->assertEquals("H", $classRefs[1][0][1]);
-        $this->assertEquals("T", $classRefs[2][0][1]);
+        $this->assertEquals('Model\User', $classRefs[0][0][1]);
+        $this->assertEquals('H', $classRefs[1][0][1]);
+        $this->assertEquals('T', $classRefs[2][0][1]);
         $this->assertCount(0, $attributeRefs);
-        $this->assertEquals("", $namespace);
+        $this->assertEquals('', $namespace);
     }
 
     /** @test */
@@ -128,9 +128,9 @@ class ClassReferencesProcessTest extends BaseTestClass
     public function namespaced_function_call()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/namespaced_function_call.stub');
-        [$classRefs, $namespace, $attributeRefs,] = ClassReferenceFinder::process($tokens);
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
         $expected = [
-           [
+            [
                 [
                     0 => T_STRING,
                     1 => "Name\Spaced\classy\Call",
@@ -160,7 +160,7 @@ class ClassReferencesProcessTest extends BaseTestClass
 
         $this->assertEquals([
             [
-                [T_STRING, 'Resource', 7,],
+                [T_STRING, 'Resource', 7],
             ],
         ], $classRefs);
     }

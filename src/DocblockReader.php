@@ -32,7 +32,7 @@ class DocblockReader
                 [, $content, $line] = $token;
                 /**
                  * Extends tag was replaced with var
-                 * Because we don't have phpDocumentor\Reflection\Types\Collection in the extends tag
+                 * Because we don't have phpDocumentor\Reflection\Types\Collection in the extends tag.
                  */
                 $content = str_replace(['@extends', '@mixin'], '@var', $content);
                 $doc = self::read($docblock, str_replace('?', '', $content), $line);
@@ -175,7 +175,7 @@ class DocblockReader
         $mixins = [];
         foreach ($docblock->getTagsByName('mixin') as $ref) {
             $desc = $ref->getDescription();
-            if (!$desc) {
+            if (! $desc) {
                 continue;
             }
 
