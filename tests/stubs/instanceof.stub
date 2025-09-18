@@ -3,3 +3,7 @@
 $r instanceof Hello or
 $r instanceof Hello2 ? '' : '=' and
 $r instanceof \Hello3 ? '' : '=' && (0 || 0);
+$state instanceof StatePosition ? ColorEnum::convert('test') : ColorEnum2::fix('test');
+$a instanceof B
+	? G::getVal()
+	: R::skip();
