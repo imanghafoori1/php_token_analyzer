@@ -1,0 +1,14 @@
+<?php
+
+class SanitizesAndMore
+{
+    /**
+     * @property-read User $user The user object.
+     * @var Product|null $product
+     * @method static QueryBuilder whereStatus(string $status)
+     */
+    private function relations()
+    {
+        //
+    }
+}
