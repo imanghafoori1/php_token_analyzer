@@ -20,6 +20,7 @@ class DoubleColon
         if (! $properties->collect && self::isCollecatble() &&
             ! in_array(ClassReferenceFinder::$lastToken[1], ['parent', 'self', 'static'], true) &&
             (ClassReferenceFinder::$secLastToken[1] ?? null) !== '->') {
+            isset($properties->classes[$properties->c]) && $properties->c++;
             $properties->addRef(ClassReferenceFinder::$lastToken);
         }
         $properties->collect = false;

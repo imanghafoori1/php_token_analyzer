@@ -36,7 +36,13 @@ class ClassReferencesProcessTest extends BaseTestClass
         $this->assertEquals('Hello', $classRefs[0][0][1]);
         $this->assertEquals('Hello2', $classRefs[1][0][1]);
         $this->assertEquals('\Hello3', $classRefs[2][0][1]);
-        $this->assertCount(3, $classRefs);
+        $this->assertEquals('StatePosition', $classRefs[3][0][1]);
+        $this->assertEquals('ColorEnum', $classRefs[4][0][1]);
+        $this->assertEquals('ColorEnum2', $classRefs[5][0][1]);
+        $this->assertEquals('B', $classRefs[6][0][1]);
+        $this->assertEquals('G', $classRefs[7][0][1]);
+        $this->assertEquals('R', $classRefs[8][0][1]);
+        $this->assertCount(9, $classRefs);
         $this->assertCount(0, $attributeRefs);
     }
 
