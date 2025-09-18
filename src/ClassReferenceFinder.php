@@ -2,7 +2,6 @@
 
 namespace Imanghafoori\TokenAnalyzer;
 
-
 class ClassReferenceFinder
 {
     public static $lastToken = [null, null, null];
@@ -40,7 +39,6 @@ class ClassReferenceFinder
 
     /**
      * @param  array  $tokens
-     *
      * @return array
      */
     public static function process(&$tokens)
@@ -186,14 +184,28 @@ class ClassReferenceFinder
                 continue;
             }
 
-            if ($cursor->collect) {
-                if (! self::isBuiltinType($token) || ($cursor->isNewing && ! in_array(strtolower($token[1] ?? ''), ['self', 'static', 'parent', 'callable'], true))) {
-                    $cursor->addRef($token);
-                }
+            if ($cursor->collect && self::isTokenACollectableReference($token, $cursor)) {
+                $cursor->addRef($token);
             }
+
             self::forward();
         }
 
         return $cursor;
+    }
+
+    private static function isTokenACollectableReference($token, ClassRefProperties $cursor)
+    {
+        if (! self::isBuiltinType($token)) {
+            return true;
+        }
+
+        $isDisallowedKeyword = in_array(
+            strtolower($token[1] ?? ''),
+            ['self', 'static', 'parent', 'callable'],
+            true
+        );
+
+        return $cursor->isNewing && ! $cursor->declaringProperty && ! $isDisallowedKeyword;
     }
 }

@@ -86,6 +86,16 @@ class ClassReferencesProcessTest extends BaseTestClass
     }
 
     /** @test */
+    public function can_detect_anonymous_class_references()
+    {
+        $tokens = $this->getTokens(__DIR__.'/stubs/anonymous_class_references.stub');
+        [$classRefs, $namespace, $attributeRefs] = ClassReferenceFinder::process($tokens);
+
+        $this->assertEquals([[T_STRING, 'Migration', 8]], $classRefs[0]);
+        $this->assertEquals([[T_STRING, 'User', 14]], $classRefs[1]);
+    }
+
+    /** @test */
     public function can_detect_inline_class_references()
     {
         $tokens = $this->getTokens(__DIR__.'/stubs/inline_class_references.stub');
