@@ -164,7 +164,12 @@ class DocblockReader
                 continue;
             }
 
-            $refs[] = ['line' => $line, 'class' => $partsOfName[1]];
+            $refClass = trim(strtok($partsOfName[1], '='));
+            if (! self::shouldBeCollected($refClass)) {
+                continue;
+            }
+
+            $refs[] = ['line' => $line, 'class' => $refClass];
         }
 
         return $refs;
