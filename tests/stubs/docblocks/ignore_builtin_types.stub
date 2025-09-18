@@ -1,0 +1,17 @@
+<?php
+
+class IgnoresBuiltIn
+{
+    /**
+     * @var string|int|MyValidClass|bool|null
+     * @param array|callable|mixed $data
+     * @return void|self|static|never
+     * @throws \RuntimeException|object
+     * @property-read $this $instance
+     * @see AnotherClass
+     */
+    public function processData($data)
+    {
+        //
+    }
+}
