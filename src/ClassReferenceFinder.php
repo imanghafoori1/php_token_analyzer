@@ -185,7 +185,7 @@ class ClassReferenceFinder
             }
 
             if ($cursor->collect) {
-                if (! self::isBuiltinType($token) || ($cursor->isNewing && ! $cursor->declaringProperty && ! in_array(strtolower($token[1] ?? ''), ['self', 'static', 'parent', 'callable'], true))) {
+                if (! self::isBuiltinType($token) || ($cursor->isNewing && ! in_array(strtolower($token[1] ?? ''), ['self', 'static', 'parent', 'callable'], true))) {
                     $cursor->addRef($token);
                 }
             }
