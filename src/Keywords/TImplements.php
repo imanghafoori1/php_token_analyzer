@@ -14,6 +14,7 @@ class TImplements
 
     public static function body(ClassRefProperties $properties)
     {
+        $properties->isExtending = false;
         $properties->collect = $properties->implements = true;
         isset($properties->classes[$properties->c]) && $properties->c++;
         ClassReferenceFinder::forward();

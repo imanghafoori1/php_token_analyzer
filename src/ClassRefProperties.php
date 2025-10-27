@@ -34,6 +34,8 @@ class ClassRefProperties
 
     public $isDefiningMethod = false;
 
+    public $isExtending = false;
+
     public $implements = false;
 
     public $isSignature = false;

@@ -3,6 +3,7 @@
 namespace Imanghafoori\TokenAnalyzer\Tests;
 
 use Imanghafoori\TokenAnalyzer\ClassReferenceFinder;
+use Imanghafoori\TokenAnalyzer\GetClassProperties;
 use Imanghafoori\TokenAnalyzer\ParseUseStatement;
 
 class FindClassReferencesTest extends BaseTestClass
@@ -188,5 +189,29 @@ class FindClassReferencesTest extends BaseTestClass
 
         $this->assertEquals($expected, $classRefs);
         $this->assertCount(0, $attributeRefs);
+    }
+
+    public function test_multi_extend()
+    {
+        $tokens = $this->getTokens(__DIR__.'/stubs/multi_extend_interface.stub');
+
+        [$classes, $namespace, $refs] = ClassReferenceFinder::process($tokens);
+
+        $this->assertEquals([
+            [
+                [T_STRING, "AnotherBaseInterface", 7]
+            ],
+            [
+                [T_STRING, "Arrayable", 7]
+            ],
+            [
+                [T_STRING, "Jsonable", 7]
+            ],
+            [
+                [T_STRING, "JsonSerializable", 7]
+            ],
+        ], $classes);
+
+        $this->assertEquals('App\Models\Support', $namespace);
     }
 }
