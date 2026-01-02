@@ -61,12 +61,14 @@ class ParseUseStatement
         $namespace = $class = $classLevel = null;
         $level = 0;
         $output = $uses = [];
-        while ($token = \current($tokens)) {
-            \next($tokens);
-            switch (\is_array($token) ? $token[0] : $token) {
+        while ($token = current($tokens)) {
+            next($tokens);
+            switch (is_array($token) ? $token[0] : $token) {
                 case T_NAMESPACE:
-                    $namespace = ltrim(self::FetchNS($tokens).'\\', '\\');
-                    $uses = [];
+                    if ($namespace === null) {
+                        $namespace = ltrim(self::FetchNS($tokens).'\\', '\\');
+                    }
+
                     break;
 
                 case T_CLASS:
@@ -133,15 +135,15 @@ class ParseUseStatement
 
         $neutral = [T_DOC_COMMENT, T_WHITESPACE, T_COMMENT];
 
-        while ($token = \current($tokens)) {
-            [$token, $s,] = \is_array($token) ? $token : [$token, $token];
+        while ($token = current($tokens)) {
+            [$token, $s,] = is_array($token) ? $token : [$token, $token];
 
-            if (\in_array($token, (array) $take, true)) {
+            if (in_array($token, (array) $take, true)) {
                 $result .= $s;
-            } elseif (! \in_array($token, $neutral, true)) {
+            } elseif (! in_array($token, $neutral, true)) {
                 break;
             }
-            \next($tokens);
+            next($tokens);
         }
 
         return $result;
