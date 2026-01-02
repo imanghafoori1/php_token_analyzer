@@ -31,6 +31,7 @@ class ExistenceChecker
             interface_exists($entityRef) ||
             trait_exists($entityRef) ||
             function_exists($entityRef) ||
-            (function_exists('enum_exists') && enum_exists($entityRef));
+            (function_exists('enum_exists') && enum_exists($entityRef)) ||
+            $entityRef === '\iterable';
     }
 }
