@@ -34,6 +34,7 @@ class ClassReferenceFinder
         '::',
         'list',
         'scalar',
+        'resource',
     ];
 
     /**
